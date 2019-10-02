@@ -36,3 +36,6 @@ Adaptación
 Integración en el motor
 
 Aunque sin decidir todavía, se prevé que se usará la plataforma SuperCollider para la realización del TFG, ya que da soporte para la composición algorítmica y usa el protocolo OSC para comunicarse en tiempo real con la red.
+
+## Bibliografía
+- UnityOSC: https://github.com/jorgegarcia/UnityOSC

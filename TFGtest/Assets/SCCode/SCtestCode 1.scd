@@ -143,12 +143,68 @@ SynthDef(\fmbass, { arg out=0, amp=0.1, gate=1, pan=0, freq=200;
 	Out.ar(out, sig);
 }).add;
 
+SynthDef(\rhodey_sc, {
+    |
+    // standard meanings
+    out = 0, freq = 440, gate = 1, pan = 0, amp = 0.1,
+    // all of these range from 0 to 1
+    vel = 0.8, modIndex = 0.2, mix = 0.2, lfoSpeed = 0.4, lfoDepth = 0.1
+    |
+    var env1, env2, env3, env4;
+    var osc1, osc2, osc3, osc4, snd;
+
+    lfoSpeed = lfoSpeed * 12;
+
+    freq = freq * 2;
+
+    env1 = EnvGen.ar(Env.adsr(0.001, 1.25, 0.0, 0.04, curve: \lin));
+    env2 = EnvGen.ar(Env.adsr(0.001, 1.00, 0.0, 0.04, curve: \lin));
+    env3 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
+    env4 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
+
+    osc4 = SinOsc.ar(freq * 0.5) * 2pi * 2 * 0.535887 * modIndex * env4 * vel;
+    osc3 = SinOsc.ar(freq, osc4) * env3 * vel;
+    osc2 = SinOsc.ar(freq * 15) * 2pi * 0.108819 * env2 * vel;
+    osc1 = SinOsc.ar(freq, osc2) * env1 * vel;
+    snd = Mix((osc3 * (1 - mix)) + (osc1 * mix));
+    snd = snd * (SinOsc.ar(lfoSpeed) * lfoDepth + 1);
+
+    // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
+    snd = snd * EnvGen.ar(Env.asr(0, 1, 0.1), gate, doneAction: 2);
+    snd = Pan2.ar(snd, pan, amp);
+
+    Out.ar(out, snd);
+}).add;
+
+t = TempoClock.new;
+t.tempo = 1.5;
+
 OSCdef.new(
 	\test,
 	{
 		arg msg; [msg].postln;
 		//Synth(\kalimba, [\freq, 440] );
-		Pbind(\instrument, \fmbass, \freq, Prand([1, 1.2, 2, 2.5, 3, 4], inf) * 200).play(TempoClock(2.3));
+		//Pbind(\instrument, \fmbass, \freq, Prand([1, 1.2, 2, 2.5, 3, 4], inf) * 200).play(TempoClock(2.3));
+		//Pbind(\instrument, \fmbass, \degree, Pseq([1, 3, 5, 7], inf), \dur, 2, \octave, 4, \root, 3).play(TempoClock(2.3));
+		m = Pbind(
+			\instrument, \rhodey_sc,
+			\scale, Scale.mixolydian,
+			\octave, 4,
+			\root, 2,
+			\legato, Pseq([0.9, 0.5, 0.5, 0.9, 0.9, 0.9, 0.9, 0.5, 1, 0.5, 1, 0.6, 0.3], inf),
+			\dur, Pseq([1 + (1/3), 1/3, 1/3, 1/7, 6/7, 5/6, 1/6, 1/2, 2/6, 1/6, 2 + 1/2, 1, 1/2], inf),
+			\degree, Pseq([
+				[0, 2, 4], 2, 4, 7, 8, 7, 0, [1, 3, 6], 5, [1, 3, 6], Rest(), [-1, 1, 3], [1, 3, 5],
+				[0, 2, 4], 2, 4, 8, 9, 7, 0, [1, 3, 6], 5, [1, 3, 6], Rest(), [-1, 1, 3], [1, 3, 5],
+			], inf),
+			\mix, 0.2,
+			\modIndex, 0.2,
+			\lfoSpeed, 0.5,
+			\lfoDepth, 0.4,
+			\vel, Pgauss(0.8, 0.1, inf),
+			\amp, 0.3
+		).play(t);
+
 	},
 	'/test', nil, 57120
 );
@@ -156,27 +212,45 @@ OSCdef.new(
 OSCdef.new(
 	\test2,
 	{
-		var base;
+		//var base;
 
-		base = Pbind(\amp, 0.8);
+		~base = Pbind(\amp, 0.8);
 
-		Ppar([
+		p = Ppar([
 			Pbindf(
-				base,
-				\instrument, Pseq([\kick, \snare, \kick, \kick, \snare], inf),
-				\dur, Pseq([4, 3, 3, 2, 4], inf)
+				~base,
+				\instrument, Pseq([\kick, \snare], inf)
 			),
 			Pbindf(
-				base,
-				\instrument, Pseq([Pn(\hihat, 16), Pn(\clap, 16)], inf),
-				\dur, Pseq([Rest(2), 2, Rest(2), 2], inf)
+				~base,
+				\instrument, Pseq([Pn(\hihat, 16), Pn(\clap, 16)], inf)
 			)
-		]).play(TempoClock(2.3*4));
+		]).play(t);
 	},
 	'/test2', nil, 57120
 );
 
+OSCdef.new(
+	\test3,
+	{
+		y = {SinOsc.ar};
+	},
+	'/test3', nil, 57120
+);
 
+OSCdef.new(
+	\test4,
+	{
+		p.stop;
+		//y.free;
+	},
+	'/test4', nil, 57120
+);
 
-
-
+OSCdef.new(
+	\test5,
+	{
+		t.tempo = t.tempo + 0.5;
+	},
+	'/test5', nil, 57120
+);

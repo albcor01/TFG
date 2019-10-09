@@ -15,6 +15,12 @@ public class test : MonoBehaviour
             OSCHandler.Instance.SendMessageToClient(ClientId, "/test", test);
             Debug.Log("hola");
         }
+
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            float test = 1.0f;
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/test5", test);
+        }
     }
 
 }

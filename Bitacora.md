@@ -1,4 +1,34 @@
+### 25/09/19
+- Primera reunión con Jaime y Marco, los tutores del proyecto. Se define el primer objetivo: 
+enlazar Unity con SuperCollider.
+
+### 27/09/19
+- Primer test del proyecto, se consigue enlazar con éxito Unity con SuperCollider. Se puede enviar
+desde Unity la orden de lanzar música a SuperCollider. Código base en "SCScripts".
+
 ### 02/10/19
-- Para crear una ventana propia de Unity solo hay que hacer una clase que herede de "EditorWindow",
-y sobreescribir los métodos "init", "onGUI" y "update". El ejemplo está en el archivo "OSCHelper.cs"
+- Primera prueba para obtener la ventana del futuro Plugin.
+Para crear una ventana propia de Unity solo hay que hacer una clase que herede de "EditorWindow",
+y sobreescribir los métodos "init", "onGUI" y "update". El ejemplo está en el archivo "OSCHelper.cs".
 Referencia de Unity en: https://docs.unity3d.com/Manual/editor-EditorWindows.html
+
+### 08/10/19
+- Con los primeros sintetizadores y la posibilidad de enviar mensajes a SuperCollider, se establece
+una primera demo a modo de prueba para comprobar el funcionamiento base. Se lanza música desde el juego
+con la posibilidad de añadir percusión dinámicamente y cambiar el tempo de la pieza. 
+Código en "SCtestCode.scd".
+
+### 09/10/19 
+- Segunda reunión con los tutores. Se establece como siguiente objetivo tener una ventana funcional, 
+con la posibilidad de recibir información desde SuperCollider y una progresión músical básica, pero 
+con sentido. Se decide enfatizar, de momento, en la riquiza tímbrica más que en la complejidad
+armónica, tomando como ejemplo a artistas como Brian Eno o C418.
+
+### 11/10/19
+- Ampliada funcionalidad de la ventana del Plugin. Se puede acceder a las variables de los objetos
+a tener en cuenta a la hora de adaptar la música desde el Editor.
+
+### 12/10/19
+- Se consigue enviar información desde SuperCollider a Unity. Primera prueba haciendo un Log del tempo
+de la pieza en el Editor.
+Código en "SCScripts".

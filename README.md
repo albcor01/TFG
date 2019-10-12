@@ -40,3 +40,5 @@ Aunque sin decidir todavía, se prevé que se usará la plataforma SuperCollider
 ## Bibliografía
 - UnityOSC por Jorge García: https://github.com/jorgegarcia/UnityOSC
 - Referencia de Unity de EditorGUILayout: https://docs.unity3d.com/ScriptReference/EditorGUILayout.html
+- Información acerca de SuperCollider: https://www.youtube.com/watch?v=yRzsOOiJ_p4&list=PLPYzvS8A_rTaNDweXe6PX4CXSGq4iEWYC
+- Manual de SuperCollider: http://doc.sccode.org/

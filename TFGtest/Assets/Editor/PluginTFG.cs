@@ -1,66 +1,43 @@
 using UnityEngine;
 using UnityEditor;
-
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
+using System.IO;
 
 
-/// <summary>
-/// GUILayout.Width - overrides the fixedWidth of the used style
+//TODO:
+//1. Optimizar el código quitando las listas
+//2. Chequear las tuplas válidas
+//3. Repintado de la ventana y persistencia de los datos
+//4. Estructura de la ventana para hacerla como un árbol
+//5. Enganchar y probar con SuperCollider
+//6. Toggle para usar los atributos del padre / no
+//7. Poder seleccionar componentes igual que se hace con las variables
 
-///GUILayout.Height - overrides the fixedHeight of the used style
-
-///GUILayout.MaxHeight - adds an additional size-constraint
-
-///GUILayout.MaxWidth - adds an additional size-constraint
-
-///GUILayout.MinHeight - adds an additional size-constraint
-
-///GUILayout.MinWidth - adds an additional size-constraint
-
-///GUILayout.ExpandWidth - overrides stretchWidth of the used style
-
-///GUILayout.ExpandHeight
-/// </summary>
+//Se encarga de gestionar la ventana del editor
 public class PluginTFG : EditorWindow
 {
-    //Variables de prueba
-    string myString = "Hola Mundo";
-    string mensajeDebug = "";
-    bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
+    //Lista de tuplas <input, efecto, output>, que es lo único relevante que necesitamos
+    public static List<MusicMaker.MusicTuple> tuples;
+
+    private static string filePath = "/SavedData/";
 
     //Listas de objetos y componentes que se van a usar
-    List<Object> objetos = new List<Object>();
-    List<List<Component>> componentes = new List<List<Component>>();
-    List<List<List<string>>> variables = new List<List<List<string>>>();
+    string mensajeDebug = "";
+    static List<Object> objetos = new List<Object>();
+    static List<List<Component>> componentes = new List<List<Component>>();
+    static List<List<List<string>>> variables = new List<List<List<string>>>();
 
     //"Estilo" (es como el CSS del editor)
-    //private static GUIStyle myStyle;
-
     //Selectores
-    GUILayoutOption[] addObjectsGUI = new GUILayoutOption[]
-    {
-        GUILayout.Width(200)
-    };
-    //Botones para quitar
-    GUILayoutOption[] removeGUI = new GUILayoutOption[] 
-    {
-        GUILayout.Width(20)
-    };
+    GUILayoutOption[] addObjectsGUI = new GUILayoutOption[] { GUILayout.Width(200) };
+    GUILayoutOption[] addComponentsGUI = new GUILayoutOption[] { GUILayout.Width(120) };
+    GUILayoutOption[] addVariableGUI = new GUILayoutOption[] { GUILayout.Width(80) };
 
-    //Selectores
-    GUILayoutOption[] addComponentsGUI = new GUILayoutOption[]
-    {
-        GUILayout.Width(120)
-    };
+    //Botón de eliminado
+    GUILayoutOption[] removeGUI = new GUILayoutOption[] { GUILayout.Width(20) };
 
-    //Selectores
-    GUILayoutOption[] addVariableGUI = new GUILayoutOption[]
-    {
-        GUILayout.Width(80)
-    };
 
     // Inicializa la ventana
     [MenuItem("Tools/Plugin TFG")]
@@ -68,28 +45,11 @@ public class PluginTFG : EditorWindow
     {
         PluginTFG window = (PluginTFG)EditorWindow.GetWindow(typeof(PluginTFG));
         window.Show();
-
-        //myStyle = new GUIStyle(GUI.skin.label)
-        //{
-        //    alignment = TextAnchor.MiddleLeft,
-        //    margin = new RectOffset(20, 0, 0, 0),
-        //    padding = new RectOffset(),
-        //    fontSize = 15,
-        //    fontStyle = FontStyle.Bold
-        //};
+        loadSettings();
     }
     // Aquí es donde se hace todo lo importante
     void OnGUI()
     {
-        ////Cogido directamente del manual de Unity
-        //GUILayout.Label("Ejemplo de prueba", EditorStyles.boldLabel);
-        //myString = EditorGUILayout.TextField("Campo de texto", myString);
-
-        //groupEnabled = EditorGUILayout.BeginToggleGroup("Configuración avanzada", groupEnabled);
-        //myBool = EditorGUILayout.Toggle("Toggle", myBool);
-        //myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
-        //EditorGUILayout.EndToggleGroup();
-
         //Para nuestro plugin
         GUILayout.Label("Música adaptativa", EditorStyles.largeLabel);
 
@@ -99,75 +59,111 @@ public class PluginTFG : EditorWindow
             GUILayout.Label("Gameobject nº" + (i + 1), EditorStyles.boldLabel);
             EditorGUILayout.BeginHorizontal();
             objetos[i] = EditorGUILayout.ObjectField(objetos[i], typeof(GameObject), true, addObjectsGUI);
+            Object obj = objetos[i];
 
             if (GUILayout.Button("X", removeGUI))
-                objetos.Remove(objetos[i]);
+            {
+                objetos.Remove(obj);
+                componentes.Remove(componentes[i]);
+                variables.Remove(variables[i]);
+                obj = null;
+            }
+                
 
             //Añadir un componente nuevo
             if (GUILayout.Button("Añadir Componente", addComponentsGUI))
             {
                 componentes[i].Add(new Component());
                 variables[i].Add(new List<string>());
-                //if (componentes[i].Capacity == componentes[i].Count)
-                //{
-                    
-                //}
-
-                //else
-                //    mensajeDebug = "Selecciona un componente para el input anterior";
             }
             EditorGUILayout.EndHorizontal();
 
-            //Cada componente cuyas variables queremos usar
-            for (int j = 0; j < componentes[i].Count; j++)
+            if (obj == null)
+                mensajeDebug = "Selecciona primero un objeto válido";
+            else
             {
-                string cName = "Componente";
-                if (componentes[i][j] != null)
-                    cName = componentes[i][j].name;
-                GUILayout.Label(cName, EditorStyles.miniBoldLabel);
-
-                EditorGUILayout.BeginHorizontal();
-                componentes[i][j] = EditorGUILayout.ObjectField(componentes[i][j], typeof(Component), true, addComponentsGUI) as Component;
-
-                //Control de errores (comprobamos que el componente pertenece a ese gameobject)
-                if (componentes[i].Count > 0 && componentes[i][j] != null && componentes[i][j].gameObject != objetos[i])
-                {
-                    componentes[i][j] = null;
-                    mensajeDebug = "Asigna un componente del GameObject seleccionado";
-                }
-
-                //Quitar un componente
-                if (GUILayout.Button("X", removeGUI))
-                    componentes[i].Remove(componentes[i][j]);
-
-                //Añadir una variable nueva
-                if (GUILayout.Button("Añadir variable", addVariableGUI))
-                {
-                    string s = "";
-                    variables[i][j].Add(s);
-                }
-
-                EditorGUILayout.EndHorizontal();
-
                 //Cada componente cuyas variables queremos usar
-                for (int k = 0; k < variables[i][j].Count; k++)
+                for (int j = 0; j < componentes[i].Count; j++)
                 {
+                    //Selección por defecto
+                    string cName = "Componente";
+                    if (componentes[i][j] != null)
+                        cName = componentes[i][j].name;
+                    GUILayout.Label(cName, EditorStyles.miniBoldLabel);
+
                     EditorGUILayout.BeginHorizontal();
-                    variables[i][j][k] = EditorGUILayout.TextField(variables[i][j][k], addVariableGUI);
+                    componentes[i][j] = EditorGUILayout.ObjectField(componentes[i][j], typeof(Component), true, addComponentsGUI) as Component;
+                    Component comp = componentes[i][j];
+
+                    //Control de errores (comprobamos que el componente pertenece a ese gameobject)
+                    if (comp != null && comp.gameObject != obj)
+                    {
+                        comp = null;
+                        mensajeDebug = "Asigna un componente del GameObject seleccionado";
+                    }
 
                     //Quitar un componente
                     if (GUILayout.Button("X", removeGUI))
-                        variables[i][j].Remove(variables[i][j][k]);
+                    {
+                        componentes[i].Remove(comp);
+                        variables[i].Remove(variables[i][j]);
+                        comp = null;
+                    }
+
+
+                    //Añadir una variable nueva
+                    if (GUILayout.Button("Añadir variable", addVariableGUI))
+                    {
+                        string s = "";
+                        variables[i][j].Add(s);
+                    }
 
                     EditorGUILayout.EndHorizontal();
 
-                    //TODO: TENER EN CUENTA MINUSCULAS Y MAYUSCULAS
-                    if(variables[i][j][k] != null)
+                    if (comp == null)
+                        mensajeDebug = "Selecciona primero un componente válido";
+                    else
                     {
-                        if (MusicMaker.Utils.checkVariable(new MusicMaker.Variable(componentes[i][j], variables[i][j][k])))
-                            mensajeDebug = "Variable correcta";
-                        else
-                            mensajeDebug = "La variable " + variables[i][j][k] + " no se encuentra en el componente " + componentes[i][j];
+                        //Cada componente cuyas variables queremos usar
+                        for (int k = 0; k < variables[i][j].Count; k++)
+                        {
+                            EditorGUILayout.BeginHorizontal();
+                            List<string> props = MusicMaker.Utils.getProperties(new MusicMaker.MusicInput(componentes[i][j], variables[i][j][k]));
+
+                            int choiceIndex = 0;
+                            if (variables[i][j][k] != null)
+                                choiceIndex = props.IndexOf(variables[i][j][k]);
+
+                            choiceIndex = EditorGUILayout.Popup(choiceIndex, props.ToArray(), addVariableGUI);
+                            if (choiceIndex >= 0)
+                                variables[i][j][k] = props[choiceIndex]; //Actualiza el valor de la variable
+                            string var = variables[i][j][k];
+                            //variables[i][j][k] = EditorGUILayout.TextField(variables[i][j][k], addVariableGUI);
+
+                            //Efecto del input sobre el output
+                            MusicMaker.MusicEffect musicEffect = MusicMaker.MusicEffect.None;
+                            musicEffect = (MusicMaker.MusicEffect)EditorGUILayout.EnumFlagsField(musicEffect, addVariableGUI);
+
+                            //Parámetro de la música a cambiar
+                            MusicMaker.MusicOutput musicOutput = MusicMaker.MusicOutput.None;
+                            musicOutput = (MusicMaker.MusicOutput)EditorGUILayout.EnumFlagsField(musicOutput, addVariableGUI);
+
+
+                            //Quitar una variable
+                            if (GUILayout.Button("X", removeGUI))
+                                variables[i][j].Remove(var);
+
+                            EditorGUILayout.EndHorizontal();
+
+                            //TODO: CHQUEAR QUE LA COMBINACIÓN DE {INPUT, EFECTO, OUTPUT ES VÁLIDA}
+                            //if (var != null)
+                            //{
+                            //    if (MusicMaker.Utils.checkCorrectInput(new MusicMaker.MusicInput(comp, var)))
+                            //        mensajeDebug = "Variable correcta";
+                            //    else
+                            //        mensajeDebug = "La variable " + var + " no se encuentra en el componente " + comp;
+                            //}
+                        }
                     }
                 }
             }
@@ -181,13 +177,45 @@ public class PluginTFG : EditorWindow
             variables.Add(new List<List<string>>());
         }
 
+        //Guarda la escena
+        saveSettings();
 
+        //Mensaje de Debug
+        GUILayout.BeginArea(new Rect(5, Screen.height - 45, 300, 20));
         GUILayout.Label(mensajeDebug, EditorStyles.boldLabel);
+        GUILayout.EndArea();
     }
 
-    /// <summary>
-    /// Actualiza la aplicación 
-    /// </summary>
+    //Carga la información desde el fichero
+    static void loadSettings()
+    {
+        string path = Application.dataPath + filePath;
+        if (File.Exists(path))
+        {
+            string jsonData = File.ReadAllText(path + "Tuples.json");
+            tuples = JsonUtility.FromJson<List<MusicMaker.MusicTuple>>(jsonData);
+        }
+        else
+        {
+            tuples = new List<MusicMaker.MusicTuple>();
+        }
+    }
+
+    //Guarda la información proporcionada a un fichero
+    void saveSettings()
+    {
+        GUILayout.BeginArea(new Rect((Screen.width - 90), Screen.height - 45, 85, 20));
+        if (GUILayout.Button("Aplicar", addVariableGUI))
+        {
+            string path = Application.dataPath + filePath;
+            string jsonData = JsonUtility.ToJson(tuples);
+            File.WriteAllText(path + "Tuples.json", jsonData);
+
+            mensajeDebug = "Cambios aplicados";
+        }
+        GUILayout.EndArea();
+    }
+    // Actualiza la aplicación 
     void Update()
     {
         if (EditorApplication.isPlaying)
@@ -195,4 +223,15 @@ public class PluginTFG : EditorWindow
             Repaint();
         }
     }
+
+    //public void Awake()
+    //{
+    //    Debug.Log("Awake");
+    //}
+
+    ////Se cierra la ventana
+    //void OnDestroy()
+    //{
+    //    Debug.Log("Destroyed...");
+    //}
 }

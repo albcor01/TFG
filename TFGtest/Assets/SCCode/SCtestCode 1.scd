@@ -176,8 +176,19 @@ SynthDef(\rhodey_sc, {
     Out.ar(out, snd);
 }).add;
 
+(
+s.boot;
+Environment.clear;
+
+~unityClient = NetAddr.new("127.0.0.1",7771);
+NetAddr.localAddr;
+)
+
 t = TempoClock.new;
 t.tempo = 1.5;
+
+b = NetAddr.new("127.0.0.1", 7771);
+
 
 OSCdef.new(
 	\test,
@@ -204,7 +215,7 @@ OSCdef.new(
 			\vel, Pgauss(0.8, 0.1, inf),
 			\amp, 0.3
 		).play(t);
-
+		b.sendMsg("/SCReciever", t.tempo);
 	},
 	'/test', nil, 57120
 );
@@ -251,6 +262,17 @@ OSCdef.new(
 	\test5,
 	{
 		t.tempo = t.tempo + 0.5;
+		b.sendMsg("tempo", t.tempo);
 	},
 	'/test5', nil, 57120
+);
+
+OSCdef.new(
+	\test6,
+	{
+		y = List.new(3);
+		5.do({ arg i; y.add(i); });
+		b.sendMsg("/list", y);
+	},
+	'/test6', nil, 57120
 );

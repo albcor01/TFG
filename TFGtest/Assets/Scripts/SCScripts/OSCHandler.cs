@@ -95,14 +95,9 @@ public class OSCHandler : MonoBehaviour
 	public void Init()
 	{
         //Initialize OSC clients (transmitters)
-        //Example:		
-        //CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 5555);
         CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 57120);
-
         //Initialize OSC servers (listeners)
-        //Example:
-
-        //CreateServer("AndroidPhone", 6666);
+        CreateServer("SCReciver", 7771);
     }
 
     #region Properties
@@ -378,7 +373,34 @@ public class OSCHandler : MonoBehaviour
 		
 		return milliseconds.ToString();
 	}
-			
-	#endregion
-}	
+
+    /// <summary>
+    /// Getter method that returns the value requested converted to string
+    /// </summary>
+    public string GetValue(string server, string id)
+    {
+        int i = 0;
+        bool exist = false;
+        string value = "-1";
+        while (i < _servers[server].packets.Count && !exist){
+            int loc = 0;
+            while (loc < _servers[server].packets.Count && !exist)
+            {
+                if (_servers[server].packets[loc].Address == id)
+                {
+                    exist = true;
+                    value = DataToString(Servers[server].packets[loc].Data);
+                }
+                loc++;
+            }
+            i++;
+        }
+        if (!exist)
+        {
+            throw new Exception(String.Format("Can't find {0} in {1}", id, server));           
+        }
+        return value;       
+    }
+    #endregion
+}
 

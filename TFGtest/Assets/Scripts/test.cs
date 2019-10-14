@@ -21,6 +21,18 @@ public class test : MonoBehaviour
             float test = 1.0f;
             OSCHandler.Instance.SendMessageToClient(ClientId, "/test5", test);
         }
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            float test = 1.0f;
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/test6", test);
+        }
+        else if (Input.GetKeyDown(KeyCode.B))
+        {
+            OSCHandler.Instance.UpdateLogs();
+            string tempo = OSCHandler.Instance.GetValue("SCReciver", "tempo");
+            Debug.Log(tempo);
+
+        }
     }
 
 }

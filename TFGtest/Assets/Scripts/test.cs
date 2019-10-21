@@ -26,6 +26,11 @@ public class test : MonoBehaviour
             float test = 1.0f;
             OSCHandler.Instance.SendMessageToClient(ClientId, "/test6", test);
         }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            float test = 1.0f;
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/test7", test);
+        }
         else if (Input.GetKeyDown(KeyCode.B))
         {
             OSCHandler.Instance.UpdateLogs();

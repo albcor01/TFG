@@ -32,3 +32,7 @@ a tener en cuenta a la hora de adaptar la música desde el Editor.
 - Se consigue enviar información desde SuperCollider a Unity. Primera prueba haciendo un Log del tempo
 de la pieza en el Editor.
 Código en "SCScripts".
+
+### 21/10/2019
+- Se define la estructura base de SuperCollider con el sistema de eventos. Los primeros eventos se basan
+en osciladores y cómo modificar su cuerpo a través de generadores LF. 

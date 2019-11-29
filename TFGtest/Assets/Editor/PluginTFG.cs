@@ -9,7 +9,7 @@ using System.IO;
 //TODO:
 //1. Optimizar el código quitando las listas
 //2. Chequear las tuplas válidas
-//3. Repintado de la ventana y persistencia de los datos
+//3. Guardado y cargado de datos
 //4. Estructura de la ventana para hacerla como un árbol
 //5. Enganchar y probar con SuperCollider
 //6. Toggle para usar los atributos del padre / no
@@ -19,7 +19,7 @@ using System.IO;
 public class PluginTFG : EditorWindow
 {
     //Lista de tuplas <input, efecto, output>, que es lo único relevante que necesitamos
-    public static List<MusicMaker.MusicTuple> tuples;
+    public static List<MusicMaker.MusicTuple> tuples = new List<MusicMaker.MusicTuple>();
 
     private static string filePath = "/SavedData/";
 
@@ -28,6 +28,9 @@ public class PluginTFG : EditorWindow
     static List<Object> objetos = new List<Object>();
     static List<List<Component>> componentes = new List<List<Component>>();
     static List<List<List<string>>> variables = new List<List<List<string>>>();
+    static List<List<List<MusicMaker.MusicEffect>>> effects = new List<List<List<MusicMaker.MusicEffect>>>();
+    static List<List<List<MusicMaker.MusicOutput>>> outputs = new List<List<List<MusicMaker.MusicOutput>>>();
+
 
     //"Estilo" (es como el CSS del editor)
     //Selectores
@@ -45,7 +48,8 @@ public class PluginTFG : EditorWindow
     {
         PluginTFG window = (PluginTFG)EditorWindow.GetWindow(typeof(PluginTFG));
         window.Show();
-        loadSettings();
+        EditorApplication.playModeStateChanged += LogPlayModeState;
+        ///loadSettings();
     }
     // Aquí es donde se hace todo lo importante
     void OnGUI()
@@ -53,6 +57,32 @@ public class PluginTFG : EditorWindow
         //Para nuestro plugin
         GUILayout.Label("Música adaptativa", EditorStyles.largeLabel);
 
+        //Distinguimos 
+        if (EditorApplication.isPlaying)
+            drawRunningGUI();
+        else
+            drawStaticGUI();
+    }
+
+    //GUI del PlayMode para ver los valores de las tuplas en ejecución
+    void drawRunningGUI()
+    {
+        List<MusicMaker.MusicTuple> tuplasNuevas = MusicMaker.MMManager.getInstance().getTuples();
+        if (tuplasNuevas != null)
+        {
+            Debug.Log(tuplasNuevas.Count);
+            foreach (MusicMaker.MusicTuple mt in tuplasNuevas)
+            {
+                Debug.Log("Tupla" + tuplasNuevas.IndexOf(mt));
+                object o = MusicMaker.Utils.getInputValue(mt.input);
+                Debug.Log(o);
+            }
+        }
+    }
+
+    //GUI para cuando no estamos en el PlayMode
+    void drawStaticGUI()
+    {
         //Cada GameObject cuyos componentes queremos usar
         for (int i = 0; i < objetos.Count; i++)
         {
@@ -66,15 +96,19 @@ public class PluginTFG : EditorWindow
                 objetos.Remove(obj);
                 componentes.Remove(componentes[i]);
                 variables.Remove(variables[i]);
+                effects.Remove(effects[i]);
+                outputs.Remove(outputs[i]);
                 obj = null;
             }
-                
+
 
             //Añadir un componente nuevo
             if (GUILayout.Button("Añadir Componente", addComponentsGUI))
             {
                 componentes[i].Add(new Component());
                 variables[i].Add(new List<string>());
+                effects[i].Add(new List<MusicMaker.MusicEffect>());
+                outputs[i].Add(new List<MusicMaker.MusicOutput>());
             }
             EditorGUILayout.EndHorizontal();
 
@@ -107,6 +141,8 @@ public class PluginTFG : EditorWindow
                     {
                         componentes[i].Remove(comp);
                         variables[i].Remove(variables[i][j]);
+                        effects[i].Remove(effects[i][j]);
+                        outputs[i].Remove(outputs[i][j]);
                         comp = null;
                     }
 
@@ -116,6 +152,8 @@ public class PluginTFG : EditorWindow
                     {
                         string s = "";
                         variables[i][j].Add(s);
+                        effects[i][j].Add(new MusicMaker.MusicEffect());
+                        outputs[i][j].Add(new MusicMaker.MusicOutput());
                     }
 
                     EditorGUILayout.EndHorizontal();
@@ -141,17 +179,35 @@ public class PluginTFG : EditorWindow
                             //variables[i][j][k] = EditorGUILayout.TextField(variables[i][j][k], addVariableGUI);
 
                             //Efecto del input sobre el output
-                            MusicMaker.MusicEffect musicEffect = MusicMaker.MusicEffect.None;
-                            musicEffect = (MusicMaker.MusicEffect)EditorGUILayout.EnumFlagsField(musicEffect, addVariableGUI);
+                            effects[i][j][k] = (MusicMaker.MusicEffect)EditorGUILayout.EnumFlagsField(effects[i][j][k], addVariableGUI);
+                            MusicMaker.MusicEffect effect = effects[i][j][k];
 
                             //Parámetro de la música a cambiar
-                            MusicMaker.MusicOutput musicOutput = MusicMaker.MusicOutput.None;
-                            musicOutput = (MusicMaker.MusicOutput)EditorGUILayout.EnumFlagsField(musicOutput, addVariableGUI);
+                            outputs[i][j][k] = (MusicMaker.MusicOutput)EditorGUILayout.EnumFlagsField(outputs[i][j][k], addVariableGUI);
+                            MusicMaker.MusicOutput output = outputs[i][j][k];
+
+                            ////Tupla
+                            //MusicMaker.MusicInput input = new MusicMaker.MusicInput(comp, var);
+                            //MusicMaker.MusicTuple t = new MusicMaker.MusicTuple(input, effect, output);
+                            ////Guardamos la variable
+                            //if (var != null && effect != MusicMaker.MusicEffect.None && output != MusicMaker.MusicOutput.None)
+                            //{
+                            //    Debug.Log("Input: {" + t.input.owner + ", " + t.input.component + ", " + t.input.value + "} " +
+                            //        "Efecto: " + t.effect + "\n" + "Output:" + t.output);
+                            //    if (!tuples.Contains(t))
+                            //        tuples.Add(t);
+                            //    Debug.Log(tuples.Count);
+                            //}
 
 
                             //Quitar una variable
                             if (GUILayout.Button("X", removeGUI))
+                            {
                                 variables[i][j].Remove(var);
+                                effects[i][j].Remove(effect);
+                                outputs[i][j].Remove(output);
+                            }
+
 
                             EditorGUILayout.EndHorizontal();
 
@@ -175,6 +231,8 @@ public class PluginTFG : EditorWindow
             objetos.Add(new Object());
             componentes.Add(new List<Component>());
             variables.Add(new List<List<string>>());
+            effects.Add(new List<List<MusicMaker.MusicEffect>>());
+            outputs.Add(new List<List<MusicMaker.MusicOutput>>());
         }
 
         //Guarda la escena
@@ -201,17 +259,33 @@ public class PluginTFG : EditorWindow
         }
     }
 
+
     //Guarda la información proporcionada a un fichero
     void saveSettings()
     {
         GUILayout.BeginArea(new Rect((Screen.width - 90), Screen.height - 45, 85, 20));
         if (GUILayout.Button("Aplicar", addVariableGUI))
         {
-            string path = Application.dataPath + filePath;
-            string jsonData = JsonUtility.ToJson(tuples);
-            File.WriteAllText(path + "Tuples.json", jsonData);
+            tuples.Clear();
+            for (int i = 0; i < variables.Count; i++)
+            {
+                for (int j = 0; j < variables[i].Count; j++)
+                {
+                    for (int k = 0; k < variables[i][j].Count; k++)
+                    {
+                        MusicMaker.MusicInput input = new MusicMaker.MusicInput(componentes[i][j], variables[i][j][k]);
+                        MusicMaker.MusicTuple t = new MusicMaker.MusicTuple(input, effects[i][j][k], outputs[i][j][k]);
+                        if (!tuples.Contains(t))
+                            tuples.Add(t);
+                    }
+                }
+            }
+            //string path = Application.dataPath + filePath;
+            //string jsonData = JsonUtility.ToJson(tuples);
+            //File.WriteAllText(path + "Tuples.json", jsonData);
 
-            mensajeDebug = "Cambios aplicados";
+            mensajeDebug = "Cambios aplicados: " + tuples.Count + " tuplas guardadas";
+            MusicMaker.MMManager.getInstance().setTuples(tuples);
         }
         GUILayout.EndArea();
     }
@@ -221,7 +295,21 @@ public class PluginTFG : EditorWindow
         if (EditorApplication.isPlaying)
         {
             Repaint();
+            //MusicMaker.MMManager.Instance.addTuples(ref tuples);
         }
+        //tupleHandler.update();
+    }
+
+
+    private static void LogPlayModeState(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.ExitingEditMode)
+        {
+            Debug.Log("e");
+            //MusicMaker.MMManager.Instance.setTuples(tuples);
+        }
+            
+        //Debug.Log(state);
     }
 
     //public void Awake()

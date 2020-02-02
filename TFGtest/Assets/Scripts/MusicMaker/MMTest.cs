@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicMakerTest : MonoBehaviour
+public class MMTest : MonoBehaviour
 {
 
     public float parametro { get; set; }

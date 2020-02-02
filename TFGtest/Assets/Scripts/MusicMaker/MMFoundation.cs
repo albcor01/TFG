@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System.Reflection;
 using System.Linq;
+using UnityEditor.UIElements;
 
-namespace MusicMaker
+namespace MM
 {
     //Parámetros modificables de la música
     public enum MusicOutput { None, Tempo, Volume }
@@ -14,39 +16,40 @@ namespace MusicMaker
 
 
     //Inputs
+    [System.Serializable]
     public class MusicInput
     {
-
-        public string value { get; set; }
-        public object component { get; set; }
-        public UnityEngine.Object owner { get; set; }
+        public Object objeto;
+        public Component componente;
+        public string variable;
+        
 
         public MusicInput()
         {
-            this.owner = null;
-            this.component = null;
-            this.value = "";
+            this.objeto = null;
+            this.componente = null;
+            this.variable = "";
         }
 
         public MusicInput(Component component, string value)
         {
-            this.owner = component.gameObject;
-            this.component = component;
-            this.value = value;
+            this.objeto = component.gameObject;
+            this.componente = component;
+            this.variable = value;
         }
 
 
-        public MusicInput(UnityEngine.Object owner, Component component, string value)
+        public MusicInput(UnityEngine.Object objeto, Component component, string value)
         {
-            this.owner = owner;
-            this.component = component;
-            this.value = value;
+            this.objeto = objeto;
+            this.componente = component;
+            this.variable = value;
         }
 
         ////Operadores
         //public static bool operator ==(MusicInput mi1, MusicInput mi2)
         //{
-        //    if (mi1.owner == mi2.owner && mi1.component == mi2.component && System.String.Equals(mi1.value, mi2.value))
+        //    if (mi1.objeto == mi2.objeto && mi1.component == mi2.component && System.String.Equals(mi1.value, mi2.value))
         //        return true;
         //    else
         //        return false;
@@ -61,28 +64,28 @@ namespace MusicMaker
         {
             var input = obj as MusicInput;
             return input != null &&
-                   value == input.value &&
-                   EqualityComparer<object>.Default.Equals(component, input.component) &&
-                   EqualityComparer<Object>.Default.Equals(owner, input.owner);
+                   variable == input.variable &&
+                   EqualityComparer<object>.Default.Equals(componente, input.componente) &&
+                   EqualityComparer<Object>.Default.Equals(objeto, input.objeto);
         }
 
         public override int GetHashCode()
         {
             var hashCode = -1495079906;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(value);
-            hashCode = hashCode * -1521134295 + EqualityComparer<object>.Default.GetHashCode(component);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Object>.Default.GetHashCode(owner);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(variable);
+            hashCode = hashCode * -1521134295 + EqualityComparer<object>.Default.GetHashCode(componente);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Object>.Default.GetHashCode(objeto);
             return hashCode;
         }
     }
 
     //Tupla que consta de input, output y efecto del primero sobre el segundo
+    [System.Serializable]
     public class MusicTuple
     {
-
-        public MusicInput input { get; set; }
-        public MusicEffect effect { get; set; }
-        public MusicOutput output { get; set; }
+        public MusicInput input;
+        public MusicEffect effect;
+        public MusicOutput output;
 
         public MusicTuple(MusicInput input, MusicEffect effect, MusicOutput output)
         {
@@ -137,7 +140,9 @@ namespace MusicMaker
         //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
         public static bool checkCorrectInput(MusicInput v)
         {
-            object obj = v.component;
+            object obj = v.componente;
+            if (obj == null)
+                return false;
             System.Type t = obj.GetType();
             List<PropertyInfo> props = t.GetProperties().ToList();
 
@@ -153,16 +158,16 @@ namespace MusicMaker
                 //Debug.Log(prop.DeclaringType.Name);
                 //if (prop.Name == v.value)
                 // return true;
-                if (prop.Name == v.value)
+                if (prop.Name == v.variable)
                     return true;
             }
             return false;
         }
 
-        //Devuelve el valor del inpur
+        //Devuelve el valor del input
         public static object getInputValue(MusicInput input)
         {
-            object obj = input.component;
+            object obj = input.componente;
             System.Type t = obj.GetType();
             List<PropertyInfo> props = t.GetProperties().ToList();
 
@@ -177,7 +182,7 @@ namespace MusicMaker
                 //}
                 //Debug.Log(prop.DeclaringType.Name);ç
 
-                if (prop.Name == input.value)
+                if (prop.Name == input.variable)
                     return prop.GetValue(obj);
             }
             return null;
@@ -186,7 +191,7 @@ namespace MusicMaker
         //Devuelve las propiedades de un objeto
         public static List<string> getProperties(MusicInput input, bool showInherited = false)
         {
-            object obj = input.component;
+            object obj = input.componente;
             System.Type t = obj.GetType();
             List<PropertyInfo> props = t.GetProperties().ToList();
 
@@ -201,10 +206,10 @@ namespace MusicMaker
             return properties;
         }
 
-        //Comprueba que la tupla es correcta
+        //Comprueba que la tupla es correcta (según nuestro criterio)
         public static bool checkCorrectTuple(MusicTuple t)
         {
-            return false;
+            return true;
         }
     }
 }

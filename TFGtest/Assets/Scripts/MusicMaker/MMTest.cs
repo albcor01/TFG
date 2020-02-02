@@ -5,17 +5,24 @@ using UnityEngine;
 public class MMTest : MonoBehaviour
 {
 
-    public float parametro { get; set; }
+    public float floatParam { get; set; }
+    public bool boolParam { get; set; }
 
-    // Start is called before the first frame update
+    //Inicialización
     void Start()
     {
-        parametro = 0;
+        floatParam = 0;
+        boolParam = false;
     }
 
-    // Update is called once per frame
+    //Prueba
     void Update()
     {
-        parametro+=Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.A))
+            floatParam -= Time.deltaTime;
+        else if (Input.GetKeyDown(KeyCode.D))
+            floatParam += Time.deltaTime;
+        else if (Input.GetKeyDown(KeyCode.B))
+            boolParam = !boolParam;
     }
 }

@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 namespace MM
 {
     //Parámetros modificables de la música
-    public enum MusicOutput { None, Tempo, Volume }
+    public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb }
 
     //Efecto del input sobre el output
     public enum MusicEffect { None, Increase, Decrease, Activate, Deactivate }
@@ -83,8 +83,11 @@ namespace MM
     [System.Serializable]
     public class MusicTuple
     {
+        [Tooltip("La variable que influye")]
         public MusicInput input;
+        [Tooltip("El efecto que causa (aumenta, disminuye, etc.)")]
         public MusicEffect effect;
+        [Tooltip("Parámetro de la música afectado (tempo, volumen, etc.)")]
         public MusicOutput output;
 
         public MusicTuple(MusicInput input, MusicEffect effect, MusicOutput output)
@@ -138,30 +141,17 @@ namespace MM
     {
         static List<MusicTuple> tuples;
         //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
-        public static bool checkCorrectInput(MusicInput v)
+        private static bool checkCorrectInput(MusicInput input)
         {
-            object obj = v.componente;
+            //Componente que contiene la variable
+            object obj = input.componente;
             if (obj == null)
                 return false;
-            System.Type t = obj.GetType();
-            List<PropertyInfo> props = t.GetProperties().ToList();
 
-            //Propiedades del objeto (mirar C# reflection)
-            foreach (var prop in props)
-            {
-                //string s = "";
-                //if (prop.DeclaringType.Name == "MonoBehaviour")
-                //{
-                //    s = prop.Name + " (" + prop.PropertyType.Name + ") :" + prop.GetValue(obj);
-                //    Debug.Log(prop.DeclaringType.Name);
-                //}
-                //Debug.Log(prop.DeclaringType.Name);
-                //if (prop.Name == v.value)
-                // return true;
-                if (prop.Name == v.variable)
-                    return true;
-            }
-            return false;
+            //Propiedades del componente
+            System.Type t = obj.GetType(); //Tipo
+            List<PropertyInfo> props = t.GetProperties().ToList();
+            return (props.Find((x) => x.Name == input.variable)) != null;
         }
 
         //Devuelve el valor del input
@@ -170,22 +160,12 @@ namespace MM
             object obj = input.componente;
             System.Type t = obj.GetType();
             List<PropertyInfo> props = t.GetProperties().ToList();
+            PropertyInfo prop = props.Find((x) => x.Name == input.variable);
+            if (prop == null)
+                return null;
 
-            //Propiedades del objeto (mirar C# reflection)
-            foreach (var prop in props)
-            {
-                //string s = "";
-                //if (prop.DeclaringType.Name == "MonoBehaviour")
-                //{
-                //    s = prop.Name + " (" + prop.PropertyType.Name + ") :" + prop.GetValue(obj);
-                //    Debug.Log(prop.DeclaringType.Name);
-                //}
-                //Debug.Log(prop.DeclaringType.Name);ç
-
-                if (prop.Name == input.variable)
-                    return prop.GetValue(obj);
-            }
-            return null;
+            //Devolvemos el valor de la propiedad
+            return prop.GetValue(obj);
         }
 
         //Devuelve las propiedades de un objeto
@@ -209,7 +189,7 @@ namespace MM
         //Comprueba que la tupla es correcta (según nuestro criterio)
         public static bool checkCorrectTuple(MusicTuple t)
         {
-            return true;
+            return(checkCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
         }
     }
 }

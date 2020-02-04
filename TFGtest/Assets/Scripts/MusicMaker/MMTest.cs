@@ -7,22 +7,24 @@ public class MMTest : MonoBehaviour
 
     public float floatParam { get; set; }
     public bool boolParam { get; set; }
+    public int intParam { get; set; }
 
     //Inicialización
     void Start()
     {
         floatParam = 0;
         boolParam = false;
+        intParam = 0;
     }
 
     //Prueba
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
             floatParam -= Time.deltaTime;
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
             floatParam += Time.deltaTime;
-        else if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
             boolParam = !boolParam;
     }
 }

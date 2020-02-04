@@ -139,7 +139,6 @@ namespace MM
     //Métodos auxiliares
     public static class Utils
     {
-        static List<MusicTuple> tuples;
         //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
         private static bool checkCorrectInput(MusicInput input)
         {
@@ -157,15 +156,33 @@ namespace MM
         //Devuelve el valor del input
         public static object getInputValue(MusicInput input)
         {
+            //Obtenemos la propiedad del componente
             object obj = input.componente;
             System.Type t = obj.GetType();
-            List<PropertyInfo> props = t.GetProperties().ToList();
-            PropertyInfo prop = props.Find((x) => x.Name == input.variable);
+            PropertyInfo prop = t.GetProperty(input.variable);
+            //List<PropertyInfo> props = t.GetProperties().ToList();
+            //PropertyInfo prop = props.Find((x) => x.Name == input.variable);
             if (prop == null)
                 return null;
 
             //Devolvemos el valor de la propiedad
             return prop.GetValue(obj);
+        }
+
+        //Devuelve el tipo del objeto especificado
+        public static System.Type getPropertyType(MusicInput input)
+        {
+            //Obtenemos la propiedad del componente
+            object obj = input.componente;
+            System.Type t = obj.GetType();
+            PropertyInfo prop = t.GetProperty(input.variable);
+            //List<PropertyInfo> props = t.GetProperties().ToList();
+            //PropertyInfo prop = props.Find((x) => x.Name == input.variable);
+            if (prop == null)
+                return null;
+
+            //Devolvemos el valor de la propiedad
+            return prop.PropertyType;
         }
 
         //Devuelve las propiedades de un objeto

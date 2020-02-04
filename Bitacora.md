@@ -33,7 +33,7 @@ a tener en cuenta a la hora de adaptar la música desde el Editor.
 de la pieza en el Editor.
 Código en "SCScripts".
 
-### 21/10/2019
+### 21/10/19
 - Se define la estructura base de SuperCollider con el sistema de eventos. Los primeros eventos se basan
 en osciladores y cómo modificar su cuerpo a través de generadores LF. 
 
@@ -43,3 +43,7 @@ script que deberá llevar un GameObject vacío y donde se podrán configurar las
 la música adaptativa. De esta forma la organización interna es mucho más sencilla y la persistencia se 
 aprovecha de la escena de Unity sin necesidad de guardar datos a ningún fichero.
 - Se eliminan por tanto algunos Scripts innecesarios (PluginTFG y MMManager)
+
+##04/02/20
+- Se consigue que solo se manden los mensajes a SuperCollider en el caso de que las variables de entrada
+hayan modificado su valor. Empezada distinción de casos para procesar los distintos tipos de mensaje.

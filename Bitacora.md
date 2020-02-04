@@ -47,3 +47,7 @@ aprovecha de la escena de Unity sin necesidad de guardar datos a ningún fichero
 ##04/02/20
 - Se consigue que solo se manden los mensajes a SuperCollider en el caso de que las variables de entrada
 hayan modificado su valor. Empezada distinción de casos para procesar los distintos tipos de mensaje.
+- Se crea "MMTest.sc", un archivo de SuperCollider parecido al "Events(Test).sc" para hacer pruebas 
+de comunicación desde Unity. NOTA: el script OSCCall ya no es necesario, lo único que hacía se hace ahora en 
+el "Start()" de MusicMaker.cs
+- Interfaz básica con un par de botones en MMTest.unity

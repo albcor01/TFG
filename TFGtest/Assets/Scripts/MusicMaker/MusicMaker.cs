@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using UnityEditor.SceneManagement;
-using System.IO;
 
 //TODO:
-//1. Enganchar y probar con SuperCollider
-//2. Poder seleccionar componentes y variables de un dropdown
-//3. Chequear las tuplas válidas
+//1. Poder seleccionar componentes y variables de un dropdown
+//2. Chequear las tuplas válidas (formar el sistema de reglas)
+//3. Dividir en 2 scripts? El primero (este) para que el usuario se lo ponga al GameObject
+// y el otro que se encargue de la ejecución en sí
 
-//Se encarga de gestionar la ventana del editor
+//Se encarga de gestionar todo lo referente al plugin
 public class MusicMaker : MonoBehaviour
 {
+    //Instancia del singleton
+    public static MusicMaker instance = null;
+
     //Lista de tuplas <input, efecto, output>, que es lo único relevante que necesitamos
     [Tooltip("La lista de tuplas que condicionarán la música")]
     public List<MM.MusicTuple> tuples;
@@ -21,25 +21,49 @@ public class MusicMaker : MonoBehaviour
     //El estado de las tuplas en el frame anterior
     private List<object> varValues;
 
+    //La id del cliente
+    private const string ClientId = "SuperCollider";
 
-    //Para cuando se hace algún cambio
+    private void Awake()
+    {
+        if (instance != null)
+            Destroy(gameObject);
+        else
+            instance = this;
+    }
+
+    // NOTA: el usuario debe inicializar sus variables en el Awake para que en la primera vuelta todo esté bajo control
+    // (mejor rendimiento porque ahorra una vuelta de mensajes)
+    private void Start()
+    {
+        //Crea:
+        //a) El cliente de SuperCollider en la dirección de loopback
+        //b) El servidor para recibir mensajes de SuperCollider
+        OSCHandler.Instance.Init();
+
+
+        //Inicializar los valores
+        varValues = new List<object>();
+        foreach (MM.MusicTuple t in tuples)
+        {
+            //Comprobamos que el usuario ha metido todos los valores de la tupla bien
+            if (MM.Utils.checkCorrectTuple(t))
+                varValues.Add(MM.Utils.getInputValue(t.input));
+            //Tupla no correcta por lo que sea
+            else
+                varValues.Add(null);
+        }
+    }
+
+    //Para cuando se hace algún cambio en el inspector
     private void OnValidate()
     {
-        //La lista de valores de variables
-        varValues = null;
-        varValues = new List<object>();
         //Validar tuplas
         foreach (MM.MusicTuple t in tuples)
         {
             //Comprobamos que el usuario ha metido todos los valores de la tupla bien
             if (MM.Utils.checkCorrectTuple(t))
-            {
                 Debug.Log("Tupla correcta: " + t.input.variable + "->" + t.effect.ToString() + "s " + t.output.ToString());
-                varValues.Add(MM.Utils.getInputValue(t.input));
-            }
-            //Tupla no correcta por lo que sea
-            else
-                varValues.Add(null);
         }
     }
 
@@ -47,6 +71,7 @@ public class MusicMaker : MonoBehaviour
     private void SendMessage(MM.MusicTuple t)
     {
         //¿Qué parámetro musical modificamos?
+        object value = MM.Utils.getInputValue(t.input);
         switch (t.output)
         {
             //Volumen
@@ -59,7 +84,7 @@ public class MusicMaker : MonoBehaviour
                 break;
             //Tempo
             case MM.MusicOutput.Tempo:
-                //OSCHandler.Instance.SendMessageToClient(ClientId, "/tempo", (float)varValues[i]);
+                OSCHandler.Instance.SendMessageToClient(ClientId, "/tempo", (float)value);
                 break;
             //Reverb
             case MM.MusicOutput.Reverb:
@@ -70,9 +95,10 @@ public class MusicMaker : MonoBehaviour
         }
     }
 
+    //Comprueba si se han producido cambios en las variables y avisa a SC
     private void Update()
     {
-        //Mandar mensajes a SuperCollider con la información que hemos recibido
+        //Recorremos las tuplas
         int i = 0;
         foreach (MM.MusicTuple t in tuples)
         {
@@ -81,6 +107,7 @@ public class MusicMaker : MonoBehaviour
             string type = MM.Utils.getPropertyType(t.input).Name;
 
             //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
+            
             if (!actualVal.Equals(varValues[i]))
             {
                 //Debug
@@ -95,5 +122,33 @@ public class MusicMaker : MonoBehaviour
             }
             i++;
         }
+    }
+
+    //Reproduce la música
+    public void PlayMusic()
+    {
+        float test = 1.0f;
+        OSCHandler.Instance.SendMessageToClient(ClientId, "/play", test);
+    }
+
+    //Para la música (no va)
+    public void StopMusic()
+    {
+        float test = 1.0f;
+        OSCHandler.Instance.SendMessageToClient(ClientId, "/stop", test);
+    }
+
+    //Arranca el server
+    public void LaunchServer()
+    {
+        float test = 1.0f;
+        OSCHandler.Instance.SendMessageToClient(ClientId, "/boot", test);
+    }
+
+    //Cierra el server
+    public void CloseServer()
+    {
+        float test = 1.0f;
+        OSCHandler.Instance.SendMessageToClient(ClientId, "/quit", test);
     }
 }

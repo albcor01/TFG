@@ -36,3 +36,10 @@ Código en "SCScripts".
 ### 21/10/2019
 - Se define la estructura base de SuperCollider con el sistema de eventos. Los primeros eventos se basan
 en osciladores y cómo modificar su cuerpo a través de generadores LF. 
+
+## 02/02/20
+- Se cambia el modelo con el que funciona el plugin en Unity; en vez de una ventana del editor, se presenta como un 
+script que deberá llevar un GameObject vacío y donde se podrán configurar las tuplas {input-efecto-output} para 
+la música adaptativa. De esta forma la organización interna es mucho más sencilla y la persistencia se 
+aprovecha de la escena de Unity sin necesidad de guardar datos a ningún fichero.
+- Se eliminan por tanto algunos Scripts innecesarios (PluginTFG y MMManager)

@@ -303,6 +303,19 @@ public class OSCHandler : MonoBehaviour
         {
             if (_servers[pair.Key].server.LastReceivedPacket != null)
             {
+
+                bool match = false; int i = 0;
+                while (i < _servers[pair.Key].packets.Count && !match)
+                {
+                    if(_servers[pair.Key].packets[i].Address == _servers[pair.Key].server.LastReceivedPacket.Address)
+                    {
+                        _servers[pair.Key].packets.RemoveAt(i);
+                        match = true;
+                    }
+                    else
+                        i++;
+                }
+
                 //Initialization for the first packet received
                 if (_servers[pair.Key].log.Count == 0)
                 {
@@ -312,6 +325,8 @@ public class OSCHandler : MonoBehaviour
                                                              FormatMilliseconds(DateTime.Now.Millisecond), " : ",
                                                              _servers[pair.Key].server.LastReceivedPacket.Address, " ",
                                                              DataToString(_servers[pair.Key].server.LastReceivedPacket.Data)));
+
+                    _servers[pair.Key].server.resetLastReceivedPacket();
                     break;
                 }
 
@@ -330,6 +345,8 @@ public class OSCHandler : MonoBehaviour
                                                              FormatMilliseconds(DateTime.Now.Millisecond), " : ",
                                                              _servers[pair.Key].server.LastReceivedPacket.Address, " ",
                                                              DataToString(_servers[pair.Key].server.LastReceivedPacket.Data)));
+
+                    _servers[pair.Key].server.resetLastReceivedPacket();
                 }
             }
         }
@@ -400,7 +417,7 @@ public class OSCHandler : MonoBehaviour
                 {
                     exist = true;
                     value = DataToString(Servers[server].packets[loc].Data);
-                    Servers[server].packets.RemoveAt(loc); //Cuando recibes un paquete si no lo sacas y lo vuelves a pedir te dara el anterior porque hay 2 y encuentra el de antes primero 
+                    Servers[server].packets.RemoveAt(loc);
                 }
                 loc++;
             }

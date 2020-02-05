@@ -134,6 +134,11 @@ namespace UnityOSC
 
         #region Methods
 
+        public void resetLastReceivedPacket()
+        {
+            _lastReceivedPacket = null;
+        }
+
         /// <summary>
         /// Opens the server at the given port and starts the listener thread.
         /// </summary>

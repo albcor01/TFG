@@ -51,3 +51,9 @@ hayan modificado su valor. Empezada distinción de casos para procesar los disti
 de comunicación desde Unity. NOTA: el script OSCCall ya no es necesario, lo único que hacía se hace ahora en 
 el "Start()" de MusicMaker.cs
 - Interfaz básica con un par de botones en MMTest.unity
+
+##05/02/20
+Se ha conseguido que los mensajes que llegan de supercollider a unity sean coherentes. Antes los mensaje llegaban 
+de manera que se añadian a una lista y nunca se iban además se volcaba el ultimo paquete recibido en cada tick porque
+nunca volvia a ser null ESTO HABRIA QUE MIRAR SI SE ACTUALIZA EN CADA TICK O SOLO CUANDO LLEGA NUEVA INFORMACION PORQUE 
+ENTONCES CAMBIA. habiendo realizado cambios en el codigo de OSCBundle he conseguido definitivamente que los datos sean coherentes.

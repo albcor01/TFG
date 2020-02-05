@@ -33,7 +33,6 @@ public class test : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
-            OSCHandler.Instance.UpdateLogs();
             string tempo = OSCHandler.Instance.GetValue("SCReciver", "tempo");
             Debug.Log(tempo);
 

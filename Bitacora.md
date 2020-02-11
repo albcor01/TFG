@@ -37,14 +37,14 @@ Código en "SCScripts".
 - Se define la estructura base de SuperCollider con el sistema de eventos. Los primeros eventos se basan
 en osciladores y cómo modificar su cuerpo a través de generadores LF. 
 
-## 02/02/20
+### 02/02/20
 - Se cambia el modelo con el que funciona el plugin en Unity; en vez de una ventana del editor, se presenta como un 
 script que deberá llevar un GameObject vacío y donde se podrán configurar las tuplas {input-efecto-output} para 
 la música adaptativa. De esta forma la organización interna es mucho más sencilla y la persistencia se 
 aprovecha de la escena de Unity sin necesidad de guardar datos a ningún fichero.
 - Se eliminan por tanto algunos Scripts innecesarios (PluginTFG y MMManager)
 
-##04/02/20
+### 04/02/20
 - Se consigue que solo se manden los mensajes a SuperCollider en el caso de que las variables de entrada
 hayan modificado su valor. Empezada distinción de casos para procesar los distintos tipos de mensaje.
 - Se crea "MMTest.sc", un archivo de SuperCollider parecido al "Events(Test).sc" para hacer pruebas 
@@ -52,8 +52,30 @@ de comunicación desde Unity. NOTA: el script OSCCall ya no es necesario, lo ún
 el "Start()" de MusicMaker.cs
 - Interfaz básica con un par de botones en MMTest.unity
 
-##05/02/20
+### 05/02/20
 Se ha conseguido que los mensajes que llegan de supercollider a unity sean coherentes. Antes los mensaje llegaban 
 de manera que se añadian a una lista y nunca se iban además se volcaba el ultimo paquete recibido en cada tick porque
 nunca volvia a ser null ESTO HABRIA QUE MIRAR SI SE ACTUALIZA EN CADA TICK O SOLO CUANDO LLEGA NUEVA INFORMACION PORQUE 
 ENTONCES CAMBIA. habiendo realizado cambios en el codigo de OSCBundle he conseguido definitivamente que los datos sean coherentes.
+
+### 10/02/20
+- Reunión interna para acalarar decisiones de diseño respecto a las 2 partes diferenciadas del proyecto:
+
+#### 1. Música procedural: se decide que el principal sesgo para la generación será establecer la temática de entre 
+un abanico (de tamaño por definir) de ellos. Cada temática se considerará como un "pack", ya que traen unos parámetros
+(tempo, tipos de acordes, número de capas, efectos, instrumentos, etc). Aparte de la temática, el usuario podrá 
+decidir algunos parámetros más, como la duración de la pieza o 
+
+#### 2. Música adaptativa: se decide que los inputs que introduzca el jugador (las variables) podrán ser únicamente de tipo
+bool, int o float. No creemos necesario usar ningún tipo más (los strings no tienen sentido en este contexto, los chars
+quedan por decidirse). Los tipos no booleanos, además, cuentan con un mínimo y un máximo para dar un contexto a la variable que recibimos.
+	* Los outputs de la música no están especificados todavía, pero entre ellos se encuantra el tempo, nºcapas, 
+	* No se incluyen entre los outputs efectos de sonido (FX), pero puede que alguna capa, aún tratándose de música, pueda suplir esta función
+si el usuario es capaz de usarlo convenientemente (e.g.: un booleano que activa una pista nueva en el momento en el que el jugador ataca)
+
+### 11/02/20
+- Se decide que los valores de tipo int y float se mandarán a SuperCollider normalizados entre {0-1},
+siendo 0.5 el valor por defecto (i.e., el parámetro se pondrá en su valor por defecto para el tópico actual), 
+y 0 y 1 el mínimo y el máximo establecidos en SuperCollider para ese parámetro.
+[ Ej: Mandamos un mensaje ("tempo", 0.9) desde Unity. En SuperCollider, si el rango de tempo para el tópico actual está entre 100 y 200
+(siendo el 150 por defecto), se establecerá el tempo como 190 ]

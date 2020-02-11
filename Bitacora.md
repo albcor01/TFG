@@ -69,8 +69,8 @@ decidir algunos parámetros más, como la duración de la pieza o
 #### 2. Música adaptativa: se decide que los inputs que introduzca el jugador (las variables) podrán ser únicamente de tipo
 bool, int o float. No creemos necesario usar ningún tipo más (los strings no tienen sentido en este contexto, los chars
 quedan por decidirse). Los tipos no booleanos, además, cuentan con un mínimo y un máximo para dar un contexto a la variable que recibimos.
-	* Los outputs de la música no están especificados todavía, pero entre ellos se encuantra el tempo, nºcapas, 
-	* No se incluyen entre los outputs efectos de sonido (FX), pero puede que alguna capa, aún tratándose de música, pueda suplir esta función
+	- Los outputs de la música no están especificados todavía, pero entre ellos se encuantra el tempo, nºcapas, 
+	- No se incluyen entre los outputs efectos de sonido (FX), pero puede que alguna capa, aún tratándose de música, pueda suplir esta función
 si el usuario es capaz de usarlo convenientemente (e.g.: un booleano que activa una pista nueva en el momento en el que el jugador ataca)
 
 ### 11/02/20

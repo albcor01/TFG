@@ -61,12 +61,14 @@ ENTONCES CAMBIA. habiendo realizado cambios en el codigo de OSCBundle he consegu
 ### 10/02/20
 - Reunión interna para acalarar decisiones de diseño respecto a las 2 partes diferenciadas del proyecto:
 
-#### 1. Música procedural: se decide que el principal sesgo para la generación será establecer la temática de entre 
-un abanico (de tamaño por definir) de ellos. Cada temática se considerará como un "pack", ya que traen unos parámetros
+#### 1. Música procedural 
+Se decide que el principal sesgo para la generación será establecer la temática de entre 
+un abanico (de tamaño por definir) de ellos. Cada temática se considerará como un "pack", ya que traen unos parámetros predeterminados
 (tempo, tipos de acordes, número de capas, efectos, instrumentos, etc). Aparte de la temática, el usuario podrá 
-decidir algunos parámetros más, como la duración de la pieza o 
+decidir algunos parámetros más, como la duración de la pieza o la tonalidad de esta.
 
-#### 2. Música adaptativa: se decide que los inputs que introduzca el jugador (las variables) podrán ser únicamente de tipo
+#### 2. Música adaptativa
+Se decide que los inputs que introduzca el jugador (las variables) podrán ser únicamente de tipo
 bool, int o float. No creemos necesario usar ningún tipo más (los strings no tienen sentido en este contexto, los chars
 quedan por decidirse). Los tipos no booleanos, además, cuentan con un mínimo y un máximo para dar un contexto a la variable que recibimos.
 - Los outputs de la música no están especificados todavía, pero entre ellos se encuantra el tempo, nºcapas, 

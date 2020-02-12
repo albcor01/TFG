@@ -27,9 +27,8 @@ public class PlayerFlightControl : MonoBehaviour
 	public float bank_rotation_multiplier = 1f; //"Bank Rotation Multiplier", "Bank amount along the Z axis when yaw is applied."
 	
 	public float screen_clamp = 500; //"Screen Clamp (Pixels)", "Once the pointer is more than this many pixels from the center, the input in that direction(s) will be treated as the maximum value."
-   
 
-
+    private const string ClientId = "SuperCollider";
 
     [HideInInspector]
 	public float roll, yaw, pitch; //Inputs for roll, yaw, and pitch, taken from Unity's input system.
@@ -74,16 +73,13 @@ public class PlayerFlightControl : MonoBehaviour
 		}
 		
 	}
-	
-	
-	void FixedUpdate () {
 
+    void FixedUpdate () {
    
 		if (actual_model == null) {
 			Debug.LogError("(FlightControls) Ship GameObject is null.");
 			return;
 		}
-		
 		
 		updateCursorPosition();
 		
@@ -101,21 +97,43 @@ public class PlayerFlightControl : MonoBehaviour
 
 		if (thrust_exists) {
 			if (Input.GetAxis("Thrust") > 0) {
-				afterburner_Active = true;
+
+                if (!afterburner_Active)
+                {
+                    float msg = 1.0f;
+                    OSCHandler.Instance.SendMessageToClient(ClientId, "/dronPlay", msg);
+                }
+
+                afterburner_Active = true;
 				slow_Active = false;
 				currentMag = Mathf.Lerp(currentMag, afterburner_speed, thrust_transition_speed * Time.deltaTime);
 				
-			} else if (Input.GetAxis("Thrust") < 0) { 	//If input on the thrust axis is negatve, activate brakes.
-				slow_Active = true;
+			}
+            else if (Input.GetAxis("Thrust") < 0) { 	//If input on the thrust axis is negatve, activate brakes.
+
+                if (afterburner_Active)
+                {
+                    float msg = 1.0f;
+                    OSCHandler.Instance.SendMessageToClient(ClientId, "/dronStop", msg);
+                }
+
+                slow_Active = true;
 				afterburner_Active = false;
 				currentMag = Mathf.Lerp(currentMag, slow_speed, thrust_transition_speed * Time.deltaTime);
-				
-			} else { //Otherwise, hold normal speed.
-				slow_Active = false;
+
+            }
+            else { //Otherwise, hold normal speed.
+
+                if (afterburner_Active)
+                {
+                    float msg = 1.0f;
+                    OSCHandler.Instance.SendMessageToClient(ClientId, "/dronStop", msg);
+                }
+
+                slow_Active = false;
 				afterburner_Active = false;
 				currentMag = Mathf.Lerp(currentMag, speed, thrust_transition_speed * Time.deltaTime);
-				
-			}
+            }
 		}
 				
 		//Apply all these values to the rigidbody on the container.
@@ -185,16 +203,25 @@ public class PlayerFlightControl : MonoBehaviour
 	
 	}
 
-	
-	void Update() {
+    void Update() {
 	
 		//Please remove this and replace it with a shooting system that works for your game, if you need one.
 		if (Input.GetMouseButtonDown(0)) {
 			fireShot();
 		}
 
-	
-	}
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            float msg = 1.0f;
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/bubblesPlay", msg);
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            float msg = 1.0f;
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/bubblesStop", msg);
+        }
+    }
 	
 	
 	public void fireShot() {

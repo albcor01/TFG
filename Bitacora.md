@@ -86,3 +86,12 @@ y 0 y 1 el mínimo y el máximo establecidos en SuperCollider para ese parámetr
 - Añadida la normalización entre 0 y 1 de los parámetros de tipo int y float, así como los casos de "Deactivate" y "Decrease".
 Los booleanos, debido al esquema del OSCHandler, también se pasarán como 0 / 1. El mensaje que se manda coincide con el valor
 del efecto (de entre los del enumerado) pero todo en minúscula y con una barra lateral delante. Ej: Reverb-> "/reverb"
+
+
+### 12/02/2020
+-Creada una demo de un juego espacial para poner a prueba las tres cosas realizadas por cada uno de los integrantes que son:
+	-primera versión funcional del plugin
+	-Correcta conexión y envío de mensajes entre unity y supercollider 
+	-Primeras versiones prototípicas de código en supercollider que permiten generar musica procedural y adaptativa.
+El juego consiste en una nave que dispara a los 10 segundos una nave enemiga aparece y te dispara y si le das 10 veces se va para 
+volver tras pasar 10 segundos.

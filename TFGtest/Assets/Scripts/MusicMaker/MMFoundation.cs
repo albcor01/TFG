@@ -22,6 +22,8 @@ namespace MM
         public Object objeto;
         public Component componente;
         public string variable;
+        public float min;
+        public float max;
         
 
         public MusicInput()

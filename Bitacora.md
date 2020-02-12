@@ -81,3 +81,8 @@ siendo 0.5 el valor por defecto (i.e., el parámetro se pondrá en su valor por 
 y 0 y 1 el mínimo y el máximo establecidos en SuperCollider para ese parámetro.
 [ Ej: Mandamos un mensaje ("tempo", 0.9) desde Unity. En SuperCollider, si el rango de tempo para el tópico actual está entre 100 y 200
 (siendo el 150 por defecto), se establecerá el tempo como 190 ]
+
+### 12/02/20
+- Añadida la normalización entre 0 y 1 de los parámetros de tipo int y float, así como los casos de "Deactivate" y "Decrease".
+Los booleanos, debido al esquema del OSCHandler, también se pasarán como 0 / 1. El mensaje que se manda coincide con el valor
+del efecto (de entre los del enumerado) pero todo en minúscula y con una barra lateral delante. Ej: Reverb-> "/reverb"

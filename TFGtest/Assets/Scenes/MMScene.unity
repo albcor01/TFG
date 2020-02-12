@@ -362,15 +362,19 @@ MonoBehaviour:
   - input:
       objeto: {fileID: 221156307}
       componente: {fileID: 221156311}
-      variable: boolParam
-    effect: 3
-    output: 4
+      variable: floatParam
+      min: 0
+      max: 2
+    effect: 1
+    output: 1
   - input:
       objeto: {fileID: 221156307}
       componente: {fileID: 221156311}
-      variable: floatParam
-    effect: 1
-    output: 1
+      variable: boolParam
+      min: 0
+      max: 1
+    effect: 3
+    output: 4
 --- !u!4 &221156309
 Transform:
   m_ObjectHideFlags: 0

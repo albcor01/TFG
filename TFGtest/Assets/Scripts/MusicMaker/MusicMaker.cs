@@ -67,32 +67,38 @@ public class MusicMaker : MonoBehaviour
         }
     }
 
-    //Manda un mensaje al servidor de SuperCollider usando el OSCHandler
-    private void SendMessage(MM.MusicTuple t)
+
+    //Saca la información de la tupla para mandar el mensaje a SuperCollider
+    private void ProcessMessage(MM.MusicTuple t)
     {
-        //¿Qué parámetro musical modificamos?
-        object value = MM.Utils.getInputValue(t.input);
-        switch (t.output)
+        //Para los valores numéricos; oscila entre 0 y 1
+        float numValue = 0;
+
+        //1. SACAR LA INFORMACIÓN SOBRE EL INPUT Y AJUSTARLO AL FORMATO QUE RECIBE SUPERCOLLIDER
+        //Si es un número, hay que normalizar:
+        object variable = MM.Utils.getInputValue(t.input);
+        if (variable.GetType().Name != "Boolean")
         {
-            //Volumen
-            case MM.MusicOutput.Volume:
-                //OSCHandler.Instance.SendMessageToClient(ClientId, "/volume", (float)varValues[i]);
-                break;
-            //Pitch
-            case MM.MusicOutput.Pitch:
-                //OSCHandler.Instance.SendMessageToClient(ClientId, "/pitch", (float)varValues[i]);
-                break;
-            //Tempo
-            case MM.MusicOutput.Tempo:
-                OSCHandler.Instance.SendMessageToClient(ClientId, "/tempo", (float)value);
-                break;
-            //Reverb
-            case MM.MusicOutput.Reverb:
-                //OSCHandler.Instance.SendMessageToClient(ClientId, "/reverb", varValues[i]);
-                break;
-            default:
-                break;
+            float range = t.input.max - t.input.min;
+            float value = Mathf.Clamp((float)variable, t.input.min, t.input.max);
+            numValue = (value - t.input.min) / range;
+
+            //Caso especial: el parámetro es inversamente proporcional
+            if (t.effect == MM.MusicEffect.Decrease)
+                numValue = 1 - numValue;
         }
+        //Si es un booleano:
+        else
+        {
+            numValue = (bool)variable ? 1 : 0; // 1 / 0
+            //Caso especial: el booleano va al revés (false->true, true->false)
+            if (t.effect == MM.MusicEffect.Deactivate)
+                numValue = 1 - numValue;
+        }
+
+        //2. DISTINGUIR EL OUTPUT Y MANDAR EL MENSAJE
+        string msg = "/" + t.output.ToString().ToLower();
+        OSCHandler.Instance.SendMessageToClient(ClientId, msg, numValue);
     }
 
     //Comprueba si se han producido cambios en las variables y avisa a SC
@@ -107,18 +113,17 @@ public class MusicMaker : MonoBehaviour
             string type = MM.Utils.getPropertyType(t.input).Name;
 
             //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
-            
             if (!actualVal.Equals(varValues[i]))
             {
                 //Debug
-                Debug.Log(t.input.variable + " (" + type + ") : " + actualVal);
-                Debug.Log(t.effect.ToString() + " " + t.output.ToString() + "(" + actualVal +")");
+                //Debug.Log(t.input.variable + " (" + type + ") : " + actualVal);
+                //Debug.Log(t.effect.ToString() + " " + t.output.ToString() + "(" + actualVal +")");
 
                 //Actualizamos nuestra variable
                 varValues[i] = actualVal;
 
-                //Mandamos el mensaje a SuperCollider
-                SendMessage(t);
+                //Procesamos el mensaje y lo mandamos
+                ProcessMessage(t);
             }
             i++;
         }

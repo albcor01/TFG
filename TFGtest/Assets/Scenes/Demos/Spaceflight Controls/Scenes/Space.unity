@@ -317,7 +317,7 @@ PrefabInstance:
     - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
         type: 3}
       propertyPath: tuples.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
         type: 3}
@@ -394,8 +394,32 @@ PrefabInstance:
       propertyPath: tuples.Array.data[2].input.componente
       value: 
       objectReference: {fileID: 74538362}
-    m_RemovedComponents:
-    - {fileID: 5856251347202516013, guid: 14257fc9d4761e0469c824de2efa0357, type: 3}
+    - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
+        type: 3}
+      propertyPath: tuples.Array.data[3].input.objeto
+      value: 
+      objectReference: {fileID: 544854678}
+    - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
+        type: 3}
+      propertyPath: tuples.Array.data[3].input.componente
+      value: 
+      objectReference: {fileID: 544854679}
+    - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
+        type: 3}
+      propertyPath: tuples.Array.data[3].input.variable
+      value: EmpiezaCombate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
+        type: 3}
+      propertyPath: tuples.Array.data[3].effect
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8839934622616896273, guid: 14257fc9d4761e0469c824de2efa0357,
+        type: 3}
+      propertyPath: tuples.Array.data[3].output
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14257fc9d4761e0469c824de2efa0357, type: 3}
 --- !u!1001 &1149328440
 PrefabInstance:

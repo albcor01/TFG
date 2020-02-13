@@ -98,6 +98,7 @@ ServerQuit.removeAll;
 	});
 	e.add(\event2 -> {
 		~drone.stop;
+		"suuu".postln;
 	});
 
 	e.add(\event3 -> {
@@ -334,60 +335,61 @@ e[\event8].value;
 e[\oneshot1].value;
 
 (
+//Activa/desactiva el dron
 OSCdef.new(
 	\intensefx,
 	{
-		e[\event1].value;
+		arg msg;
+		if(msg[1] == 1)
+		{
+			e[\event1].value;
+		}
+		{
+			e[\event2].value;
+		}
 	},
 	'/intensefx', nil, 57120
 );
-
-OSCdef.new(
-	\dronStop,
-	{
-		e[\event2].value;
-	},
-	'/dronStop', nil, 57120
-);
-
+//Activa/desactiva las burbujas
 OSCdef.new(
 	\ambiencefx,
 	{
-		e[\event3].value;
+		arg msg;
+		//Activa/desactiva las burbujas
+		if(msg[1] == 1)
+		{
+			e[\event3].value;
+		}
+		{
+			e[\event4].value;
+		}
 	},
 	'/ambiencefx', nil, 57120
 );
-
-OSCdef.new(
-	\bubblesStop,
-	{
-		e[\event4].value;
-	},
-	'/bubblesStop', nil, 57120
-);
-
+//Activa/desactiva la percusión y acordes de fondo
 OSCdef.new(
 	\backgroundmusic,
 	{
-		e[\event7].value;
+		arg msg;
+		//Activa/desactiva la música de fondo
+		if(msg[1] == 1)
+		{
+			e[\event7].value;
+		}
+		{
+			e[\event8].value;
+		}
 	},
 	'/backgroundmusic', nil, 57120
 );
 
+//Activa el efecto OneShot
 OSCdef.new(
-	\musicStop,
-	{
-		e[\event8].value;
-	},
-	'/musicStop', nil, 57120
-);
-
-OSCdef.new(
-	\sfxPlay,
+	\oneshotfx,
 	{
 		e[\oneshot1].value;
 	},
-	'/sfxPlay', nil, 57120
+	'/oneshotfx', nil, 57120
 );
 )
 

@@ -9,7 +9,7 @@ namespace MM
 {
     #region Input, Output, Efecto
     //Parámetros modificables de la música
-    public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb, Percussions, BackgroundMusic, IntenseFX, AmbienceFX }
+    public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb, Percussions, BackgroundMusic, IntenseFX, AmbienceFX, OneShotFX }
 
     //Efecto del input sobre el output
     public enum MusicEffect { None, Increase, Decrease, Activate, Deactivate }

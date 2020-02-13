@@ -99,4 +99,4 @@ volver tras pasar 10 segundos.
 
 ### 13/02/20
 - Añadidos nuevos outputs para la demo de la reunión de hoy: Percussions, BackgroundMusic, AmbienceFX, IntenseFX.
-Metido el MusicManager en la escena de la demo satisfactoriamente
+Metido el MusicManager en la escena de la demo satisfactoriamente. (El "usuario" ya no manda mensajes a SuperCollider)

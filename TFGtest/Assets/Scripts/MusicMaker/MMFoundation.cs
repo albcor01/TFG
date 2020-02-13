@@ -1,19 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
 using System.Linq;
-using UnityEditor.UIElements;
 
+//Espacio de nombres del Music Maker
 namespace MM
 {
+    #region Input, Output, Efecto
     //Parámetros modificables de la música
-    public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb }
+    public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb, Percussions, BackgroundMusic, IntenseFX, AmbienceFX }
 
     //Efecto del input sobre el output
     public enum MusicEffect { None, Increase, Decrease, Activate, Deactivate }
-
 
     //Inputs
     [System.Serializable]
@@ -24,8 +23,8 @@ namespace MM
         public string variable;
         public float min;
         public float max;
-        
 
+        #region Constructoras
         public MusicInput()
         {
             this.objeto = null;
@@ -47,21 +46,9 @@ namespace MM
             this.componente = component;
             this.variable = value;
         }
+        #endregion
 
-        ////Operadores
-        //public static bool operator ==(MusicInput mi1, MusicInput mi2)
-        //{
-        //    if (mi1.objeto == mi2.objeto && mi1.component == mi2.component && System.String.Equals(mi1.value, mi2.value))
-        //        return true;
-        //    else
-        //        return false;
-        //}
-
-        //public static bool operator !=(MusicInput mi1, MusicInput mi2)
-        //{
-        //    return !(mi1 == mi2);
-        //}
-
+        #region Equals y Hash
         public override bool Equals(object obj)
         {
             var input = obj as MusicInput;
@@ -79,8 +66,11 @@ namespace MM
             hashCode = hashCode * -1521134295 + EqualityComparer<Object>.Default.GetHashCode(objeto);
             return hashCode;
         }
+        #endregion
     }
+    #endregion
 
+    #region Tuplas
     //Tupla que consta de input, output y efecto del primero sobre el segundo
     [System.Serializable]
     public class MusicTuple
@@ -116,45 +106,15 @@ namespace MM
             hashCode = hashCode * -1521134295 + output.GetHashCode();
             return hashCode;
         }
-
-
-        ////Operadores
-        //public static bool operator ==(MusicTuple mt1, MusicTuple mt2)
-        //{
-        //    if (mt1.input == mt2.input)
-        //    {
-        //        Debug.Log("He llegado");
-        //        if (mt1.effect == mt2.effect && mt1.output == mt2.output)
-        //            return true;
-        //    }
-                
-        //    return false;
-        //}
-
-        //public static bool operator !=(MusicTuple mt1, MusicTuple mt2)
-        //{
-        //    return !(mt1 == mt2);
-        //}
     }
 
+    #endregion
 
+    #region Utilidades
     //Métodos auxiliares
     public static class Utils
     {
-        //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
-        private static bool checkCorrectInput(MusicInput input)
-        {
-            //Componente que contiene la variable
-            object obj = input.componente;
-            if (obj == null)
-                return false;
-
-            //Propiedades del componente
-            System.Type t = obj.GetType(); //Tipo
-            List<PropertyInfo> props = t.GetProperties().ToList();
-            return (props.Find((x) => x.Name == input.variable)) != null;
-        }
-
+        #region Reflection
         //Devuelve el valor del input
         public static object getInputValue(MusicInput input)
         {
@@ -204,11 +164,73 @@ namespace MM
 
             return properties;
         }
+        #endregion
+
+        #region Check Tuples
+        //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
+        private static bool checkCorrectInput(MusicInput input)
+        {
+            //Componente que contiene la variable
+            object obj = input.componente;
+            if (obj == null)
+                return false;
+
+            //Propiedades del componente
+            System.Type t = obj.GetType(); //Tipo
+            List<PropertyInfo> props = t.GetProperties().ToList();
+            return (props.Find((x) => x.Name == input.variable)) != null;
+        }
 
         //Comprueba que la tupla es correcta (según nuestro criterio)
         public static bool checkCorrectTuple(MusicTuple t)
         {
             return(checkCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
         }
+
+        #endregion
     }
+
+    #endregion
+
+    #region Drawers
+    [CustomPropertyDrawer(typeof(MusicInput))]
+    public class MusicInputDrawer : PropertyDrawer
+    {
+        // Draw the property inside the given rect
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            // Using BeginProperty / EndProperty on the parent property means that
+            // prefab override logic works on the entire property.
+            EditorGUI.BeginProperty(position, label, property);
+
+            // Draw label
+            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+
+            // Don't make child fields be indented
+            var indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            // Calculate rects
+            var objRect = new Rect(position.x, position.y, 70, position.height);
+            var compRect = new Rect(position.x + 75, position.y, 70, position.height);
+            var varRect = new Rect(position.x + 150, position.y, 70, position.height);
+            var minRect = new Rect(position.x + 225, position.y, 35, position.height);
+            var maxRect = new Rect(position.x + 265, position.y, 35, position.height);
+
+
+            // Draw fields - passs GUIContent.none to each so they are drawn without labels
+            EditorGUI.PropertyField(objRect, property.FindPropertyRelative("objeto"), GUIContent.none);
+            EditorGUI.PropertyField(compRect, property.FindPropertyRelative("componente"), GUIContent.none);
+            EditorGUI.PropertyField(varRect, property.FindPropertyRelative("variable"), GUIContent.none);
+            EditorGUI.PropertyField(minRect, property.FindPropertyRelative("min"), GUIContent.none);
+            EditorGUI.PropertyField(maxRect, property.FindPropertyRelative("max"), GUIContent.none);
+
+
+            // Set indent back to what it was
+            EditorGUI.indentLevel = indent;
+
+            EditorGUI.EndProperty();
+        }
+    }
+    #endregion
 }

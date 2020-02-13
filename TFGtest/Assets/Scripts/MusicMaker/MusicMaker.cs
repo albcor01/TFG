@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections.Generic;
 
 //TODO:
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 //Se encarga de gestionar todo lo referente al plugin
 public class MusicMaker : MonoBehaviour
 {
+    #region Variables
     //Instancia del singleton
     public static MusicMaker instance = null;
 
@@ -24,6 +24,9 @@ public class MusicMaker : MonoBehaviour
     //La id del cliente
     private const string ClientId = "SuperCollider";
 
+    #endregion
+
+    #region Callbacks de Unity
     private void Awake()
     {
         if (instance != null)
@@ -67,7 +70,37 @@ public class MusicMaker : MonoBehaviour
         }
     }
 
+    //Comprueba si se han producido cambios en las variables y avisa a SC
+    private void Update()
+    {
+        //Recorremos las tuplas
+        int i = 0;
+        foreach (MM.MusicTuple t in tuples)
+        {
+            //Cogemos el valor actual de la variable externa
+            object actualVal = MM.Utils.getInputValue(t.input);
+            string type = MM.Utils.getPropertyType(t.input).Name;
 
+            //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
+            if (!actualVal.Equals(varValues[i]))
+            {
+                //Debug
+                //Debug.Log(t.input.variable + " (" + type + ") : " + actualVal);
+                //Debug.Log(t.effect.ToString() + " " + t.output.ToString() + "(" + actualVal +")");
+
+                //Actualizamos nuestra variable
+                varValues[i] = actualVal;
+
+                //Procesamos el mensaje y lo mandamos
+                ProcessMessage(t);
+            }
+            i++;
+        }
+    }
+
+    #endregion
+
+    #region Métodos
     //Saca la información de la tupla para mandar el mensaje a SuperCollider
     private void ProcessMessage(MM.MusicTuple t)
     {
@@ -101,34 +134,6 @@ public class MusicMaker : MonoBehaviour
         OSCHandler.Instance.SendMessageToClient(ClientId, msg, numValue);
     }
 
-    //Comprueba si se han producido cambios en las variables y avisa a SC
-    private void Update()
-    {
-        //Recorremos las tuplas
-        int i = 0;
-        foreach (MM.MusicTuple t in tuples)
-        {
-            //Cogemos el valor actual de la variable externa
-            object actualVal = MM.Utils.getInputValue(t.input);
-            string type = MM.Utils.getPropertyType(t.input).Name;
-
-            //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
-            if (!actualVal.Equals(varValues[i]))
-            {
-                //Debug
-                //Debug.Log(t.input.variable + " (" + type + ") : " + actualVal);
-                //Debug.Log(t.effect.ToString() + " " + t.output.ToString() + "(" + actualVal +")");
-
-                //Actualizamos nuestra variable
-                varValues[i] = actualVal;
-
-                //Procesamos el mensaje y lo mandamos
-                ProcessMessage(t);
-            }
-            i++;
-        }
-    }
-
     //Reproduce la música
     public void PlayMusic()
     {
@@ -156,4 +161,5 @@ public class MusicMaker : MonoBehaviour
         float test = 1.0f;
         OSCHandler.Instance.SendMessageToClient(ClientId, "/quit", test);
     }
+    #endregion
 }

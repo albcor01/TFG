@@ -1,14 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MMTest : MonoBehaviour
 {
-
+    #region Variables
     public float floatParam { get; set; }
     public bool boolParam { get; set; }
     public int intParam { get; set; }
 
+    #endregion
+
+    #region Métodos de Unity
     //Inicialización
     void Awake()
     {
@@ -20,7 +21,6 @@ public class MMTest : MonoBehaviour
     //Prueba
     void Update()
     {
-        float test = 1.0f;
         //Arrancar/cerrar el servidor
         if (Input.GetKeyDown(KeyCode.Return))
             MusicMaker.instance.LaunchServer();
@@ -39,8 +39,16 @@ public class MMTest : MonoBehaviour
         else if (Input.GetKey(KeyCode.D))
             floatParam += Time.deltaTime;
 
+        //Parámetro int
+        if (Input.GetKey(KeyCode.Z))
+            intParam -= (int)(Time.deltaTime * 10);
+        else if (Input.GetKey(KeyCode.C))
+            intParam += (int)(Time.deltaTime * 10);
+
         //Parámetro booleano
         if (Input.GetKeyDown(KeyCode.B))
             boolParam = !boolParam;
     }
+
+    #endregion
 }

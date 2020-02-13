@@ -335,11 +335,11 @@ e[\oneshot1].value;
 
 (
 OSCdef.new(
-	\dronPlay,
+	\intensefx,
 	{
 		e[\event1].value;
 	},
-	'/dronPlay', nil, 57120
+	'/intensefx', nil, 57120
 );
 
 OSCdef.new(
@@ -351,11 +351,11 @@ OSCdef.new(
 );
 
 OSCdef.new(
-	\bubblesPlay,
+	\ambiencefx,
 	{
 		e[\event3].value;
 	},
-	'/bubblesPlay', nil, 57120
+	'/ambiencefx', nil, 57120
 );
 
 OSCdef.new(
@@ -367,11 +367,11 @@ OSCdef.new(
 );
 
 OSCdef.new(
-	\musicPlay,
+	\backgroundmusic,
 	{
 		e[\event7].value;
 	},
-	'/musicPlay', nil, 57120
+	'/backgroundmusic', nil, 57120
 );
 
 OSCdef.new(

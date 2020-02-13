@@ -172,19 +172,21 @@ namespace MM
         {
             //Componente que contiene la variable
             object obj = input.componente;
-            if (obj == null)
+            if (obj == null || input.objeto == null)
                 return false;
 
             //Propiedades del componente
             System.Type t = obj.GetType(); //Tipo
             List<PropertyInfo> props = t.GetProperties().ToList();
-            return (props.Find((x) => x.Name == input.variable)) != null;
+            PropertyInfo p = props.Find((x) => x.Name == input.variable);
+            //Tiene esa propiedad
+            return (p != null);
         }
 
         //Comprueba que la tupla es correcta (según nuestro criterio)
         public static bool checkCorrectTuple(MusicTuple t)
         {
-            return(checkCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
+            return (checkCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
         }
 
         #endregion

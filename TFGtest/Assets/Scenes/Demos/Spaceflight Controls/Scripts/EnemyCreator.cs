@@ -5,11 +5,16 @@ using UnityEngine;
 public class EnemyCreator : MonoBehaviour
 {
     bool EnCombate = false;
-    bool EmpiezaCombate = false;
+    public bool EmpiezaCombate { get; set; }
     public GameObject Enemgo;
     public GameObject EnemyShipRespawn;
 
     private const string ClientId = "SuperCollider";
+
+    private void Awake()
+    {
+        EmpiezaCombate = false;
+    }
 
     // Update is called once per frame
     void Update()

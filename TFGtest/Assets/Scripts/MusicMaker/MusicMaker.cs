@@ -6,6 +6,7 @@ using System.Collections.Generic;
 //2. Chequear las tuplas válidas (formar el sistema de reglas)
 //3. Dividir en 2 scripts? El primero (este) para que el usuario se lo ponga al GameObject
 // y el otro que se encargue de la ejecución en sí
+//4. QUITAR LAS TUPLAS QUE SEAN NULL
 
 //Se encarga de gestionar todo lo referente al plugin
 public class MusicMaker : MonoBehaviour
@@ -37,6 +38,7 @@ public class MusicMaker : MonoBehaviour
 
     // NOTA: el usuario debe inicializar sus variables en el Awake para que en la primera vuelta todo esté bajo control
     // (mejor rendimiento porque ahorra una vuelta de mensajes)
+    // Aquí se hace que solo queden tuplas válidas para no tener que comprobarlo en cada tick
     private void Start()
     {
         //Crea:
@@ -44,18 +46,13 @@ public class MusicMaker : MonoBehaviour
         //b) El servidor para recibir mensajes de SuperCollider
         OSCHandler.Instance.Init();
 
+        //Eliminar tuplas no válidas 
+        tuples.RemoveAll(x => !MM.Utils.checkCorrectTuple(x));
 
-        //Inicializar los valores
+        //Inicializar los valores auxiliares copiando de los originales
         varValues = new List<object>();
         foreach (MM.MusicTuple t in tuples)
-        {
-            //Comprobamos que el usuario ha metido todos los valores de la tupla bien
-            if (MM.Utils.checkCorrectTuple(t))
-                varValues.Add(MM.Utils.getInputValue(t.input));
-            //Tupla no correcta por lo que sea
-            else
-                varValues.Add(null);
-        }
+            varValues.Add(MM.Utils.getInputValue(t.input));
     }
 
     //Para cuando se hace algún cambio en el inspector

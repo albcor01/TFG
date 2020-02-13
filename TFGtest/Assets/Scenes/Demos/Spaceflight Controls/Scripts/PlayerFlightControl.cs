@@ -33,7 +33,7 @@ public class PlayerFlightControl : MonoBehaviour
     [HideInInspector]
 	public float roll, yaw, pitch; //Inputs for roll, yaw, and pitch, taken from Unity's input system.
 	[HideInInspector]
-	public bool afterburner_Active = false; //True if afterburners are on.
+    public bool afterburner_Active { get; set; } //True if afterburners are on.
 	[HideInInspector]
 	public bool slow_Active = false; //True if brakes are on
 	
@@ -47,9 +47,19 @@ public class PlayerFlightControl : MonoBehaviour
 	
 	bool thrust_exists = true;
 	bool roll_exists = true;
+
+
+    //ADAPTATIVA
+    public bool bubbles { get; set; }
     #endregion
 
     #region Monobehaviour methods
+
+    private void Awake()
+    {
+        bubbles = false;
+        afterburner_Active = false;
+    }
     void Start() {
 	
 		mousePos = new Vector2(0,0);	
@@ -97,39 +107,18 @@ public class PlayerFlightControl : MonoBehaviour
 
 		if (thrust_exists) {
 			if (Input.GetAxis("Thrust") > 0) {
-
-                if (!afterburner_Active)
-                {
-                    float msg = 1.0f;
-                    OSCHandler.Instance.SendMessageToClient(ClientId, "/dronPlay", msg);
-                }
-
                 afterburner_Active = true;
 				slow_Active = false;
 				currentMag = Mathf.Lerp(currentMag, afterburner_speed, thrust_transition_speed * Time.deltaTime);
 				
 			}
             else if (Input.GetAxis("Thrust") < 0) { 	//If input on the thrust axis is negatve, activate brakes.
-
-                if (afterburner_Active)
-                {
-                    float msg = 1.0f;
-                    OSCHandler.Instance.SendMessageToClient(ClientId, "/dronStop", msg);
-                }
-
                 slow_Active = true;
 				afterburner_Active = false;
 				currentMag = Mathf.Lerp(currentMag, slow_speed, thrust_transition_speed * Time.deltaTime);
 
             }
             else { //Otherwise, hold normal speed.
-
-                if (afterburner_Active)
-                {
-                    float msg = 1.0f;
-                    OSCHandler.Instance.SendMessageToClient(ClientId, "/dronStop", msg);
-                }
-
                 slow_Active = false;
 				afterburner_Active = false;
 				currentMag = Mathf.Lerp(currentMag, speed, thrust_transition_speed * Time.deltaTime);
@@ -212,14 +201,7 @@ public class PlayerFlightControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            float msg = 1.0f;
-            OSCHandler.Instance.SendMessageToClient(ClientId, "/bubblesPlay", msg);
-        }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            float msg = 1.0f;
-            OSCHandler.Instance.SendMessageToClient(ClientId, "/bubblesStop", msg);
+            bubbles = !bubbles;
         }
     }
 	

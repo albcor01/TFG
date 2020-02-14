@@ -100,3 +100,8 @@ volver tras pasar 10 segundos.
 ### 13/02/20
 - Añadidos nuevos outputs para la demo de la reunión de hoy: Percussions, BackgroundMusic, AmbienceFX, IntenseFX.
 Metido el MusicManager en la escena de la demo satisfactoriamente. (El "usuario" ya no manda mensajes a SuperCollider)
+
+### 14/02/20
+- Mejorada la UI del plugin, ya solo hay que arrastrar el GameObject que se desea usar, y a partir de ahi todo lo demás
+se selecciona mediante menús desplegables. Los números "min" y "max" solo aparecen si la variable no es booleana
+- Falta refactorizar código repetido en MMFoundation

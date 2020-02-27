@@ -105,3 +105,7 @@ Metido el MusicManager en la escena de la demo satisfactoriamente. (El "usuario"
 - Mejorada la UI del plugin, ya solo hay que arrastrar el GameObject que se desea usar, y a partir de ahi todo lo demás
 se selecciona mediante menús desplegables. Los números "min" y "max" solo aparecen si la variable no es booleana
 - Falta refactorizar código repetido en MMFoundation
+
+### 27/02/2020
+- Comenzada la refactorización de código de supercollider. Se acabaron los test aleatorios en archivos sin sentido. A partir de 
+ahora estará todo organizado convenientemente para su fácil uso y entendimiento. Aun queda mucho pero estamos en ello

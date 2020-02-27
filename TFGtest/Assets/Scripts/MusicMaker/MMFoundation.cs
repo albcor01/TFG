@@ -8,6 +8,9 @@ using System.Linq;
 namespace MM
 {
     #region Tuplas
+    //Los distintos paquetes que el usuario va a poder utilizar para la creación de musica
+    public enum packages { Ambient, Desert, Horror, Asian, Aquatic, War, Electronic };
+
     //Parámetros modificables de la música
     public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb, Percussions, BackgroundMusic, IntenseFX, AmbienceFX, OneShotFX }
 
@@ -242,6 +245,21 @@ namespace MM
         #endregion
     }
 
+    public class Pair<T, U>
+    {
+        public Pair()
+        {
+        }
+
+        public Pair(T first, U second)
+        {
+            this.First = first;
+            this.Second = second;
+        }
+
+        public T First { get; set; }
+        public U Second { get; set; }
+    };
     #endregion
 
     #region Drawers

@@ -11,7 +11,11 @@ using System.Collections.Generic;
 //Se encarga de gestionar todo lo referente al plugin
 public class MusicMaker : MonoBehaviour
 {
+
+
     #region Variables
+    public MM.packages package = MM.packages.Ambient;
+    
     //Instancia del singleton
     public static MusicMaker instance = null;
 

@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 
 //TODO:
-//1. Poder seleccionar componentes y variables de un dropdown
-//2. Chequear las tuplas válidas (formar el sistema de reglas)
-//3. Dividir en 2 scripts? El primero (este) para que el usuario se lo ponga al GameObject
+//1. Chequear las tuplas válidas (formar el sistema de reglas)
+//2. Dividir en 2 scripts? El primero (este) para que el usuario se lo ponga al GameObject
 // y el otro que se encargue de la ejecución en sí
-//4. QUITAR LAS TUPLAS QUE SEAN NULL
+//3. QUITAR LAS TUPLAS QUE SEAN NULL
 
 //Se encarga de gestionar todo lo referente al plugin
 public class MusicMaker : MonoBehaviour
 {
-
-
     #region Variables
-    public MM.packages package = MM.packages.Ambient;
+
+    //Paquete elegido para la música 
+    public MM.Package package = MM.Package.None;
     
     //Instancia del singleton
     public static MusicMaker instance = null;

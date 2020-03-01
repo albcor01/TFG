@@ -109,3 +109,7 @@ se selecciona mediante menús desplegables. Los números "min" y "max" solo apar
 ### 27/02/2020
 - Comenzada la refactorización de código de supercollider. Se acabaron los test aleatorios en archivos sin sentido. A partir de 
 ahora estará todo organizado convenientemente para su fácil uso y entendimiento. Aun queda mucho pero estamos en ello
+
+### 01/03/20
+- Comenzada la ventana relacionada con la primera parte del plugin en Unity. Te deja elegir paquete, queda guardar la información 
+en un sitio no perecedero.

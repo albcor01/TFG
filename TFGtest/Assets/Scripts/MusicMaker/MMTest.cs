@@ -23,15 +23,15 @@ public class MMTest : MonoBehaviour
     {
         //Arrancar/cerrar el servidor
         if (Input.GetKeyDown(KeyCode.Return))
-            MusicMaker.instance.LaunchServer();
+            MusicMaker.Instance.LaunchServer();
         if (Input.GetKeyDown(KeyCode.Escape))
-            MusicMaker.instance.CloseServer();
+            MusicMaker.Instance.CloseServer();
 
         //Reproducir/pausar música
         if (Input.GetKeyDown(KeyCode.P))
-            MusicMaker.instance.PlayMusic();
+            MusicMaker.Instance.PlayMusic();
         else if (Input.GetKeyDown(KeyCode.S))
-            MusicMaker.instance.StopMusic();
+            MusicMaker.Instance.StopMusic();
 
         //Parámetro float
         if (Input.GetKey(KeyCode.A))

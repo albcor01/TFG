@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System;
-
+using System.IO;
 //Ventana del editor para elegir parámetros sobre la música generativa
 public class MMWindow : EditorWindow
 {
@@ -31,7 +31,6 @@ public class MMWindow : EditorWindow
     {
         //Para recuperar los settings que habíamos puesto
         string packageName = EditorPrefs.GetString("PackageType");
-        Debug.Log(packageName);
         package = (MM.Package)Enum.Parse(typeof(MM.Package), packageName);
     }
 
@@ -56,20 +55,26 @@ public class MMWindow : EditorWindow
         //Guardar los cambios
         if (GUILayout.Button("Guardar cambios"))
         {
+            //Guardamos en EditorPrefs...
             EditorPrefs.SetString("PackageType", package.ToString());
+            //...y también en archivo para que luego lo lea el MonoBehaviour
+            MusicMaker.Instance.SetPackage(package);
+            File.WriteAllText(Application.persistentDataPath + "/save.json", package.ToString());
             if (package != MM.Package.None)
                 Debug.Log("Has elegido el paquete " + package.ToString());
             else
                 Debug.Log("Ningún paquete seleccionado");
         }
     }
+
+
     /*
      * "Tick" de la ventana (para ejecutar la lógica)
      * En principio pa esto no hace falta
      */
-    void Update()
-    {
+    //void Update()
+    //{
 
-    }
+    //}
     #endregion
 }

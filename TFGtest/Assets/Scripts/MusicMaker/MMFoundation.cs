@@ -219,21 +219,23 @@ namespace MM
         //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
         private static bool checkCorrectInput(MusicInput input)
         {
-            //Componente que contiene la variable
+            //1. Comprobamos que hay un gameobject y objeto seleccionados
             object obj = input.componente;
             if (obj == null || input.objeto == null)
                 return false;
 
-            //Minimo y maximo
-            if (input.min >= input.max)
-                return false;
-
-            //Propiedades del componente
+            //2. Comprobamos que el componente tiene esa propiedad
             System.Type t = obj.GetType(); //Tipo
             List<PropertyInfo> props = t.GetProperties().ToList();
             PropertyInfo p = props.Find((x) => x.Name == input.variable);
-            //Tiene esa propiedad
-            return (p != null);
+            if (p == null)
+                return false;
+
+            //3. Comprobamos que el min y max están bien
+            if (Utils.GetType(input.variable, obj).Name != "Boolean" && input.min >= input.max)
+                return false;
+
+            return true;
         }
 
         //Comprueba que la tupla es correcta (según nuestro criterio)
@@ -245,6 +247,7 @@ namespace MM
         #endregion
     }
 
+    //Clase Par
     public class Pair<T, U>
     {
         public Pair()
@@ -306,6 +309,8 @@ namespace MM
             // Objetos (es un field normal y corriente) NOTA: todos los objetos tienen al menos un componente (el Transform)
             EditorGUI.PropertyField(objRect, objProp, GUIContent.none);
 
+            if (objProp.objectReferenceValue == null)
+                return;
             // Componente
             DisplayComponents(property, compRect);
 
@@ -314,7 +319,7 @@ namespace MM
 
             // Para los booleanos
             object variable = Utils.GetValue(varProp.stringValue, compProp.objectReferenceValue);
-            if(variable != null && Utils.GetType(varProp.stringValue, compProp.objectReferenceValue).Name != "Boolean")
+            if (variable != null && Utils.GetType(varProp.stringValue, compProp.objectReferenceValue).Name != "Boolean")
             {
                 EditorGUI.PropertyField(minRect, minProp, GUIContent.none);
                 EditorGUI.PropertyField(maxRect, maxProp, GUIContent.none);

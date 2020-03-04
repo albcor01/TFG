@@ -315,6 +315,86 @@ Synth.new(\bpfsaw, [\freq, 440, \amp, 0.7]);
 
 ~marimba.stop;
 
+//TEST DE TERROR
+
+SynthDef(\organDonor,{
+	arg out = 0, pan = 0.0, freq = 440, amp = 0.1, gate = 1, att = 0.01, dec = 0.5, sus = 1, rel = 0.5, lforate = 10, lfowidth = 0.01, cutoff = 100, rq = 0.5;
+
+	var vibrato, pulse, filter, env;
+	vibrato = SinOsc.ar(lforate, Rand(0, 2.0));
+	// up octave, detune by 4 cents
+	// 11.96.midiratio = 1.9953843530485
+	// up octave and a half, detune up by 10 cents
+	// 19.10.midiratio = 3.0139733629359
+	freq = freq * [1, 1.9953843530485, 3.0139733629359];
+	freq = freq * (1.0 + (lfowidth * vibrato));
+	pulse = VarSaw.ar(
+		freq: freq,
+		iphase: Rand(0.0, 1.0) ! 3,
+		width: Rand(0.3, 0.5) ! 3,
+		mul: [1.0,0.7,0.3]);
+	pulse = Mix(pulse);
+	filter = RLPF.ar(pulse, cutoff, rq);
+	env = EnvGen.ar(
+		envelope: Env.adsr(att, dec, sus, rel, amp),
+		gate: gate,
+		doneAction: 2);
+	Out.ar(out, Pan2.ar(filter * env, pan));
+}).add;
+y = Synth.new("organDonor");
+
+(
+~chords = Pbind(
+	\instrument, \bpfsaw,
+	\dur, Pwhite(4.5, 5.0, inf),
+	\midinote, Pxrand([
+		[60, 63, 65, 70],
+		[60, 63, 67],
+		[60, 63, 67, 70],
+		[65, 68, 72],
+	], inf),
+	\detune,1,
+	\cfmin, 100,
+	\cfmax, 200,
+	\rqmin, Pexprand(0.05, 0.05, inf),
+	\atk, Pwhite(2.0, 2.5, inf),
+	\rel, Pwhite(5, 6.0, inf),
+	\ldb, 6,
+	\amp, 0.7,
+	\out, 6,
+).play;
+)
+
+(
+~chords = Pbind(
+	\instrument, \organDonor,
+	\dur, Pwhite(4.5, 5.0, inf),
+	\midinote, Pxrand([
+		[61, 64, 66, 71],
+		[61, 64, 68],
+		[61, 64, 68, 71],
+		[66, 69, 73],
+	], inf),
+	\detune,0.4,
+	\cfmin, 100,
+	\cfmax, 200,
+	\rqmin, Pexprand(0.05, 0.05, inf),
+	\atk, Pwhite(2.0, 2.5, inf),
+	\rel, Pwhite(5, 6.0, inf),
+	\ldb, 1,
+	\amp, 0.2,
+	\out, 6,
+).play;
+)
+x = Synth.new(\reverb, [\in, 6]);
+
+s.boot
+s.plotTree
+
+s.freeAll;
+
+
+
 
 
 

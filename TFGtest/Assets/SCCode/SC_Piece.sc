@@ -43,7 +43,6 @@ ServerQuit.removeAll;
 		);
 	};
 };
-// b[\folder][index].play;
 
 // BUSSES
 // ---------------------------------------------------
@@ -218,7 +217,26 @@ ServerQuit.removeAll;
 	});
 
 	e.add(\oneshot2 -> {
-
+		15.do{
+			Synth(
+				\bpfbuf,
+				[
+					\atk, rrand(0.2,3.0),
+					\sus, rrand(0.2,2.0),
+					\rel, exprand(1.0,6.0),
+					\c1, exprand(1,8),
+					\c2, exprand(-8,-1),
+					\buf, b[\sfx][0].bufnum,
+					\rate, exprand(0.4,2.0),
+					\bpfmix, 0,
+					\amp, exprand(0.2,0.5),
+					\pan, rrand(-0.9,0.9),
+					\spos, rrand(0,100000),
+					\out, ~bus[\reverb]
+				],
+				~mainGrp
+			);
+		};
 	});
 
 	e.add(\oneshot3 -> {
@@ -251,7 +269,7 @@ s.waitForBoot({
 
 	~unityClient = NetAddr.new("127.0.0.1",7771);
 	NetAddr.localAddr;
-	b = NetAddr.new("127.0.0.1", 7771);
+	x = NetAddr.new("127.0.0.1", 7771);
 
 	s.sync;
 
@@ -333,6 +351,11 @@ e[\event6].value;
 e[\event7].value;
 e[\event8].value;
 e[\oneshot1].value;
+e[\oneshot2].value;
+b[\sfx][0].play;
+b[\sfx][0].bufnum;
+~path;
+b;
 
 (
 //Activa/desactiva el dron

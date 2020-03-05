@@ -21,7 +21,7 @@ Scale.major;
 Scale.minor;
 (Scale.minor.degrees+60).midicps; //60 == middle C
 
-// INITIALIZE WITH UNITY
+// INITIALIZE WITH UNITY"
 // ---------------------------------------------------
 (
 s.boot;
@@ -369,23 +369,18 @@ y = Synth.new("organDonor");
 ~chords = Pbind(
 	\instrument, \organDonor,
 	\dur, Pwhite(4.5, 5.0, inf),
-	\midinote, Pxrand([
-		[61, 64, 66, 71],
-		[61, 64, 68],
-		[61, 64, 68, 71],
-		[66, 69, 73],
-	], inf),
-	\detune,0.4,
-	\cfmin, 100,
-	\cfmax, 200,
+	\midinote, Pxrand(~autoChords, inf),
 	\rqmin, Pexprand(0.05, 0.05, inf),
-	\atk, Pwhite(2.0, 2.5, inf),
+	\att, 0.01,
 	\rel, Pwhite(5, 6.0, inf),
 	\ldb, 1,
 	\amp, 0.2,
 	\out, 6,
+	\cutoff, 100,
 ).play;
 )
+
+
 x = Synth.new(\reverb, [\in, 6]);
 
 s.boot

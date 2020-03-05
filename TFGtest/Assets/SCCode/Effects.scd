@@ -16,4 +16,41 @@
 		sig = FreeVerb.ar(sig, 0.5,0.8,0.2)!2;
 		Out.ar(out, sig);
 	}).add;
+
+	//Recibe una nota en midi y un modo del 0 al 7
+	//la nota midi se recomienda que este entre un LA 220 (midinote:57)
+	//y un LA 880 (midinote:77) los modos que acepta la función van del
+	//0 al 6 siendo estos los siguientes
+	//0 = Jonico, 1 = Dorico, 2 = Frigio, 3 = Lidio, 4 = Mixolidio, 5 = Eolico, 6 = Locrio
+	//A partir de aquí generara un array con arrays de acordes construidos con notas en el
+	//modo elegido a partir de la nota elegida.
+	~chorsdGen = {
+		arg midi = 57, modo = 0;
+		var dist, ran, chords, actualPos, midiNotes, actualMidi;
+
+		dist = Array.with(2,2,1,2,2,2,1); //El array base de distancias de los modos griegos
+		actualPos = modo;
+		actualMidi = midi;
+		ran = rrand(4,10); //Numero de acordes que vamos a crear;
+
+
+		midiNotes = Array.fill(8,{
+			actualMidi = actualMidi+dist[actualPos%7];
+			actualPos = actualPos + 1;
+			actualMidi;
+		});
+		midiNotes.insert(0, midi);
+		chords = Array.fill(10,{
+			r = rrand(2, 5);
+			a = Array.fill(r,{
+				b = rrand(0,7);
+				midiNotes[b];
+			});
+			a;
+		});
+		midiNotes.postln;
+		chords;
+	};
+
+	~autoChords = ~chorsdGen.value(60, 5);
 }

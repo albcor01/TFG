@@ -102,7 +102,8 @@ s.waitForBoot({
 
 	s.sync;
 	ServerTree.add(~makeNodes);
-	ServerBoot.add(~makeEvents);
+	ServerBoot.add(~ambientEvents);
+	ServerBoot.add(~terrorEvents);
 	s.freeAll;
 	s.sync;
 

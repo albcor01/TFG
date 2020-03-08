@@ -347,12 +347,7 @@ y = Synth.new("organDonor");
 ~chords = Pbind(
 	\instrument, \bpfsaw,
 	\dur, Pwhite(4.5, 5.0, inf),
-	\midinote, Pxrand([
-		[60, 63, 65, 70],
-		[60, 63, 67],
-		[60, 63, 67, 70],
-		[65, 68, 72],
-	], inf),
+	\midinote, Pxrand(~autoChords, inf),
 	\detune,1,
 	\cfmin, 100,
 	\cfmax, 200,

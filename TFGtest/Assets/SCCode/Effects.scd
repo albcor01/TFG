@@ -26,31 +26,46 @@
 	//modo elegido a partir de la nota elegida.
 	~chorsdGen = {
 		arg midi = 57, modo = 0;
-		var dist, ran, chords, actualPos, midiNotes, actualMidi;
+		var dist, chords, actualPos, midiNotes, actualMidi;
 
 		dist = Array.with(2,2,1,2,2,2,1); //El array base de distancias de los modos griegos
 		actualPos = modo;
 		actualMidi = midi;
-		ran = rrand(4,10); //Numero de acordes que vamos a crear;
 
-
-		midiNotes = Array.fill(8,{
+		//En esta parte metemos todas las notas de la escala en el array
+		midiNotes = Array.fill(9,{
 			actualMidi = actualMidi+dist[actualPos%7];
 			actualPos = actualPos + 1;
 			actualMidi;
 		});
-		midiNotes.insert(0, midi);
+		midiNotes  = midiNotes.insert(0, midi);
+
+		//Empezamos a rellenar el array de acordes
 		chords = Array.fill(10,{
 			r = rrand(2, 5);
-			a = Array.fill(r,{
-				b = rrand(0,7);
-				midiNotes[b];
+			a = [];
+			h = 0;
+			for(h, r,
+			{
+				b = rrand(0,9);
+				while(
+					{
+						var centinela = false;
+						j = 0;
+						for(0, a.size -1,
+							{
+								if(a[j] == midiNotes[b], {centinela = true;});
+								j = j+1;
+						});
+						centinela;
+				},{b = rrand(0,9);});
+				a = a.insert(0, midiNotes[b]);
 			});
 			a;
 		});
-		midiNotes.postln;
 		chords;
 	};
 
 	~autoChords = ~chorsdGen.value(60, 5);
+
 }

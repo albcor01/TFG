@@ -113,3 +113,7 @@ ahora estará todo organizado convenientemente para su fácil uso y entendimient
 ### 01/03/20
 - Comenzada la ventana relacionada con la primera parte del plugin en Unity. Te deja elegir paquete, queda guardar la información 
 en un sitio no perecedero.
+
+### 08/03/20
+- A lo largo de la ultima semana se ha creado un generador de acordes aleatorio en funcion de una nota base y un modo indicados
+tambien comenzados varios paquetes de sonido, el de terror por mi parte. 

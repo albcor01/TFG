@@ -5,7 +5,7 @@
 
 //Aqui se almacena en el diccionario de eventos las distintas posibilidades del paquete
 //Para posteriormente acceder a los cambios con mensajes recibidos de UNITY
-~makeEvents = {
+~ambientEvents = {
 	e = Dictionary.new;
 	e.add(\Drone -> {
 		~drone = Pbind(
@@ -144,6 +144,7 @@
 			);
 		};
 	});
+}
 
 e[\Drone].value;
 e[\StopDrone].value;
@@ -158,7 +159,7 @@ e[\oneshot1].value;
 //Fin Eventos
 //--------------------------------------
 
-	(
+(
 //Activa/desactiva el dron
 OSCdef.new(
 	\intensefx,

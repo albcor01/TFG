@@ -121,7 +121,7 @@ namespace MM
          * Devuelve el valor de la variable del input
          * Ejemplo de uso: object val = Utils.getInputValue(tuplas[0].input);
          */
-        public static object getInputValue(MusicInput input)
+        public static object GetInputValue(MusicInput input)
         {
             //Obtenemos la propiedad del componente
             object obj = input.componente;
@@ -176,7 +176,7 @@ namespace MM
          * Ej: Type t = Utils.getPropertyType(tuplas[0].input);
          *     Debug.Log(t.Name); 
          **/
-        public static System.Type getPropertyType(MusicInput input)
+        public static System.Type GetPropertyType(MusicInput input)
         {
             //Obtenemos la propiedad del componente
             object obj = input.componente;

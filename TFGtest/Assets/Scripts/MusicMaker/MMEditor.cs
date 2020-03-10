@@ -49,7 +49,7 @@ namespace MM
             GUILayout.Label("Selección de paquete temático", EditorStyles.boldLabel);
             package = (MM.Package)EditorGUILayout.EnumPopup("Elige un paquete:", package);
 
-            //Se ha elegido un paquete
+            //Hay un paquete seleccionado
             if (package != MM.Package.None)
             {
                 groupEnabled = EditorGUILayout.BeginToggleGroup("Personalizar paquete", groupEnabled);
@@ -62,13 +62,19 @@ namespace MM
             //Guardar los cambios
             if (GUILayout.Button("Guardar cambios"))
             {
-                //Guardamos en EditorPrefs...
-                EditorPrefs.SetString("PackageType", package.ToString());
-                //...y también en archivo para que luego lo lea el MonoBehaviour
-                MusicMaker.Instance.SetPackage(package);
-                File.WriteAllText(Application.persistentDataPath + "/save.json", package.ToString());
+                //Se ha elegido algún paquete
                 if (package != MM.Package.None)
+                {
+                    //Guardamos en EditorPrefs...
+                    EditorPrefs.SetString("PackageType", package.ToString());
+                    //...y también en archivo para que luego lo lea el MonoBehaviour
+                    MusicMaker.Instance.SetPackage(package);
+                    File.WriteAllText(Application.persistentDataPath + "/save.json", package.ToString());
+
                     userMsg = "Has elegido el paquete " + package.ToString();
+                }
+                    
+                //No se ha elegido
                 else
                     userMsg = "Ningún paquete seleccionado";
             }
@@ -156,7 +162,7 @@ namespace MM
             List<Component> comps = ((GameObject)go).GetComponents<Component>().ToList<Component>();
 
             //Quitamos los componentes que no tienen atributos públicos
-            comps.RemoveAll(x => Utils.GetVariables(x) == null);
+            comps.RemoveAll(x => Utils.GetProperties(x) == null);
 
             //Vemos cuál está seleccionado
             Component seleccionado = comps.Find((x) => x == compProp.objectReferenceValue);

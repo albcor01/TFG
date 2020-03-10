@@ -75,12 +75,12 @@ public class MusicMaker : MonoBehaviour
                 OSCHandler.Instance.Init();
 
             //Eliminar tuplas no válidas 
-            tuples.RemoveAll(x => !MM.Utils.checkCorrectTuple(x));
+            tuples.RemoveAll(x => !MM.Utils.CheckCorrectTuple(x));
 
             //Inicializar los valores auxiliares copiando de los originales
             varValues = new List<object>();
             foreach (MM.MusicTuple t in tuples)
-                varValues.Add(MM.Utils.getInputValue(t.input));
+                varValues.Add(MM.Utils.GetInputValue(t.input));
 
             //Le mandamos el tipo de paquete al cliente de SuperCollider
             float test = 1.0f;
@@ -114,8 +114,8 @@ public class MusicMaker : MonoBehaviour
             foreach (MM.MusicTuple t in tuples)
             {
                 //Cogemos el valor actual de la variable externa
-                object actualVal = MM.Utils.getInputValue(t.input);
-                string type = MM.Utils.getPropertyType(t.input).Name;
+                object actualVal = MM.Utils.GetInputValue(t.input);
+                string type = MM.Utils.GetPropertyType(t.input).Name;
 
                 //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
                 if (!actualVal.Equals(varValues[i]))
@@ -147,7 +147,7 @@ public class MusicMaker : MonoBehaviour
 
         //1. SACAR LA INFORMACIÓN SOBRE EL INPUT Y AJUSTARLO AL FORMATO QUE RECIBE SUPERCOLLIDER
         //Si es un número, hay que normalizar:
-        object variable = MM.Utils.getInputValue(t.input);
+        object variable = MM.Utils.GetInputValue(t.input);
         if (variable.GetType().Name != "Boolean")
         {
             float range = t.input.max - t.input.min;

@@ -117,7 +117,10 @@ namespace MM
     public static class Utils
     {
         #region Reflection
-        //Devuelve el valor del input
+        /**
+         * Devuelve el valor de la variable del input
+         * Ejemplo de uso: object val = Utils.getInputValue(tuplas[0].input);
+         */
         public static object getInputValue(MusicInput input)
         {
             //Obtenemos la propiedad del componente
@@ -133,7 +136,10 @@ namespace MM
             return prop.GetValue(obj);
         }
 
-        //Devuelve el valor del input
+        /**
+         * Devuelve el valor de la propiedad de "instance" con el nombre indicado en "propName"
+         * Ejemplo de uso: object val = Utils.GetValue("mass", player.GetComponent<Rigidbody>());
+         */
         public static object GetValue(string propName, object instance)
         {
             //Obtenemos la propiedad del componente
@@ -148,7 +154,11 @@ namespace MM
             return prop.GetValue(instance);
         }
 
-        //Devuelve el valor del input
+        /**
+         * Devuelve el tipo del que es la propiedad de "instance" llamada "propName"
+         * Ejemplo de uso: Type t = Utils.GetType("mass", obj.GetComponent<Rigidbody>());
+         *                 Debug.Log(t.Name); //Escribe "Float"
+         **/
         public static System.Type GetType(string propName, object instance)
         {
             //Obtenemos la propiedad del componente
@@ -161,7 +171,11 @@ namespace MM
             return prop.PropertyType;
         }
 
-        //Devuelve el tipo del objeto especificado
+        /**
+         * Devuelve el tipo de la variable de un input dado
+         * Ej: Type t = Utils.getPropertyType(tuplas[0].input);
+         *     Debug.Log(t.Name); 
+         **/
         public static System.Type getPropertyType(MusicInput input)
         {
             //Obtenemos la propiedad del componente
@@ -177,8 +191,12 @@ namespace MM
             return prop.PropertyType;
         }
 
-        //Devuelve las propiedades de un objeto
-        public static List<string> getProperties(MusicInput input, bool showInherited = false)
+        /**
+         * Devuelve las propiedades del componente referenciado por el input en forma de lista de strings
+         * Ejemplo de uso: List<string> props = Utils.getProperties(tuplas[0].input);
+         *                 Debug.Log(props.Length); 
+        **/
+        public static List<string> GetProperties(MusicInput input, bool showInherited = false)
         {
             object obj = input.componente;
             System.Type t = obj.GetType();
@@ -194,8 +212,12 @@ namespace MM
             return properties;
         }
 
-        //Devuelve las propiedades de un objeto
-        public static List<string> GetVariables(object component, bool showInherited = false)
+        /**
+         * Devuelve las propiedades de un componente en forma de lista de strings
+         * Ejemplo de uso: List<string> props = Utils.getProperties(player.GetComponent<Player>());
+         *                 Debug.Log(props); 
+        **/
+        public static List<string> GetProperties(object component, bool showInherited = false)
         {
             System.Type t = component.GetType();
             List<PropertyInfo> props = t.GetProperties().ToList();
@@ -216,7 +238,7 @@ namespace MM
 
         #region Check Tuples
         //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
-        private static bool checkCorrectInput(MusicInput input)
+        private static bool CheckCorrectInput(MusicInput input)
         {
             //1. Comprobamos que hay un gameobject y objeto seleccionados
             object obj = input.componente;
@@ -238,9 +260,9 @@ namespace MM
         }
 
         //Comprueba que la tupla es correcta (según nuestro criterio)
-        public static bool checkCorrectTuple(MusicTuple t)
+        public static bool CheckCorrectTuple(MusicTuple t)
         {
-            return (checkCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
+            return (CheckCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
         }
 
         #endregion

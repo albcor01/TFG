@@ -13,6 +13,7 @@ namespace MM
     {
         #region Variables
         string myString = "Sharknado";
+        string userMsg = "Ningún paquete seleccionado";
         bool groupEnabled;
         bool myBool = true;
         float myFloat = 0.5f;
@@ -67,21 +68,12 @@ namespace MM
                 MusicMaker.Instance.SetPackage(package);
                 File.WriteAllText(Application.persistentDataPath + "/save.json", package.ToString());
                 if (package != MM.Package.None)
-                    Debug.Log("Has elegido el paquete " + package.ToString());
+                    userMsg = "Has elegido el paquete " + package.ToString();
                 else
-                    Debug.Log("Ningún paquete seleccionado");
+                    userMsg = "Ningún paquete seleccionado";
             }
+            GUILayout.Label(userMsg, EditorStyles.boldLabel);
         }
-
-
-        /*
-         * "Tick" de la ventana (para ejecutar la lógica)
-         * En principio pa esto no hace falta
-         */
-        //void Update()
-        //{
-
-        //}
         #endregion
     }
     #endregion
@@ -189,7 +181,7 @@ namespace MM
             object comp = compProp.objectReferenceValue;
 
             //Lista de variables disponibles
-            List<string> varNames = Utils.GetVariables(comp);
+            List<string> varNames = Utils.GetProperties(comp);
             string seleccionada = varNames.Find((x) => x == varProp.stringValue);
             string[] varList = varNames.ToArray<string>();
 

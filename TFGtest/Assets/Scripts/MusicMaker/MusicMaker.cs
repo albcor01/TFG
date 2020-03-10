@@ -63,10 +63,16 @@ public class MusicMaker : MonoBehaviour
     {
         if (EditorApplication.isPlaying)
         {
-            //Crea:
-            //a) El cliente de SuperCollider en la dirección de loopback
-            //b) El servidor para recibir mensajes de SuperCollider
-            OSCHandler.Instance.Init();
+
+            //Recuperamos la info del paquete (que se pierde por arte de magia)
+            string data = File.ReadAllText(Application.persistentDataPath + "/save.json");
+            package = (MM.Package)Enum.Parse(typeof(MM.Package), data);
+
+            //Iniciamos SuperCollider:
+            //a) Crea el cliente de SuperCollider en la dirección de loopback
+            //b) Crea el servidor para recibir mensajes de SuperCollider
+            if (package != MM.Package.None)
+                OSCHandler.Instance.Init();
 
             //Eliminar tuplas no válidas 
             tuples.RemoveAll(x => !MM.Utils.checkCorrectTuple(x));
@@ -76,9 +82,10 @@ public class MusicMaker : MonoBehaviour
             foreach (MM.MusicTuple t in tuples)
                 varValues.Add(MM.Utils.getInputValue(t.input));
 
-            //Recuperamos la info del paquete (que se pierde por arte de magia)
-            string data = File.ReadAllText(Application.persistentDataPath + "/save.json");
-            package = (MM.Package)Enum.Parse(typeof(MM.Package), data);
+            //Le mandamos el tipo de paquete al cliente de SuperCollider
+            float test = 1.0f;
+            if (package != MM.Package.None)
+                OSCHandler.Instance.SendMessageToClient(ClientId, "/" + package.ToString(), test);
         }
     }
 
@@ -91,7 +98,7 @@ public class MusicMaker : MonoBehaviour
             foreach (MM.MusicTuple t in tuples)
             {
                 //Comprobamos que el usuario ha metido todos los valores de la tupla bien
-                if (MM.Utils.checkCorrectTuple(t))
+                if (MM.Utils.CheckCorrectTuple(t))
                     Debug.Log("Tupla correcta: " + t.input.variable + "->" + t.effect.ToString() + "s " + t.output.ToString());
             }
         }
@@ -130,7 +137,7 @@ public class MusicMaker : MonoBehaviour
 
     #endregion
 
-    #region Métodos
+    #region Mensajes
 
     //Saca la información de la tupla para mandar el mensaje a SuperCollider
     private void ProcessMessage(MM.MusicTuple t)
@@ -166,31 +173,10 @@ public class MusicMaker : MonoBehaviour
     }
 
     //Reproduce la música
-    public void PlayMusic()
+    public void StartMusic()
     {
         float test = 1.0f;
         OSCHandler.Instance.SendMessageToClient(ClientId, "/play", test);
-    }
-
-    //Para la música (no va)
-    public void StopMusic()
-    {
-        float test = 1.0f;
-        OSCHandler.Instance.SendMessageToClient(ClientId, "/stop", test);
-    }
-
-    //Arranca el server
-    public void LaunchServer()
-    {
-        float test = 1.0f;
-        OSCHandler.Instance.SendMessageToClient(ClientId, "/boot", test);
-    }
-
-    //Cierra el server
-    public void CloseServer()
-    {
-        float test = 1.0f;
-        OSCHandler.Instance.SendMessageToClient(ClientId, "/quit", test);
     }
 
     //Establece el paquete
@@ -198,5 +184,6 @@ public class MusicMaker : MonoBehaviour
     {
         package = newPackage;
     }
+
     #endregion
 }

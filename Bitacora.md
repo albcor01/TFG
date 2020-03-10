@@ -117,3 +117,8 @@ en un sitio no perecedero.
 ### 08/03/20
 - A lo largo de la ultima semana se ha creado un generador de acordes aleatorio en funcion de una nota base y un modo indicados
 tambien comenzados varios paquetes de sonido, el de terror por mi parte. 
+
+### 09/03/20
+- Se envía un mensaje al cliente de SuperCollider desde Unity al iniciar la escena. En este se indica el paquete elegido
+y se deberán añadir también los parámetros opcionales iniciales. Con esto, el cliente debe inicializarse, compilar los scripts
+y comenzar a reproducir la música. 

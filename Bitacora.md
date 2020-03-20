@@ -122,3 +122,8 @@ tambien comenzados varios paquetes de sonido, el de terror por mi parte.
 - Se envía un mensaje al cliente de SuperCollider desde Unity al iniciar la escena. En este se indica el paquete elegido
 y se deberán añadir también los parámetros opcionales iniciales. Con esto, el cliente debe inicializarse, compilar los scripts
 y comenzar a reproducir la música. 
+- En proceso de poner los nombres de métodos con UpperCamelCase
+
+### 20/03/20
+- Reunión con Jaime para que vea los progreso de los paquetes que se están haciendo
+- Empezada demo para el paquete de terror

@@ -1,13 +1,14 @@
-// EVENTS
-//Los distintos eventos a los que se podrá llammar desde Unity para generar
-//La música de ambiente genérico.
-// ---------------------------------------------------
 
-//Aqui se almacena en el diccionario de eventos las distintas posibilidades del paquete
-//Para posteriormente acceder a los cambios con mensajes recibidos de UNITY
-~terrorEvents = {
-	e = Dictionary.new;
-	e.add(\CreepyMelody -> {
+TerrorPackage {
+
+	//Variables de la clase
+	var <e, params;
+
+	init{ arg parameters;
+		e = Dictionary.new;
+		params = parameters;
+
+		e.add(\CreepyMelody -> {
 		~creepyMelody = Pbind(
 			\instrument, \bpfsaw,
 			\dur, Pwhite(4.5, 5.0, inf),
@@ -19,7 +20,7 @@
 			\atk, Pwhite(2.0, 2.5, inf),
 			\rel, Pwhite(5, 6.0, inf),
 			\ldb, 6,
-			\amp, 0.7,
+			\amp, 2,
 			\group, ~mainGrp,
 			\out, ~bus[\reverb],
 		).play;
@@ -27,7 +28,6 @@
 	e.add(\StopCreepyMelody -> {
 		~creepyMelody.stop;
 	});
-
 	e.add(\SoftMelody -> {
 		Routine({
 			~softMelody = Pbind(
@@ -72,57 +72,55 @@
 			);
 		};
 	});
+
+
+
+	//Mensajes
+		//Activa/desactiva la percusión y acordes de fondo
+		OSCdef.new(
+			\CreepyMelody,
+			{
+				arg msg;
+				//Activa/desactiva la música de fondo
+				if(msg[1] == 1)
+				{
+					e[\CreepyMelody].value;
+				}
+				{
+					e[\StopCreepyMelody].value;
+				}
+			},
+			'/CreepyMelody', nil, 57120
+		);
+
+		OSCdef.new(
+			\SoftMelody,
+			{
+				arg msg;
+				//Activa/desactiva la música de fondo
+				if(msg[1] == 1)
+				{
+					e[\SoftMelody].value;
+				}
+				{
+					e[\StopSoftMelody].value;
+				}
+			},
+			'/SoftMelody', nil, 57120
+		);
+
+		//Activa el efecto OneShot
+		OSCdef.new(
+			\oneshotfx,
+			{
+				e[\oneshot1].value;
+			},
+			'/oneshotfx', nil, 57120
+		);
+	}
+
+	test{
+		e[\CreepyMelody].value;
+	}
+
 }
-
-e[\CreepyMelody].value;
-e[\StopCreepyMelody].value;
-e[\SoftMelody].value;
-e[\StopSoftMelody].value;
-e[\oneshot1].value;
-
-//Fin Eventos
-//--------------------------------------
-
-(
-//Activa/desactiva la percusión y acordes de fondo
-OSCdef.new(
-	\CreepyMelody,
-	{
-		arg msg;
-		//Activa/desactiva la música de fondo
-		if(msg[1] == 1)
-		{
-			e[\CreepyMelody].value;
-		}
-		{
-			e[\StopCreepyMelody].value;
-		}
-	},
-	'/CreepyMelody', nil, 57120
-);
-
-OSCdef.new(
-	\SoftMelody,
-	{
-		arg msg;
-		//Activa/desactiva la música de fondo
-		if(msg[1] == 1)
-		{
-			e[\SoftMelody].value;
-		}
-		{
-			e[\StopSoftMelody].value;
-		}
-	},
-	'/SoftMelody', nil, 57120
-);
-
-//Activa el efecto OneShot
-OSCdef.new(
-	\oneshotfx,
-	{
-		e[\oneshot1].value;
-	},
-	'/oneshotfx', nil, 57120
-);
-)

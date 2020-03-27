@@ -1,13 +1,15 @@
-// EVENTS
-//Los distintos eventos a los que se podrá llammar desde Unity para generar
-//La música de ambiente genérico.
-// ---------------------------------------------------
 
-//Aqui se almacena en el diccionario de eventos las distintas posibilidades del paquete
-//Para posteriormente acceder a los cambios con mensajes recibidos de UNITY
-~ambientEvents = {
-	e = Dictionary.new;
-	e.add(\Drone -> {
+AmbientPackage {
+
+	//Variables de la clase
+	var <e, params;
+
+	init{ arg parameters;
+
+		e = Dictionary.new;
+		params = parameters;
+
+		e.add(\Drone -> {
 		~drone = Pbind(
 			\instrument, \bpfsaw,
 			\dur, 1,
@@ -144,76 +146,63 @@
 			);
 		};
 	});
+
+	//Lo suyo es que en el init se compilen los mensajes, a ver si sucede o no
+	//Mensajes, ¿funcionara esta vaina?
+	OSCdef.new(
+		\intensefx,
+		{
+			arg msg;
+			if(msg[1] == 1)
+			{
+				e[\Drone].value;
+			}
+			{
+				e[\StopDrone].value;
+			}
+		},
+		'/intensefx', nil, 57120
+	);
+	//Activa/desactiva las burbujas
+	OSCdef.new(
+		\ambiencefx,
+		{
+			arg msg;
+			//Activa/desactiva las burbujas
+			if(msg[1] == 1)
+			{
+				e[\Bubbles].value;
+			}
+			{
+				e[\StopBubbles].value;
+			}
+		},
+		'/ambiencefx', nil, 57120
+	);
+	//Activa/desactiva la percusión y acordes de fondo
+	OSCdef.new(
+		\backgroundmusic,
+		{
+			arg msg;
+			//Activa/desactiva la música de fondo
+			if(msg[1] == 1)
+			{
+				e[\AmbientMelody].value;
+			}
+			{
+				e[\StopAmbientMelody].value;
+			}
+		},
+		'/backgroundmusic', nil, 57120
+	);
+
+	//Activa el efecto OneShot
+	OSCdef.new(
+		\oneshotfx,
+		{
+			e[\oneshot1].value;
+		},
+		'/oneshotfx', nil, 57120
+	);
+	}
 }
-
-e[\Drone].value;
-e[\StopDrone].value;
-e[\Bubbles].value;
-e[\StopBubbles].value;
-e[\Marimba].value;
-e[\StopMarimba].value;
-e[\AmbientMelody].value;
-e[\StopAmbientMelody].value;
-e[\oneshot1].value;
-
-//Fin Eventos
-//--------------------------------------
-
-(
-//Activa/desactiva el dron
-OSCdef.new(
-	\intensefx,
-	{
-		arg msg;
-		if(msg[1] == 1)
-		{
-			e[\Drone].value;
-		}
-		{
-			e[\StopDrone].value;
-		}
-	},
-	'/intensefx', nil, 57120
-);
-//Activa/desactiva las burbujas
-OSCdef.new(
-	\ambiencefx,
-	{
-		arg msg;
-		//Activa/desactiva las burbujas
-		if(msg[1] == 1)
-		{
-			e[\Bubbles].value;
-		}
-		{
-			e[\StopBubbles].value;
-		}
-	},
-	'/ambiencefx', nil, 57120
-);
-//Activa/desactiva la percusión y acordes de fondo
-OSCdef.new(
-	\backgroundmusic,
-	{
-		arg msg;
-		//Activa/desactiva la música de fondo
-		if(msg[1] == 1)
-		{
-			e[\AmbientMelody].value;
-		}
-		{
-			e[\StopAmbientMelody].value;
-		}
-	},
-	'/backgroundmusic', nil, 57120
-);
-
-//Activa el efecto OneShot
-OSCdef.new(
-	\oneshotfx,
-	{
-		e[\oneshot1].value;
-	},
-	'/oneshotfx', nil, 57120
-);
-)

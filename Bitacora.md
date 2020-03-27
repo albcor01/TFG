@@ -121,4 +121,10 @@ tambien comenzados varios paquetes de sonido, el de terror por mi parte.
 ### 09/03/20
 - Se envía un mensaje al cliente de SuperCollider desde Unity al iniciar la escena. En este se indica el paquete elegido
 y se deberán añadir también los parámetros opcionales iniciales. Con esto, el cliente debe inicializarse, compilar los scripts
-y comenzar a reproducir la música. 
+y comenzar a reproducir la música.
+
+### 14/03/20
+-cambiado por completo la estructura del codigo de supercollider, ahora funciona por programación orientada a objetos creando 
+las clases pertinentes. Esto permite que no tengamos que complira a mano el código sino que se cree una instancia del MusicMaker
+que se encarga de compilarlo y ejecutarlo todo.
+

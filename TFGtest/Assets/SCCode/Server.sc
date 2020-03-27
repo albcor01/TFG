@@ -26,10 +26,10 @@ PluginServer {
 		// BUFFERS
 		// ---------------------------------------------------
 		~makeBuffers = {
-			b = Dictionary.new;
+			~buff = Dictionary.new;
 			PathName(~path).entries.do{
 				arg subfolder;
-				b.add(
+				~buff.add(
 					subfolder.folderName.asSymbol ->
 					Array.fill(
 						subfolder.entries.size,

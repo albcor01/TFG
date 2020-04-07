@@ -1,14 +1,15 @@
 
-TerrorPackage {
+TerrorPackage : Package {
 
-	//Variables de la clase
-	var <e, params;
 
 	init{ arg parameters;
-		e = Dictionary.new;
+		percs = Dictionary.new;
+		chords = Dictionary.new;
+		melodies = Dictionary.new;
+
 		params = parameters;
 
-		e.add(\CreepyMelody -> {
+		melodies.add(\CreepyMelody -> {
 		~creepyMelody = Pbind(
 			\instrument, \bpfsaw,
 			\dur, Pwhite(4.5, 5.0, inf),
@@ -25,10 +26,10 @@ TerrorPackage {
 			\out, ~bus[\reverb],
 		).play;
 	});
-	e.add(\StopCreepyMelody -> {
+	melodies.add(\StopCreepyMelody -> {
 		~creepyMelody.stop;
 	});
-	e.add(\SoftMelody -> {
+	melodies.add(\SoftMelody -> {
 		Routine({
 			~softMelody = Pbind(
 				\instrument, \organDonor,
@@ -38,18 +39,18 @@ TerrorPackage {
 				\att, 0.01,
 				\rel, Pwhite(5, 6.0, inf),
 				\ldb, 1,
-				\amp, 0.2,
+				\amp, 2,
 				\group, ~mainGrp,
 				\out, ~bus[\reverb],
 				\cutoff, 100,
 			).play;
 		}).play(AppClock);
 	});
-	e.add(\StopSoftMelody -> {
+	melodies.add(\StopSoftMelody -> {
 		~softMelody.stop;
 	});
 
-	e.add(\oneshot1 -> {
+	percs.add(\oneshot1 -> {
 		12.do{
 			Synth(
 				\bpfsaw,
@@ -72,55 +73,5 @@ TerrorPackage {
 			);
 		};
 	});
-
-
-
-	//Mensajes
-		//Activa/desactiva la percusión y acordes de fondo
-		OSCdef.new(
-			\CreepyMelody,
-			{
-				arg msg;
-				//Activa/desactiva la música de fondo
-				if(msg[1] == 1)
-				{
-					e[\CreepyMelody].value;
-				}
-				{
-					e[\StopCreepyMelody].value;
-				}
-			},
-			'/CreepyMelody', nil, 57120
-		);
-
-		OSCdef.new(
-			\SoftMelody,
-			{
-				arg msg;
-				//Activa/desactiva la música de fondo
-				if(msg[1] == 1)
-				{
-					e[\SoftMelody].value;
-				}
-				{
-					e[\StopSoftMelody].value;
-				}
-			},
-			'/SoftMelody', nil, 57120
-		);
-
-		//Activa el efecto OneShot
-		OSCdef.new(
-			\oneshotfx,
-			{
-				e[\oneshot1].value;
-			},
-			'/oneshotfx', nil, 57120
-		);
 	}
-
-	test{
-		e[\CreepyMelody].value;
-	}
-
 }

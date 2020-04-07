@@ -1,15 +1,15 @@
 
-AmbientPackage {
+AmbientPackage : Package {
 
-	//Variables de la clase
-	var <e, params;
 
 	init{ arg parameters;
 
-		e = Dictionary.new;
+		percs = Dictionary.new;
+		chords = Dictionary.new;
+		melodies = Dictionary.new;
 		params = parameters;
 
-		e.add(\Drone -> {
+		percs.add(\Drone -> {
 		~drone = Pbind(
 			\instrument, \bpfsaw,
 			\dur, 1,
@@ -27,11 +27,11 @@ AmbientPackage {
 			\out, ~bus[\reverb],
 		).play;
 	});
-	e.add(\StopDrone -> {
+	percs.add(\StopDrone -> {
 		~drone.stop;
 	});
 
-	e.add(\Bubbles -> {
+	percs.add(\Bubbles -> {
 		Routine({
 			~bubbles = Pbind(
 				\instrument, \bpfsaw,
@@ -52,11 +52,11 @@ AmbientPackage {
 			).play;
 		}).play(AppClock);
 	});
-	e.add(\StopBubbles -> {
+	percs.add(\StopBubbles -> {
 		~bubbles.stop;
 	});
 
-	e.add(\Marimba -> {
+	melodies.add(\Marimba -> {
 		~simpleMarimba = Pbind(
 			\instrument, \bpfsaw,
 			\dur, Prand([0.5,1,2,3],inf),
@@ -74,11 +74,11 @@ AmbientPackage {
 			\out, ~bus[\reverb],
 		).play;
 	});
-	e.add(\StopMarimba -> {
+	melodies.add(\StopMarimba -> {
 		~simpleMarimba.stop;
 	});
 
-	e.add(\AmbientMelody -> {
+	melodies.add(\AmbientMelody -> {
 		~chords = Pbind(
 			\instrument, \bpfsaw,
 			\dur, Pwhite(4.5,7.0),
@@ -118,12 +118,12 @@ AmbientPackage {
 		).play;
 	});
 
-	e.add(\StopAmbientMelody -> {
+	melodies.add(\StopAmbientMelody -> {
 		~marimba.stop;
 		~chords.stop;
 	});
 
-	e.add(\oneshot1 -> {
+	percs.add(\oneshot1 -> {
 		12.do{
 			Synth(
 				\bpfsaw,
@@ -147,62 +147,6 @@ AmbientPackage {
 		};
 	});
 
-	//Lo suyo es que en el init se compilen los mensajes, a ver si sucede o no
-	//Mensajes, ¿funcionara esta vaina?
-	OSCdef.new(
-		\intensefx,
-		{
-			arg msg;
-			if(msg[1] == 1)
-			{
-				e[\Drone].value;
-			}
-			{
-				e[\StopDrone].value;
-			}
-		},
-		'/intensefx', nil, 57120
-	);
-	//Activa/desactiva las burbujas
-	OSCdef.new(
-		\ambiencefx,
-		{
-			arg msg;
-			//Activa/desactiva las burbujas
-			if(msg[1] == 1)
-			{
-				e[\Bubbles].value;
-			}
-			{
-				e[\StopBubbles].value;
-			}
-		},
-		'/ambiencefx', nil, 57120
-	);
-	//Activa/desactiva la percusión y acordes de fondo
-	OSCdef.new(
-		\backgroundmusic,
-		{
-			arg msg;
-			//Activa/desactiva la música de fondo
-			if(msg[1] == 1)
-			{
-				e[\AmbientMelody].value;
-			}
-			{
-				e[\StopAmbientMelody].value;
-			}
-		},
-		'/backgroundmusic', nil, 57120
-	);
 
-	//Activa el efecto OneShot
-	OSCdef.new(
-		\oneshotfx,
-		{
-			e[\oneshot1].value;
-		},
-		'/oneshotfx', nil, 57120
-	);
 	}
 }

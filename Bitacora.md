@@ -129,11 +129,13 @@ y comenzar a reproducir la música.
 las clases pertinentes. Esto permite que no tengamos que complira a mano el código sino que se cree una instancia del MusicMaker
 que se encarga de compilarlo y ejecutarlo todo.
 
-=======
 y comenzar a reproducir la música. 
 - En proceso de poner los nombres de métodos con UpperCamelCase
 
 ### 20/03/20
 - Reunión con Jaime para que vea los progreso de los paquetes que se están haciendo
 - Empezada demo para el paquete de terror
->>>>>>> 23c288be6c811691b829f2f78d06a95564b92a06
+
+### 07/4/2020
+creados los diccionariso base para separar los eventos de los paquetes en supercollider
+

@@ -1,15 +1,17 @@
 
-DesertPackage {
+DesertPackage : Package {
 
 	//Variables de la clase
-	var <e, params;
 
 		init{ arg parameters;
 
-		e = Dictionary.new;
+		percs = Dictionary.new;
+		chords = Dictionary.new;
+		melodies = Dictionary.new;
+
 		params = parameters;
 
-		e.add(\DesertPercs -> {
+		percs.add(\DesertPercs -> {
 			Pdef(
 				\rhythm,
 				Pbind(
@@ -31,7 +33,7 @@ DesertPackage {
 			).play(quant:1.875);
 		});
 
-		e.add(\ReDesertPercs -> {
+		percs.add(\ReDesertPercs -> {
 			Pdef(
 				\rhythm,
 				Pbind(
@@ -53,11 +55,11 @@ DesertPackage {
 			).quant_(1.875);
 		});
 
-		e.add(\StopDesertPercs -> {
+		percs.add(\StopDesertPercs -> {
 			Pdef(\rhythm).stop;
 		});
 
-		e.add(\DesertShakers -> {
+		percs.add(\DesertShakers -> {
 			~shakerSustain = Pbind(
 				\instrument, \bpfbuf,
 				\dur, Pwhite(0.2,0.7),
@@ -75,11 +77,11 @@ DesertPackage {
 			).play;
 		});
 
-		e.add(\StopDesertShakers -> {
+		percs.add(\StopDesertShakers -> {
 			~shakerSustain.stop;
 		});
 
-		e.add(\DesertChord -> {
+		chords.add(\DesertChord -> {
 			Pdef(
 				\chord,
 				Pbind(
@@ -102,11 +104,11 @@ DesertPackage {
 			).play(quant:1.875);
 		});
 
-		e.add(\StopDesertChord -> {
+		chords.add(\StopDesertChord -> {
 			Pdef(\chord).stop;
 		});
 
-		e.add(\DesertMelody -> {
+		melodies.add(\DesertMelody -> {
 			Pdef(
 				\melodies,
 				Pbind(
@@ -126,7 +128,7 @@ DesertPackage {
 			).play(quant:1.875);
 		});
 
-		e.add(\ReDesertMelody -> {
+		melodies.add(\ReDesertMelody -> {
 			Pdef(
 				\melodies,
 				Pbind(
@@ -146,11 +148,11 @@ DesertPackage {
 			).quant_(1.875);
 		});
 
-		e.add(\StopDesertMelody -> {
+		melodies.add(\StopDesertMelody -> {
 			Pdef(\melodies).stop;
 		});
 
-		e.add(\DesertMelody2 -> {
+		melodies.add(\DesertMelody2 -> {
 			Pdef(
 				\melodies2,
 				Pbind(
@@ -181,11 +183,11 @@ DesertPackage {
 			).play(quant:1.875);
 		});
 
-		e.add(\StopDesertMelody2 -> {
+		melodies.add(\StopDesertMelody2 -> {
 			Pdef(\melodies2).stop;
 		});
 
-		e.add(\DesertMelody3 -> {
+		melodies.add(\DesertMelody3 -> {
 			Pdef(
 				\melodies3,
 				Pbind(
@@ -215,11 +217,11 @@ DesertPackage {
 			).play(quant:1.875);
 		});
 
-		e.add(\StopDesertMelody3 -> {
+		melodies.add(\StopDesertMelody3 -> {
 			Pdef(\melodies3).stop;
 		});
 
-		e.add(\DesertMelodyOS -> {
+		melodies.add(\DesertMelodyOS -> {
 			Pdef(
 				\desertOS,
 				Pbind(
@@ -237,11 +239,11 @@ DesertPackage {
 			).play(quant:1.875);
 		});
 
-		e.add(\StopDesertMelodyOS -> {
+		melodies.add(\StopDesertMelodyOS -> {
 			Pdef(\desertOS).stop;
 		});
 
-		e.add(\DesertShakersOS -> {
+		percs.add(\DesertShakersOS -> {
 			15.do{
 				Synth(
 					\bpfbuf,
@@ -265,81 +267,76 @@ DesertPackage {
 				);
 			};
 		});
-
-		//Mensajes
-		//...
-		//OSCdef.new(
-		//	\MsgName,
-		//	{
-		//		arg msg;
-		//		if(msg[1] == 1)
-		//		{
-		//			e[\EventName].value;
-		//		}
-		//		{
-		//			e[\StopEventName].value;
-		//		}
-		//	},
-		//	'/MsgName', nil, 57120
-		//);
 	}
 
-	test{
-		e[\DesertPercs].value;
+	startBasePercs{
+		percs[\DesertPercs].value;
 	}
-	test2{
-		e[\ReDesertPercs].value;
+	modifyBasePerc{
+		percs[\ReDesertPercs].value;
 	}
-	test3{
-		e[\StopDesertPercs].value;
+	stopBasePercs{
+		percs[\StopDesertPercs].value;
 	}
-
-	test4{
-		e[\DesertShakers].value;
+	startShakers{
+		percs[\DesertShakers].value;
 	}
-	test5{
-		e[\StopDesertShakers].value;
+	stopShakers{
+		percs[\StopDesertShakers].value;
 	}
-
-	test6{
-		e[\DesertChord].value;
+	startChord{
+		chords[\DesertChord].value;
 	}
-	test7{
-		e[\StopDesertChord].value;
+	stopChord{
+		chords[\StopDesertChord].value;
 	}
-
-	test8{
-		e[\DesertMelody].value;
+	startMelody{
+		melodies[\DesertMelody].value;
 	}
-	test9{
-		e[\ReDesertMelody].value;
+	modifyMelody{
+		melodies[\ReDesertMelody].value;
 	}
-	test10{
-		e[\StopDesertMelody].value;
+	stopMelody{
+		melodies[\StopDesertMelody].value;
 	}
-
-	test11{
-		e[\DesertMelody2].value;
+	startPredefinedMelody{
+		melodies[\DesertMelody2].value;
 	}
-	test12{
-		e[\StopDesertMelody2].value;
+	stopPredefineMelody{
+		melodies[\StopDesertMelody2].value;
 	}
-
-	test13{
-		e[\DesertMelody3].value;
+	startOneShotMelody{
+		melodies[\DesertMelody3].value;
 	}
-	test14{
-		e[\StopDesertMelody3].value;
+	stopOneShotMelody{
+		melodies[\StopDesertMelody3].value;
 	}
-
-	test15{
-		e[\DesertMelodyOS].value;
+	startSlideMelody{
+		melodies[\DesertMelodyOS].value;
 	}
-	test16{
-		e[\StopDesertMelodyOS].value;
+	stopSlideMelody{
+		melodies[\StopDesertMelodyOS].value;
+	}
+	startOneShotMaracas{
+		percs[\DesertShakersOS].value;
 	}
 
-	test17{
-		e[\DesertShakersOS].value;
+
+	play{
+		this.startShakers;
+		if( params.rhythmBase == true; ,{this.startBasePercs;}); //TEST
+		this.startChord;
+		this.startMelody;
 	}
+
+	stop{
+		this.stopBasePercs;
+		this.stopShakers;
+		this.stopChord;
+		this.stopMelody;
+		this.stopPredefineMelody;
+		this.stopOneShotMelody;
+		this.stopSlideMelody;
+	}
+
 }

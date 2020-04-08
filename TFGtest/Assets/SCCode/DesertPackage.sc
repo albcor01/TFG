@@ -1,6 +1,5 @@
 
 DesertPackage : Package {
-
 	//Variables de la clase
 
 		init{ arg parameters;

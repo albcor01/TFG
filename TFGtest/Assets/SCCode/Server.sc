@@ -1,6 +1,8 @@
 
-PluginServer {
-	init { var s, b;
+PluginServer { var <server, <>boot;
+
+	init {
+		var s;
 
 		s = Server.local;
 		s.options.numOutputBusChannels_(2);
@@ -10,14 +12,14 @@ PluginServer {
 		ServerBoot.removeAll;
 		ServerTree.removeAll;
 		ServerQuit.removeAll;
-
+		server = s;
 
 		// GLOBAL VARIABLES INITIALIZATION
 		// ---------------------------------------------------
 		// ---------------------------------------------------
 		~out = 0;
-		~path = PathName(thisProcess.nowExecutingPath).parentPath++"buffers/";
-
+		//~path = PathName(thisProcess.nowExecutingPath).parentPath++"buffers/";
+		~path = "C:/ProgramData/SuperCollider/Extensions/buffers/";
 		// FUNCTIONS DEFINITIONS
 		// ---------------------------------------------------
 		// CREAMOS LAS DISTINTAS FUNCIONES QUE QUEREMOS QUE SE LLAMEN AL HACER BOOT DEL SERVIDOR
@@ -41,6 +43,7 @@ PluginServer {
 				);
 			};
 		};
+
 		// b[\folder][index].play;
 
 		// BUSSES
@@ -99,24 +102,6 @@ PluginServer {
 
 
 		ServerQuit.add(~cleanup);
-
-		s.waitForBoot({
-
-			s.sync;
-			~unityClient = NetAddr.new("127.0.0.1",7771);
-			NetAddr.localAddr;
-			b = NetAddr.new("127.0.0.1", 7771);
-			s.sync;
-
-
-
-			s.sync;
-			ServerTree.add(~makeNodes);
-			s.freeAll;
-			s.sync;
-
-			"done".postln;
-		});
 
 	}
 }

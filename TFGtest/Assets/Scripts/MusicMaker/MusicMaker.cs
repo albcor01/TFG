@@ -83,9 +83,8 @@ public class MusicMaker : MonoBehaviour
                 varValues.Add(MM.Utils.GetInputValue(t.input));
 
             //Le mandamos el tipo de paquete al cliente de SuperCollider
-            float test = 1.0f;
             if (package != MM.Package.None)
-                OSCHandler.Instance.SendMessageToClient(ClientId, "/" + package.ToString(), test);
+                OSCHandler.Instance.SendMessageToClient(ClientId, "/Start", "/" + package.ToString());
         }
     }
 

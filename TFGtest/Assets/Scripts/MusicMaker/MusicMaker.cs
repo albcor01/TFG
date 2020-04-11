@@ -68,6 +68,7 @@ public class MusicMaker : MonoBehaviour
             string data = File.ReadAllText(Application.persistentDataPath + "/save.json");
             package = (MM.Package)Enum.Parse(typeof(MM.Package), data);
 
+
             //Iniciamos SuperCollider:
             //a) Crea el cliente de SuperCollider en la dirección de loopback
             //b) Crea el servidor para recibir mensajes de SuperCollider
@@ -171,17 +172,16 @@ public class MusicMaker : MonoBehaviour
         OSCHandler.Instance.SendMessageToClient(ClientId, msg, numValue);
     }
 
-    //Reproduce la música
-    public void StartMusic()
-    {
-        float test = 1.0f;
-        OSCHandler.Instance.SendMessageToClient(ClientId, "/play", test);
-    }
-
     //Establece el paquete
     public void SetPackage(MM.Package newPackage)
     {
         package = newPackage;
+    }
+
+    //Cuando acaba el juego, mandamos el mensaje de "/Stop"
+    void OnApplicationQuit()
+    {
+        OSCHandler.Instance.SendMessageToClient(ClientId, "/Stop", package.ToString());
     }
 
     #endregion

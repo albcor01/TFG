@@ -237,6 +237,7 @@ public class OSCHandler : MonoBehaviour
     /// </param>
     public void SendMessageToClient<T>(string clientId, string address, T value)
     {
+        //Hacemos Debug de cada mensaje que enviamos al servidor de SuperCollider
         Debug.Log("Mensaje enviado: " + address + ", " + value.ToString());
         List<object> temp = new List<object>();
         temp.Add(value);

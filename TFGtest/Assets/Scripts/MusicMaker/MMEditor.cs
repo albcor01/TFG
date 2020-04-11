@@ -88,14 +88,6 @@ namespace MM
     [CustomPropertyDrawer(typeof(MusicInput))]
     public class MusicInputDrawer : PropertyDrawer
     {
-        private int height = 58;
-        private int compIndex = 0;
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return height;
-        }
-
         // Draw the property inside the given rects
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

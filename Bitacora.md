@@ -89,8 +89,8 @@ del output (de entre los del enumerado) pero todo en minúscula y con una barra 
 
 
 ### 12/02/20
--Creada una demo de un juego espacial para poner a prueba las tres cosas realizadas por cada uno de los integrantes que son:
-	-primera versión funcional del plugin
+- Creada una demo de un juego espacial para poner a prueba las tres cosas realizadas por cada uno de los integrantes que son:
+	-Primera versión funcional del plugin
 	-Correcta conexión y envío de mensajes entre unity y supercollider 
 	-Primeras versiones prototípicas de código en supercollider que permiten generar musica procedural y adaptativa.
 El juego consiste en una nave que dispara a los 10 segundos una nave enemiga aparece y te dispara y si le das 10 veces se va para 
@@ -106,7 +106,7 @@ Metido el MusicManager en la escena de la demo satisfactoriamente. (El "usuario"
 se selecciona mediante menús desplegables. Los números "min" y "max" solo aparecen si la variable no es booleana
 - Falta refactorizar código repetido en MMFoundation
 
-### 27/02/2020
+### 27/02/20
 - Comenzada la refactorización de código de supercollider. Se acabaron los test aleatorios en archivos sin sentido. A partir de 
 ahora estará todo organizado convenientemente para su fácil uso y entendimiento. Aun queda mucho pero estamos en ello
 
@@ -121,21 +121,35 @@ tambien comenzados varios paquetes de sonido, el de terror por mi parte.
 ### 09/03/20
 - Se envía un mensaje al cliente de SuperCollider desde Unity al iniciar la escena. En este se indica el paquete elegido
 y se deberán añadir también los parámetros opcionales iniciales. Con esto, el cliente debe inicializarse, compilar los scripts
-<<<<<<< HEAD
 y comenzar a reproducir la música.
 
 ### 14/03/20
--cambiado por completo la estructura del codigo de supercollider, ahora funciona por programación orientada a objetos creando 
+- Cambiado por completo la estructura del codigo de supercollider, ahora funciona por programación orientada a objetos creando 
 las clases pertinentes. Esto permite que no tengamos que complira a mano el código sino que se cree una instancia del MusicMaker
 que se encarga de compilarlo y ejecutarlo todo.
 
-y comenzar a reproducir la música. 
-- En proceso de poner los nombres de métodos con UpperCamelCase
+- En proceso de poner los nombres de métodos de Unity con UpperCamelCase
 
 ### 20/03/20
 - Reunión con Jaime para que vea los progreso de los paquetes que se están haciendo
 - Empezada demo para el paquete de terror
 
-### 07/4/2020
-creados los diccionariso base para separar los eventos de los paquetes en supercollider
+### 30/03/20
+- Reunión por videollamada con Jaime y Marco para que vieran el progreso del proyecto
+y para que Marco nos aconsejara sobre el enfoque respecto a la generación de melodías.
+- Se decide, por consejo suyo, poner énfasis en los llamados clichés, con la idea de tener una lista de clichés
+(con la duración y tono de cada nota) para cada género de forma paralela a los acordes y ritmo que suenan.
+
+### 07/4/20
+- Creados los diccionariso base para separar los eventos de los paquetes en supercollider
+
+### 12/04/20
+- Reunión sin profesor. Se acuerda seguir una estructura en el código de SuperCollider para unificar la estructura,
+métodos y gestión de las capas que tendrá cada uno de los paquetes. 
+- Esta estructura distingue 4 partes de la música: base rítmica, base armónica, melodía y OneShots. Cada parte tiene una lista de capas
+que pueden sonar a la vez, de forma que puede no sonar (0), tener todas las capas activas (e.g., 1, 2, 3), o cualquier combinación 
+posible.
+- Paquetes de Desierto, Terror y Ambiente en proceso (el 1º más avanzado). Los siguientes en hacerse 
+serán el Acuático y el Electrónico, con la idea de tenerlos todos funcionando bien antes de
+detallar y exprimir cada uno al máximo (y considerarlos así "cerrados")
 

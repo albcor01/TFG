@@ -178,6 +178,7 @@ public class MusicMaker : MonoBehaviour
         package = newPackage;
     }
 
+    //TODO: asegurarse que esto siempre se llama antes del OnQuit() de OSCHandler, porque si no la hemos liao
     //Cuando acaba el juego, mandamos el mensaje de "/Stop"
     void OnApplicationQuit()
     {

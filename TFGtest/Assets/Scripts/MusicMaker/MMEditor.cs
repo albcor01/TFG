@@ -12,13 +12,23 @@ namespace MM
     public class MMWindow : EditorWindow
     {
         #region Variables
-        string myString = "Sharknado";
+
+        //Número de "aspectos" en que dividir, y nº de capas máxima para cada aspecto
+        const int NUM_ASPECTS = 4;
+        const int MAX_LAYERS = 4;
+
+        //Editor
         string userMsg = "Ningún paquete seleccionado";
-        bool groupEnabled;
-        bool myBool = true;
-        float myFloat = 0.5f;
-        MM.Package package;
+        bool customPackage;
+        bool[] openFolds;
+
+        //Serializable
+        MM.Package package; //Paquete
+        bool[,] layers; //Información sobre qué capas empezarán activas
+        float tempo = 1f; //Tempo
+   
         #endregion
+
 
         #region Métodos de Unity
         /*
@@ -36,9 +46,17 @@ namespace MM
          */
         private void Awake()
         {
-            //Para recuperar los settings que habíamos puesto
+            //Para recuperar el paquete que habíamos puesto
             string packageName = EditorPrefs.GetString("PackageType");
             package = (MM.Package)Enum.Parse(typeof(MM.Package), packageName);
+
+            //Por defecto activamos la primera capa de cada aspecto
+            layers = new bool[NUM_ASPECTS, MAX_LAYERS];
+            for (int i = 0; i < NUM_ASPECTS; i++)
+                layers[i,0] = true;
+
+            //Menús abiertos
+            openFolds = new bool[4];
         }
 
         /*
@@ -46,16 +64,56 @@ namespace MM
          */
         void OnGUI()
         {
+            //Selección de paquete
             GUILayout.Label("Selección de paquete temático", EditorStyles.boldLabel);
             package = (MM.Package)EditorGUILayout.EnumPopup("Elige un paquete:", package);
 
             //Hay un paquete seleccionado
             if (package != MM.Package.None)
             {
-                groupEnabled = EditorGUILayout.BeginToggleGroup("Personalizar paquete", groupEnabled);
-                myBool = EditorGUILayout.Toggle("Usar VST", myBool);
-                myFloat = EditorGUILayout.Slider("Tempo", myFloat, 0, 1);
-                myString = EditorGUILayout.TextField("Tu película favorita", myString);
+                //Personalizar paquete
+                customPackage = EditorGUILayout.BeginToggleGroup("Personalizar paquete", customPackage);
+
+                //Capa rítmica
+                openFolds[0] = EditorGUILayout.Foldout(openFolds[0], "Ritmo");
+                if (openFolds[0])
+                {
+                    layers[0,0] = EditorGUILayout.Toggle("Percusión base", layers[0,0]);
+                    layers[0,1] = EditorGUILayout.Toggle("Percusión secundaria", layers[0,1]);
+                    layers[0,2] = EditorGUILayout.Toggle("Efectos", layers[0,2]);
+                }
+
+                //Capa armónica
+                openFolds[1] = EditorGUILayout.Foldout(openFolds[1], "Armonía");
+                if (openFolds[1])
+                {
+                    layers[1, 0] = EditorGUILayout.Toggle("Progresión de acordes", layers[1, 0]);
+                    layers[1, 1] = EditorGUILayout.Toggle("Acordes octavados", layers[1, 1]);
+                }
+
+                //Capa melódica
+                openFolds[2] = EditorGUILayout.Foldout(openFolds[2], "Melodía");
+                if (openFolds[2])
+                {
+                    layers[2, 0] = EditorGUILayout.Toggle("Melodía aleatoria", layers[2, 0]);
+                    layers[2, 1] = EditorGUILayout.Toggle("Clichés (1)", layers[2, 1]);
+                    layers[2, 2] = EditorGUILayout.Toggle("Clichés (2)", layers[2, 2]);
+                }
+
+                //Capa de efectos
+                openFolds[3] = EditorGUILayout.Foldout(openFolds[3], "FX");
+                if (openFolds[3])
+                {
+                    layers[3, 0] = EditorGUILayout.Toggle("Fx 1", layers[3, 0]);
+                    layers[3, 1] = EditorGUILayout.Toggle("Fx 2", layers[3, 1]);
+                    layers[3, 2] = EditorGUILayout.Toggle("Fx 3", layers[3, 2]);
+                    layers[3, 3] = EditorGUILayout.Toggle("Fx 4", layers[3, 3]);
+                }
+
+                //Tempo deseado
+                tempo = EditorGUILayout.Slider("Tempo (sobre el base)", tempo, 0.5f, 1.5f);
+
+                //Termina la personalización
                 EditorGUILayout.EndToggleGroup();
             }
 

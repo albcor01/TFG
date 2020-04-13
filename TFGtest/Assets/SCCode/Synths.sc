@@ -1,4 +1,3 @@
-//Definiciones de sintetizadores que se usan
 Synths {
 		//SINTE DE DIENTES DE SIERRA, GENERICO PARA MUCHOS USOS
 	init{

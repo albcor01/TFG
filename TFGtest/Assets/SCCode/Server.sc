@@ -1,4 +1,4 @@
-//Clase para gestionar el server de SuperCollider de forma más cómoda
+
 PluginServer { var <server, <>boot;
 
 	init {

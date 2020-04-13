@@ -1,36 +1,43 @@
-//EL NÚMERO DE CAPAS SIEMPRE TIENE QUE SER >= 1
+
 MusicMakerParameters {
-	var <tempo = 1, <armonicBase = false,
-	<number_of_melodic_layers = 1, <number_of_percs_layers = 1, <rhythmBase = false;
+	var <basetempo = 1, <actualTempo,  <octave, <num_percs_layers = 3, <percs_layers, <num_harmonic_layers = 2, <harmonic_layers, <num_melodic_layers = 3, melodic_layers, num_one_shots = 4;
 
-	//TODO: hacer que sea un solo método y cant pueda ser negativo¿?
-	//Aument el tampo
-	increaseTempo{ arg cant;
-		tempo += cant;
+	init{ arg baseT, oct;
+		basetempo = baseT;
+		actualTempo = baseT;
+		octave = oct;
+
+		percs_layers = Array.fill(num_percs_layers, {false;});
+		harmonic_layers = Array.fill(num_harmonic_layers, {false;});
+		melodic_layers = Array.fill(num_melodic_layers, {false;});
 	}
 
-	//Disminuye el tempo
-	decreaseTempo{ arg cant;
-		tempo -= cant;
+	setTempo{ arg mult;
+		actualTempo = basetempo * mult;
 	}
 
-	//Establece el nº de capas melódicas
-	setMelodicLayers{ arg value;
-		number_of_melodic_layers = value;
+	setOctabe{ arg oct;
+		octave = oct;
 	}
 
-	//Establece el nº de capas de percusión
-	setPercLayers{ arg value;
-		number_of_percs_layers = value;
+	activatePercsLayer{ arg layer;
+		percs_layers[layer] = true;
+	}
+	activateHarmonicLayer{ arg layer;
+		harmonic_layers[layer] = true;
+	}
+	activateMelodicLayer{ arg layer;
+		melodic_layers[layer] = true;
 	}
 
-	//Activa/desactiva la base rítmica
-	setRhythmBase{ arg value;
-		rhythmBase = value;
-	}
 
-	//Activa/desactiva la base armónica
-	setArmonicBase{ arg value;
-		armonicBase = value;
+	deactivatePercsLayer{ arg layer;
+		percs_layers[layer] = false;
+	}
+	deactivateHarmonicLayer{ arg layer;
+		harmonic_layers[layer] = false;
+	}
+	deactivateMelodicLayer{ arg layer;
+		melodic_layers[layer] = false;
 	}
 }

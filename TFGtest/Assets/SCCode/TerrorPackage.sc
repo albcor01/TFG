@@ -74,4 +74,8 @@ TerrorPackage : Package {
 		};
 	});
 	}
+
+	play{melodies[\SoftMelody].value;}
+
+	stop{}
 }

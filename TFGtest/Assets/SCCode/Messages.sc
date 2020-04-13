@@ -1,4 +1,4 @@
-//Lista de mensajes que podemos recibir de Unity y acción de cada uno
+
 Messages {
 	var params, package;
 

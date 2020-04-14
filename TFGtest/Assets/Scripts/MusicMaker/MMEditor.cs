@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 namespace MM
 {
@@ -26,7 +27,12 @@ namespace MM
         MM.Package package; //Paquete
         bool[,] layers; //Información sobre qué capas empezarán activas
         float tempo = 1f; //Tempo
-   
+
+        //Nombre de archivos
+        string layersFile;
+        string packageFile;
+        string defaultLayers = "1000100010001000";
+
         #endregion
 
 
@@ -46,17 +52,39 @@ namespace MM
          */
         private void Awake()
         {
-            //Para recuperar el paquete que habíamos puesto
+            //Nombre de los archivos
+            layersFile = Application.persistentDataPath + "/MMLayers_" + SceneManager.GetActiveScene().name + ".json";
+            packageFile = Application.persistentDataPath + "/MMPackage_" + SceneManager.GetActiveScene().name + ".json";
+
+            //Para recuperar el paquete que habíamos puesto (con EditorPrefs vale)
             string packageName = EditorPrefs.GetString("PackageType");
             package = (MM.Package)Enum.Parse(typeof(MM.Package), packageName);
 
-            //Por defecto activamos la primera capa de cada aspecto
+            //Para recuperar las capas (de archivo)
             layers = new bool[NUM_ASPECTS, MAX_LAYERS];
-            for (int i = 0; i < NUM_ASPECTS; i++)
-                layers[i,0] = true;
+            if (File.Exists(layersFile))
+            {
+                //Personalizado 
+                customPackage = true;
+
+                //Leemos las capas activas del archivo
+                string data = File.ReadAllText(layersFile);
+                int c = 0;
+                for (int i = 0; i < NUM_ASPECTS; i++)
+                    for (int j = 0; j < MAX_LAYERS; j++)
+                        layers[i, j] = data[c++] == '1' ? true : false;
+            }
+
+            //Si no había archivo...
+            else
+            {
+                ///...ponemos la 1º capa activa por defecto
+                for (int i = 0; i < NUM_ASPECTS; i++)
+                    layers[i, 0] = true;
+            }
 
             //Menús abiertos
-            openFolds = new bool[4];
+            openFolds = new bool[NUM_ASPECTS];
         }
 
         /*
@@ -75,35 +103,43 @@ namespace MM
                 customPackage = EditorGUILayout.BeginToggleGroup("Personalizar paquete", customPackage);
 
                 //Capa rítmica
+                var indent = EditorGUI.indentLevel;
                 openFolds[0] = EditorGUILayout.Foldout(openFolds[0], "Ritmo");
                 if (openFolds[0])
                 {
+                    EditorGUI.indentLevel++;
                     layers[0,0] = EditorGUILayout.Toggle("Percusión base", layers[0,0]);
                     layers[0,1] = EditorGUILayout.Toggle("Percusión secundaria", layers[0,1]);
                     layers[0,2] = EditorGUILayout.Toggle("Efectos", layers[0,2]);
                 }
 
                 //Capa armónica
+                EditorGUI.indentLevel = indent;
                 openFolds[1] = EditorGUILayout.Foldout(openFolds[1], "Armonía");
                 if (openFolds[1])
                 {
+                    EditorGUI.indentLevel++;
                     layers[1, 0] = EditorGUILayout.Toggle("Progresión de acordes", layers[1, 0]);
                     layers[1, 1] = EditorGUILayout.Toggle("Acordes octavados", layers[1, 1]);
                 }
 
                 //Capa melódica
+                EditorGUI.indentLevel = indent;
                 openFolds[2] = EditorGUILayout.Foldout(openFolds[2], "Melodía");
                 if (openFolds[2])
                 {
+                    EditorGUI.indentLevel++;
                     layers[2, 0] = EditorGUILayout.Toggle("Melodía aleatoria", layers[2, 0]);
                     layers[2, 1] = EditorGUILayout.Toggle("Clichés (1)", layers[2, 1]);
                     layers[2, 2] = EditorGUILayout.Toggle("Clichés (2)", layers[2, 2]);
                 }
 
                 //Capa de efectos
+                EditorGUI.indentLevel = indent;
                 openFolds[3] = EditorGUILayout.Foldout(openFolds[3], "FX");
                 if (openFolds[3])
                 {
+                    EditorGUI.indentLevel++;
                     layers[3, 0] = EditorGUILayout.Toggle("Fx 1", layers[3, 0]);
                     layers[3, 1] = EditorGUILayout.Toggle("Fx 2", layers[3, 1]);
                     layers[3, 2] = EditorGUILayout.Toggle("Fx 3", layers[3, 2]);
@@ -111,31 +147,69 @@ namespace MM
                 }
 
                 //Tempo deseado
+                EditorGUI.indentLevel = indent;
                 tempo = EditorGUILayout.Slider("Tempo (sobre el base)", tempo, 0.5f, 1.5f);
 
                 //Termina la personalización
                 EditorGUILayout.EndToggleGroup();
             }
 
-            //Guardar los cambios
+            //GUARDA LOS CAMBIOS
             if (GUILayout.Button("Guardar cambios"))
             {
                 //Se ha elegido algún paquete
                 if (package != MM.Package.None)
                 {
-                    //Guardamos en EditorPrefs...
+                    //Guardamos en EditorPrefs y también en archivo para que luego lo lea el MonoBehaviour
                     EditorPrefs.SetString("PackageType", package.ToString());
-                    //...y también en archivo para que luego lo lea el MonoBehaviour
-                    MusicMaker.Instance.SetPackage(package);
-                    File.WriteAllText(Application.persistentDataPath + "/save.json", package.ToString());
+                    File.WriteAllText(packageFile, package.ToString());
 
+                    //Guardamos las capas como un string
+                    string layersStr = "";
+                    for (int i = 0; i < NUM_ASPECTS; i++)
+                        for (int j = 0; j < MAX_LAYERS; j++)
+                            layersStr += layers[i,j] ? '1' : '0';
+
+                    //Vemos si se ha personalizado el paquete o no
                     userMsg = "Has elegido el paquete " + package.ToString();
+                    if (layersStr != defaultLayers)
+                        userMsg += " (Personalizado)";
+                    else
+                    {
+                        layersStr = defaultLayers;
+                        customPackage = false;
+                    }
+
+                    //Escribimos a disco las capas
+                    File.WriteAllText(layersFile, defaultLayers);
+
+                    //Comprobamos que no existiera ya un GO creado
+                    GameObject musicMaker = GameObject.Find("MusicMaker");
+                    if (musicMaker)
+                        DestroyImmediate(musicMaker);
+
+                    //Creamos el MusicMaker
+                    musicMaker = new GameObject("MusicMaker");
+                    musicMaker.AddComponent<MusicMaker>();
                 }
-                    
+
                 //No se ha elegido
                 else
+                {
+                    //Borrar el archivo con el nombre y el GameObject
                     userMsg = "Ningún paquete seleccionado";
+                    if (File.Exists(packageFile))
+                    {
+                        File.Delete(packageFile);
+                        GameObject MMgo = GameObject.Find("MusicMaker");
+                        if (MMgo)
+                            DestroyImmediate(MMgo);
+                    }
+                    if (File.Exists(layersFile))
+                        File.Delete(layersFile);
+                }  
             }
+            //Mensaje al usuario
             GUILayout.Label(userMsg, EditorStyles.boldLabel);
         }
         #endregion

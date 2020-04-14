@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 //TODO:
 //1. Chequear las tuplas válidas (formar el sistema de reglas)
@@ -65,8 +66,16 @@ public class MusicMaker : MonoBehaviour
         {
 
             //Recuperamos la info del paquete (que se pierde por arte de magia)
-            string data = File.ReadAllText(Application.persistentDataPath + "/save.json");
-            package = (MM.Package)Enum.Parse(typeof(MM.Package), data);
+            //TODO: poner este nombre accesible desde algún lado, que es mu largo
+            string packageFile = Application.persistentDataPath + "/MMPackage_" + SceneManager.GetActiveScene().name + ".json";
+            string packageData = File.ReadAllText(packageFile);
+            package = (MM.Package)Enum.Parse(typeof(MM.Package), packageData);
+
+            //Capas
+            string layersFile = Application.persistentDataPath + "/MMLayers_" + SceneManager.GetActiveScene().name + ".json";
+            string layersData = "1000100010001000"; //TODO: esto tambien
+            if (File.Exists(layersFile))
+                layersData = File.ReadAllText(layersFile);
 
 
             //Iniciamos SuperCollider:

@@ -181,7 +181,7 @@ namespace MM
                     }
 
                     //Escribimos a disco las capas
-                    File.WriteAllText(layersFile, defaultLayers);
+                    File.WriteAllText(layersFile, layersStr);
 
                     //Comprobamos que no existiera ya un GO creado
                     GameObject musicMaker = GameObject.Find("MusicMaker");

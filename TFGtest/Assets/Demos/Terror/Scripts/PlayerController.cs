@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     const int VEL = 5;
     const int ROT_VEL = 2;
     public bool lightOn { get; set; }
+    public bool []lights { get; set; }
     // Start is called before the first frame update
     void Start()
     {

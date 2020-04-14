@@ -85,12 +85,12 @@ public class MusicMaker : MonoBehaviour
                 OSCHandler.Instance.Init();
 
             //Eliminar tuplas no válidas 
-            tuples.RemoveAll(x => !MM.Utils.CheckCorrectTuple(x));
+            tuples.RemoveAll(x => !x.IsCorrect());
 
             //Inicializar los valores auxiliares copiando de los originales
             varValues = new List<object>();
             foreach (MM.MusicTuple t in tuples)
-                varValues.Add(MM.Utils.GetInputValue(t.input));
+                varValues.Add(t.input.GetValue());
 
             //Le mandamos el tipo de paquete al cliente de SuperCollider
             if (package != MM.Package.None)
@@ -107,8 +107,13 @@ public class MusicMaker : MonoBehaviour
             foreach (MM.MusicTuple t in tuples)
             {
                 //Comprobamos que el usuario ha metido todos los valores de la tupla bien
-                if (MM.Utils.CheckCorrectTuple(t))
-                    Debug.Log("Tupla correcta: " + t.input.variable + "->" + t.effect.ToString() + "s " + t.output.ToString());
+                if (t.IsCorrect())
+                {
+                    if (t.input.IsAnArray())
+                        Debug.Log("Tupla correcta: " + t.input.variable + "[" + t.input.index + "]->" + t.effect.ToString() + "s " + t.output.ToString());
+                    else
+                        Debug.Log("Tupla correcta: " + t.input.variable + "->" + t.effect.ToString() + "s " + t.output.ToString());
+                }
             }
         }
     }
@@ -123,8 +128,8 @@ public class MusicMaker : MonoBehaviour
             foreach (MM.MusicTuple t in tuples)
             {
                 //Cogemos el valor actual de la variable externa
-                object actualVal = MM.Utils.GetInputValue(t.input);
-                string type = MM.Utils.GetPropertyType(t.input).Name;
+                object actualVal = t.input.GetValue();
+                string type = t.input.GetType().Name;
 
                 //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
                 if (!actualVal.Equals(varValues[i]))
@@ -156,7 +161,7 @@ public class MusicMaker : MonoBehaviour
 
         //1. SACAR LA INFORMACIÓN SOBRE EL INPUT Y AJUSTARLO AL FORMATO QUE RECIBE SUPERCOLLIDER
         //Si es un número, hay que normalizar:
-        object variable = MM.Utils.GetInputValue(t.input);
+        object variable = t.input.GetValue();
         if (variable.GetType().Name != "Boolean")
         {
             float range = t.input.max - t.input.min;
@@ -175,6 +180,8 @@ public class MusicMaker : MonoBehaviour
             if (t.effect == MM.MusicEffect.Deactivate)
                 numValue = 1 - numValue;
         }
+
+        //TODO: gestionar los arrays
 
         //2. DISTINGUIR EL OUTPUT Y MANDAR EL MENSAJE
         string msg = "/" + t.output.ToString().ToLower();

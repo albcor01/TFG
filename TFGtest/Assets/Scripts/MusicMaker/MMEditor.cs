@@ -175,22 +175,19 @@ namespace MM
                     if (layersStr != defaultLayers)
                         userMsg += " (Personalizado)";
                     else
-                    {
-                        layersStr = defaultLayers;
                         customPackage = false;
-                    }
 
                     //Escribimos a disco las capas
                     File.WriteAllText(layersFile, layersStr);
 
-                    //Comprobamos que no existiera ya un GO creado
+                    //Si no existe el GO, lo creamos
                     GameObject musicMaker = GameObject.Find("MusicMaker");
-                    if (musicMaker)
-                        DestroyImmediate(musicMaker);
-
-                    //Creamos el MusicMaker
-                    musicMaker = new GameObject("MusicMaker");
-                    musicMaker.AddComponent<MusicMaker>();
+                    if (!musicMaker)
+                    {
+                        //Creamos el MusicMaker
+                        musicMaker = new GameObject("MusicMaker");
+                        musicMaker.AddComponent<MusicMaker>();
+                    }
                 }
 
                 //No se ha elegido
@@ -220,6 +217,15 @@ namespace MM
     [CustomPropertyDrawer(typeof(MusicInput))]
     public class MusicInputDrawer : PropertyDrawer
     {
+        private int height = 58;
+        private int compIndex = 0;
+
+        public override Single GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return height;
+        }
+
+
         // Draw the property inside the given rects
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -240,11 +246,13 @@ namespace MM
             SerializedProperty varProp = property.FindPropertyRelative("variable");
             SerializedProperty minProp = property.FindPropertyRelative("min");
             SerializedProperty maxProp = property.FindPropertyRelative("max");
+            SerializedProperty indexProp = property.FindPropertyRelative("index");
 
             // Rectángulos donde se pintan
             var objRect = new Rect(position.x, position.y, 100, 16);
             var compRect = new Rect(position.x, position.y + 18, 150, 16);
             var varRect = new Rect(position.x, position.y + 36, 120, 20);
+            var indexRect = new Rect(position.x + 130, position.y + 36, 35, 16);
             var minRect = new Rect(position.x + 130, position.y + 36, 35, 16);
             var maxRect = new Rect(position.x + 175, position.y + 36, 35, 16);
 
@@ -260,12 +268,19 @@ namespace MM
             // Variables
             DisplayVariables(property, varRect);
 
-            // Para los booleanos
-            object variable = Utils.GetValue(varProp.stringValue, compProp.objectReferenceValue);
-            if (variable != null && Utils.GetType(varProp.stringValue, compProp.objectReferenceValue).Name != "Boolean")
+            // Para los floats
+            MusicInput input = new MusicInput((Component)compProp.objectReferenceValue, varProp.stringValue);
+            object variable = input.GetValue();
+            if (variable != null) 
             {
-                EditorGUI.PropertyField(minRect, minProp, GUIContent.none);
-                EditorGUI.PropertyField(maxRect, maxProp, GUIContent.none);
+                System.Type type = input.GetType();
+                if (type.IsArray)
+                    EditorGUI.PropertyField(indexRect, indexProp, GUIContent.none);
+                else if (type.Name != "Boolean")
+                {
+                    EditorGUI.PropertyField(minRect, minProp, GUIContent.none);
+                    EditorGUI.PropertyField(maxRect, maxProp, GUIContent.none);
+                }
             }
 
             // Set indent back to what it was
@@ -301,6 +316,7 @@ namespace MM
             compProp.objectReferenceValue = comps[compIndex];
         }
 
+        //Muestra todas las variables que tiene un componente
         private void DisplayVariables(SerializedProperty property, Rect rect)
         {
             //Cogemos las propiedades

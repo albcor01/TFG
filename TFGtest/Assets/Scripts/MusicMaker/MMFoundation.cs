@@ -3,6 +3,14 @@ using UnityEngine;
 using System.Reflection;
 using System.Linq;
 
+
+//Tipos que se aceptan como inputs válidos:
+//1. Booleanos
+//2. Enteros
+//3. Floats
+//4. Componentes de un array
+
+
 //Espacio de nombres del Music Maker
 namespace MM
 {
@@ -11,6 +19,7 @@ namespace MM
     public enum Package { None, Ambient, Desert, Horror, Asian, Aquatic, War, Electronic };
 
     //Parámetros modificables de la música
+    //TODO: hacer de Output una clase y no un Enum
     public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb, Percussions, BackgroundMusic, IntenseFX, AmbienceFX, OneShotFX }
 
     //Efecto del input sobre el output
@@ -23,8 +32,11 @@ namespace MM
         public Object objeto;
         public Component componente;
         public string variable;
+        //Para floats
         public float min;
         public float max;
+        //Para arrays
+        public int index;
 
         #region Constructoras
         public MusicInput()
@@ -32,6 +44,7 @@ namespace MM
             this.objeto = null;
             this.componente = null;
             this.variable = "";
+            this.index = -1;
         }
 
         public MusicInput(Component component, string value)
@@ -39,6 +52,7 @@ namespace MM
             this.objeto = component.gameObject;
             this.componente = component;
             this.variable = value;
+            this.index = -1;
         }
 
 
@@ -47,6 +61,7 @@ namespace MM
             this.objeto = objeto;
             this.componente = component;
             this.variable = value;
+            this.index = -1;
         }
         #endregion
 
@@ -69,6 +84,81 @@ namespace MM
             return hashCode;
         }
         #endregion
+
+        #region Métodos
+
+        /*
+         * Devuelve el tipo del input (Double, Boolean, Int32...)
+         */
+        public System.Type GetType()
+        {
+            //Obtenemos la propiedad del componente
+            System.Type t = componente.GetType();
+            PropertyInfo prop = t.GetProperty(variable);
+            if (prop == null)
+                return null;
+
+            //Devolvemos el valor de la propiedad
+            return prop.PropertyType;
+        }
+
+        /*
+         * Devuelve el valor del input (2.0, false, -3...) -> usa reflexión
+         */
+        public object GetValue()
+        {
+            //Obtenemos la propiedad del componente
+            object obj = componente; //casting necesario
+            System.Type type = obj.GetType();
+            PropertyInfo prop = type.GetProperty(variable);
+
+            //Si no existe, nada
+            if (prop == null)
+                return null;
+
+            //Devolvemos el valor de la propiedad
+            return prop.GetValue(obj);
+        }
+
+        /*
+         * Indica si la variable forma parte de un array
+         */
+        public bool IsAnArray()
+        {
+            System.Type type = this.GetType();
+            return (type.IsArray);
+        }
+
+        /*
+         * Indica si el input es correcto (i.e.; si la variable existe y el input tiene sentido)
+         */
+        public bool IsCorrect()
+        {
+            //1. Comprobamos que hay un gameobject y objeto seleccionados
+            object obj = componente;
+            if (obj == null || objeto == null)
+                return false;
+
+            //2. Comprobamos que el componente tiene esa propiedad
+            System.Type t = obj.GetType(); //Tipo
+            List<PropertyInfo> props = t.GetProperties().ToList();
+            PropertyInfo p = props.Find((x) => x.Name == variable);
+            if (p == null)
+                return false;
+
+            //4. Comprobamos que está correcto
+            if (IsAnArray())
+            {
+                if (index < 0)
+                    return false;
+            }
+            else if (GetType().Name != "Boolean" && min >= max)
+                return false;
+
+            return true;
+        }
+
+        #endregion
     }
 
     //Tupla que consta de input, output y efecto del primero sobre el segundo
@@ -88,6 +178,18 @@ namespace MM
             this.effect = effect;
             this.output = output;
         }
+
+        #region Métodos
+
+        /*
+         * Indica si la tupla es correcta (i.e.; si sus 3 partes son correctas)
+         */
+        public bool IsCorrect()
+        {
+            return (input.IsCorrect() && effect != MusicEffect.None && output != MusicOutput.None);
+        }
+
+        #endregion
 
         #region Equals y Hash
 
@@ -112,106 +214,10 @@ namespace MM
     }
     #endregion
 
-    #region Utilidades
+    #region Utilidades (usando Reflection)
     //Métodos auxiliares
     public static class Utils
     {
-        #region Reflection
-        /**
-         * Devuelve el valor de la variable del input
-         * Ejemplo de uso: object val = Utils.getInputValue(tuplas[0].input);
-         */
-        public static object GetInputValue(MusicInput input)
-        {
-            //Obtenemos la propiedad del componente
-            object obj = input.componente;
-            System.Type t = obj.GetType();
-            PropertyInfo prop = t.GetProperty(input.variable);
-            //List<PropertyInfo> props = t.GetProperties().ToList();
-            //PropertyInfo prop = props.Find((x) => x.Name == input.variable);
-            if (prop == null)
-                return null;
-
-            //Devolvemos el valor de la propiedad
-            return prop.GetValue(obj);
-        }
-
-        /**
-         * Devuelve el valor de la propiedad de "instance" con el nombre indicado en "propName"
-         * Ejemplo de uso: object val = Utils.GetValue("mass", player.GetComponent<Rigidbody>());
-         */
-        public static object GetValue(string propName, object instance)
-        {
-            //Obtenemos la propiedad del componente
-            System.Type t = instance.GetType();
-            PropertyInfo prop = t.GetProperty(propName);
-            //List<PropertyInfo> props = t.GetProperties().ToList();
-            //PropertyInfo prop = props.Find((x) => x.Name == input.variable);
-            if (prop == null)
-                return null;
-
-            //Devolvemos el valor de la propiedad
-            return prop.GetValue(instance);
-        }
-
-        /**
-         * Devuelve el tipo del que es la propiedad de "instance" llamada "propName"
-         * Ejemplo de uso: Type t = Utils.GetType("mass", obj.GetComponent<Rigidbody>());
-         *                 Debug.Log(t.Name); //Escribe "Float"
-         **/
-        public static System.Type GetType(string propName, object instance)
-        {
-            //Obtenemos la propiedad del componente
-            System.Type t = instance.GetType();
-            PropertyInfo prop = t.GetProperty(propName);
-            if (prop == null)
-                return null;
-
-            //Devolvemos el valor de la propiedad
-            return prop.PropertyType;
-        }
-
-        /**
-         * Devuelve el tipo de la variable de un input dado
-         * Ej: Type t = Utils.getPropertyType(tuplas[0].input);
-         *     Debug.Log(t.Name); 
-         **/
-        public static System.Type GetPropertyType(MusicInput input)
-        {
-            //Obtenemos la propiedad del componente
-            object obj = input.componente;
-            System.Type t = obj.GetType();
-            PropertyInfo prop = t.GetProperty(input.variable);
-            //List<PropertyInfo> props = t.GetProperties().ToList();
-            //PropertyInfo prop = props.Find((x) => x.Name == input.variable);
-            if (prop == null)
-                return null;
-
-            //Devolvemos el valor de la propiedad
-            return prop.PropertyType;
-        }
-
-        /**
-         * Devuelve las propiedades del componente referenciado por el input en forma de lista de strings
-         * Ejemplo de uso: List<string> props = Utils.getProperties(tuplas[0].input);
-         *                 Debug.Log(props.Length); 
-        **/
-        public static List<string> GetProperties(MusicInput input, bool showInherited = false)
-        {
-            object obj = input.componente;
-            System.Type t = obj.GetType();
-            List<PropertyInfo> props = t.GetProperties().ToList();
-
-            List<string> properties = new List<string>();
-            //Propiedades del objeto (mirar C# reflection)
-            foreach (var prop in props)
-            {
-                if (showInherited || prop.DeclaringType.Name == t.Name)
-                    properties.Add(prop.Name);
-            }
-            return properties;
-        }
-
         /**
          * Devuelve las propiedades de un componente en forma de lista de strings
          * Ejemplo de uso: List<string> props = Utils.getProperties(player.GetComponent<Player>());
@@ -219,71 +225,24 @@ namespace MM
         **/
         public static List<string> GetProperties(object component, bool showInherited = false)
         {
+            //Propiedades del componente (mirar C# reflection)
             System.Type t = component.GetType();
             List<PropertyInfo> props = t.GetProperties().ToList();
 
+            //Las pasamos a string 
             List<string> properties = new List<string>();
-            //Propiedades del objeto (mirar C# reflection)
             foreach (var prop in props)
             {
                 if (showInherited || prop.DeclaringType.Name == t.Name)
                     properties.Add(prop.Name);
             }
 
+            //Caso especial
             if (properties.Count == 0)
                 return null;
             return properties;
         }
-        #endregion
-
-        #region Check Tuples
-        //Comprueba que la variable es correcta (es decir, que el componente tiene una propiedad que se llama como se indica)
-        private static bool CheckCorrectInput(MusicInput input)
-        {
-            //1. Comprobamos que hay un gameobject y objeto seleccionados
-            object obj = input.componente;
-            if (obj == null || input.objeto == null)
-                return false;
-
-            //2. Comprobamos que el componente tiene esa propiedad
-            System.Type t = obj.GetType(); //Tipo
-            List<PropertyInfo> props = t.GetProperties().ToList();
-            PropertyInfo p = props.Find((x) => x.Name == input.variable);
-            if (p == null)
-                return false;
-
-            //3. Comprobamos que el min y max están bien
-            if (Utils.GetType(input.variable, obj).Name != "Boolean" && input.min >= input.max)
-                return false;
-
-            return true;
-        }
-
-        //Comprueba que la tupla es correcta (según nuestro criterio)
-        public static bool CheckCorrectTuple(MusicTuple t)
-        {
-            return (CheckCorrectInput(t.input) && t.effect != MusicEffect.None && t.output != MusicOutput.None);
-        }
-
-        #endregion
     }
 
-    //Clase Par
-    public class Pair<T, U>
-    {
-        public Pair()
-        {
-        }
-
-        public Pair(T first, U second)
-        {
-            this.First = first;
-            this.Second = second;
-        }
-
-        public T First { get; set; }
-        public U Second { get; set; }
-    };
     #endregion
-
 }

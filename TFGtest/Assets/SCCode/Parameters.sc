@@ -1,6 +1,12 @@
 
 MusicMakerParameters {
-	var <basetempo = 1, <actualTempo,  <octave, <num_percs_layers = 3, <percs_layers, <num_harmonic_layers = 2, <harmonic_layers, <num_melodic_layers = 3, melodic_layers, num_one_shots = 4;
+	var
+	<basetempo = 1, <actualTempo,
+	<octave,
+	<num_percs_layers = 3, <percs_layers,
+	<num_harmonic_layers = 2, <harmonic_layers,
+	<num_melodic_layers = 3, <melodic_layers,
+	<num_one_shots = 4;
 
 	init{ arg baseT, oct;
 		basetempo = baseT;
@@ -12,13 +18,15 @@ MusicMakerParameters {
 		melodic_layers = Array.fill(num_melodic_layers, {false;});
 	}
 
+
 	setTempo{ arg mult;
 		actualTempo = basetempo * mult;
 	}
 
-	setOctabe{ arg oct;
+	setOctave{ arg oct;
 		octave = oct;
 	}
+
 
 	activatePercsLayer{ arg layer;
 		percs_layers[layer] = true;

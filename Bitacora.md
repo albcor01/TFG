@@ -153,3 +153,13 @@ posible.
 serán el Acuático y el Electrónico, con la idea de tenerlos todos funcionando bien antes de
 detallar y exprimir cada uno al máximo (y considerarlos así "cerrados")
 
+### 13/04/20
+- Actualizado la interfaz de Unity con la nueva estructura a seguir. Se muestran las capas
+para que el usuario elija cuáles empiezan activas.
+
+### 14/04/20
+- Ahora el plugin permite usar elementos que estén en un array para la parte adaptativa, indicando el índice.
+Se ha refactorizado el código de "Utilities", moviéndolo casi todo a las propias clases
+MusicInput y MusicTuple.
+- Reunión con Jaime:: 
+

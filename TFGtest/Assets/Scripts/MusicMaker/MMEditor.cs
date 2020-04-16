@@ -273,10 +273,9 @@ namespace MM
             object variable = input.GetValue();
             if (variable != null) 
             {
-                System.Type type = input.GetType();
-                if (type.IsArray)
+                if (input.IsAnArray())
                     EditorGUI.PropertyField(indexRect, indexProp, GUIContent.none);
-                else if (type.Name != "Boolean")
+                else if (input.GetType().Name != "Boolean")
                 {
                     EditorGUI.PropertyField(minRect, minProp, GUIContent.none);
                     EditorGUI.PropertyField(maxRect, maxProp, GUIContent.none);

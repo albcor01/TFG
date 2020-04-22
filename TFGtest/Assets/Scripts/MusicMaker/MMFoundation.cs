@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
-using System.Linq;
+using System.Linq; 
+using UnityEngine.SceneManagement;
 
 
 //Tipos que se aceptan como inputs válidos:
@@ -9,6 +10,7 @@ using System.Linq;
 //2. Enteros
 //3. Floats
 //4. Componentes de un array
+
 
 
 //Espacio de nombres del Music Maker
@@ -214,12 +216,12 @@ namespace MM
     }
     #endregion
 
-    #region Utilidades (usando Reflection)
+    #region Utilidades
     //Métodos auxiliares
     public static class Utils
     {
         /**
-         * Devuelve las propiedades de un componente en forma de lista de strings
+         * Devuelve las propiedades de un componente en forma de lista de strings (usa Reflection)
          * Ejemplo de uso: List<string> props = Utils.getProperties(player.GetComponent<Player>());
          *                 Debug.Log(props); 
         **/
@@ -242,7 +244,34 @@ namespace MM
                 return null;
             return properties;
         }
+
+        /**
+         * Devuelve la ruta donde se guarda el el paquete seleccionado
+         */
+        public static string GetPackageFile()
+        {
+            return Application.persistentDataPath + "/MMPackage_" + SceneManager.GetActiveScene().name + ".json";
+        }
+
+
+        /**
+         * Devuelve la ruta donde se guardan las capas iniciales
+         */
+        public static string GetLayersFile()
+        {
+            return Application.persistentDataPath + "/MMLayers_" + SceneManager.GetActiveScene().name + ".json";
+        }
     }
 
+    #endregion
+
+    #region Constantes
+
+    public static class Constants
+    {
+        //Número de "aspectos" en que dividir, y nº de capas máxima para cada aspecto
+        public const int NUM_ASPECTS = 4;
+        public const int MAX_LAYERS = 4;
+    }
     #endregion
 }

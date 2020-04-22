@@ -5,6 +5,7 @@ public class MMTest : MonoBehaviour
     #region Variables
     public float floatParam { get; set; }
     public bool boolParam { get; set; }
+    public bool[] boolArrayParam { get; set; }
     public int intParam { get; set; }
 
     #endregion
@@ -16,6 +17,9 @@ public class MMTest : MonoBehaviour
         floatParam = 1;
         boolParam = false;
         intParam = 0;
+        boolArrayParam = new bool[4];
+        for (int i = 0; i < 4; i++)
+                boolArrayParam[i] = false;
     }
 
     //Prueba

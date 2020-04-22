@@ -17,18 +17,19 @@ public class MusicMaker : MonoBehaviour
 {
     #region Variables
 
-    //Paquete elegido para la música 
-    private MM.Package package;
-    
     //Instancia del singleton
     private static MusicMaker instance_ = null;
 
-    //Lista de tuplas <input, efecto, output>, que es lo único relevante que necesitamos
+    //Paquete elegido para la música 
+    private MM.Package package;
+   
+    //Lista de tuplas <input, efecto, output> elegidas por el usuario
     [Tooltip("La lista de tuplas que condicionarán la música")]
     public List<MM.MusicTuple> tuples;
-
-    //El estado de las tuplas en el frame anterior
+    //El valor de cada variable en el frame anterior (para compararlo)
     private List<object> varValues;
+    //Capas que hay activas en este momento
+    bool[,] activeLayers; 
 
     //La id del cliente
     private const string ClientId = "SuperCollider";
@@ -65,24 +66,32 @@ public class MusicMaker : MonoBehaviour
         if (EditorApplication.isPlaying)
         {
 
-            //Recuperamos la info del paquete (que se pierde por arte de magia)
-            //TODO: poner este nombre accesible desde algún lado, que es mu largo
-            string packageFile = Application.persistentDataPath + "/MMPackage_" + SceneManager.GetActiveScene().name + ".json";
-            string packageData = File.ReadAllText(packageFile);
+            //Paquete actual
+            string packageData = File.ReadAllText(MM.Utils.GetPackageFile());
             package = (MM.Package)Enum.Parse(typeof(MM.Package), packageData);
 
             //Capas
-            string layersFile = Application.persistentDataPath + "/MMLayers_" + SceneManager.GetActiveScene().name + ".json";
-            string layersData = "1000100010001000"; //TODO: esto tambien
-            if (File.Exists(layersFile))
-                layersData = File.ReadAllText(layersFile);
+            string layersFile = MM.Utils.GetLayersFile();
+            Debug.Assert(File.Exists(layersFile));
+            string layersData = File.ReadAllText(layersFile);
 
+            //TODO: se prodía hacer una estructura única para representar el array bidimensional de 4x4. Más fácil de usar
+            //Inicializamos los valores de las capas
+            int c = 0;
+            activeLayers = new bool[MM.Constants.NUM_ASPECTS, MM.Constants.MAX_LAYERS];
+            for (int i = 0; i < MM.Constants.NUM_ASPECTS; i++) //ESTE CÓDIGO ESTÁ REPE
+                for (int j = 0; j < MM.Constants.MAX_LAYERS; j++)
+                    activeLayers[i, j] = layersData[c++] == '1' ? true : false;
+
+            //Debug
+            Debug.Log(package);
+            Debug.Log(layersData);
 
             //Iniciamos SuperCollider:
             //a) Crea el cliente de SuperCollider en la dirección de loopback
             //b) Crea el servidor para recibir mensajes de SuperCollider
-            if (package != MM.Package.None)
-                OSCHandler.Instance.Init();
+            Debug.Assert(package != MM.Package.None); //Para asegurarnos
+            OSCHandler.Instance.Init();
 
             //Eliminar tuplas no válidas 
             tuples.RemoveAll(x => !x.IsCorrect());
@@ -93,8 +102,7 @@ public class MusicMaker : MonoBehaviour
                 varValues.Add(t.input.GetValue());
 
             //Le mandamos el tipo de paquete al cliente de SuperCollider
-            if (package != MM.Package.None)
-                OSCHandler.Instance.SendMessageToClient(ClientId, "/Start", package.ToString());
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/Start", package.ToString());
         }
     }
 

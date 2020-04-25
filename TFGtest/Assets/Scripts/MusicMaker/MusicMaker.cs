@@ -5,12 +5,6 @@ using System;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-//TODO:
-//1. Chequear las tuplas válidas (formar el sistema de reglas)
-//2. Dividir en 2 scripts? El primero (este) para que el usuario se lo ponga al GameObject
-// y el otro que se encargue de la ejecución en sí
-//3. QUITAR LAS TUPLAS QUE SEAN NULL
-
 //Se encarga de gestionar todo lo referente al plugin
 [ExecuteInEditMode]
 public class MusicMaker : MonoBehaviour
@@ -118,9 +112,9 @@ public class MusicMaker : MonoBehaviour
                 if (t.IsCorrect())
                 {
                     if (t.input.IsAnArray())
-                        Debug.Log("Tupla correcta: " + t.input.variable + "[" + t.input.index + "]->" + t.effect.ToString() + "s " + t.output.ToString());
+                        Debug.Log("Tupla correcta: " + t.input.variable + "[" + t.input.index + "]->" + t.effect.ToString() + "s->" + t.output.aspect.ToString() + " nº " + t.output.layerNo);
                     else
-                        Debug.Log("Tupla correcta: " + t.input.variable + "->" + t.effect.ToString() + "s " + t.output.ToString());
+                        Debug.Log("Tupla correcta: " + t.input.variable + "->" + t.effect.ToString() + "s->" + t.output.aspect.ToString() + " nº " + t.output.layerNo);
                 }
             }
         }
@@ -149,6 +143,7 @@ public class MusicMaker : MonoBehaviour
                     //Actualizamos nuestra variable
                     varValues[i] = actualVal;
 
+                    //TODO: verificación en 2 pasos, primero se actualiza "tuples" y luego se manda a supercollider esa info
                     //Procesamos el mensaje y lo mandamos
                     ProcessMessage(t);
                 }
@@ -192,7 +187,7 @@ public class MusicMaker : MonoBehaviour
         //TODO: gestionar los arrays
 
         //2. DISTINGUIR EL OUTPUT Y MANDAR EL MENSAJE
-        string msg = "/" + t.output.ToString().ToLower();
+        string msg = "/" + t.output.aspect.ToString().ToLower() + t.output.layerNo;
         OSCHandler.Instance.SendMessageToClient(ClientId, msg, numValue);
     }
 

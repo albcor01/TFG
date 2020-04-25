@@ -12,32 +12,38 @@ using UnityEngine.SceneManagement;
 //4. Componentes de un array
 
 
-
 //Espacio de nombres del Music Maker
 namespace MM
 {
-    #region Tuplas
     //Los distintos paquetes que el usuario va a poder utilizar para la creación de musica
     public enum Package { None, Ambient, Desert, Horror, Asian, Aquatic, War, Electronic };
 
-    //Parámetros modificables de la música
-    //TODO: hacer de Output una clase y no un Enum
-    public enum MusicOutput { None, Tempo, Volume, Pitch, Reverb, Percussions, BackgroundMusic, IntenseFX, AmbienceFX, OneShotFX }
-
     //Efecto del input sobre el output
-    public enum MusicEffect { None, Increase, Decrease, Activate, Deactivate }
+    public enum MusicEffect { None, Activate, Deactivate, Increase, Decrease };
 
-    //Inputs
+    //Los 4 aspectos de la música
+    [System.Serializable]
+    public enum Aspect { None, Rhythm, Harmony, Melody, FX };
+
+
+    #region Tuplas
+    /**
+     * Representa un input (i.e), la variable que tenemos linkada y el componente y GO al que hace pertenece
+     * Además incluye parámetros que se usarán dependiendo del tipo de dato que sea la variable
+     **/
     [System.Serializable]
     public class MusicInput
     {
+        //Lo básico (los booleanos no necesitan más)
         public Object objeto;
         public Component componente;
         public string variable;
-        //Para floats
+
+        //Solo ara floats
         public float min;
         public float max;
-        //Para arrays
+
+        //Solo ara arrays
         public int index;
 
         #region Constructoras
@@ -163,7 +169,47 @@ namespace MM
         #endregion
     }
 
-    //Tupla que consta de input, output y efecto del primero sobre el segundo
+    /**
+     * Representa un output, i.e, un output
+     **/
+    [System.Serializable]
+    public class MusicOutput
+    {
+        //El aspecto al que hace referencia
+        public Aspect aspect;
+
+        //El nº de capa que activa/desactiva
+        public int layerNo;
+
+        #region Constructoras
+        public MusicOutput()
+        {
+            this.aspect = Aspect.None;
+            this.layerNo = 0;
+        }
+
+        public MusicOutput(Aspect aspect, int layerNo)
+        {
+            this.aspect = aspect;
+            this.layerNo = layerNo;
+        }
+        #endregion
+
+        #region Métodos
+        /*
+         * Indica si el output es correcto (i.e., se ha seleccionado un aspecto y capa válida)
+         */
+        public bool IsCorrect()
+        {
+            return (aspect != Aspect.None && (layerNo > 0 && layerNo <= Constants.MAX_LAYERS)); //Empieza en 1 (claridad para el usuario)
+        }
+
+        #endregion
+    }
+
+    /**
+     * Tupla que consta de input, output y efecto del primero sobre el segundo
+     **/
     [System.Serializable]
     public class MusicTuple
     {
@@ -188,7 +234,7 @@ namespace MM
          */
         public bool IsCorrect()
         {
-            return (input.IsCorrect() && effect != MusicEffect.None && output != MusicOutput.None);
+            return (input.IsCorrect() && effect != MusicEffect.None && output.IsCorrect());
         }
 
         #endregion

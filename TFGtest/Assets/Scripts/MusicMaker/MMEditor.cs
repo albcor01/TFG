@@ -248,8 +248,8 @@ public class MusicInputDrawer : PropertyDrawer
         var compRect = new Rect(position.x, position.y + 18, 150, 16);
         var varRect = new Rect(position.x, position.y + 36, 120, 20);
         var indexRect = new Rect(position.x + 130, position.y + 36, 35, 16);
-        var minRect = new Rect(position.x + 130, position.y + 36, 35, 16);
-        var maxRect = new Rect(position.x + 175, position.y + 36, 35, 16);
+        var minRect = new Rect(position.x + 125, position.y + 36, 35, 16);
+        var maxRect = new Rect(position.x + 165, position.y + 36, 35, 16);
 
 
         // Objetos (es un field normal y corriente) NOTA: todos los objetos tienen al menos un componente (el Transform)
@@ -328,6 +328,47 @@ public class MusicInputDrawer : PropertyDrawer
         //Hacemos el Popup
         int varIndex = Mathf.Max(EditorGUI.Popup(rect, varNames.IndexOf(seleccionada), varList), 0);
         varProp.stringValue = varNames[varIndex];
+    }
+}
+
+
+
+[CustomPropertyDrawer(typeof(MM.MusicOutput))]
+public class MusicOutputDrawer : PropertyDrawer
+{
+    // Draw the property inside the given rects
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        // Using BeginProperty / EndProperty on the parent property means that
+        // prefab override logic works on the entire property.
+        EditorGUI.BeginProperty(position, label, property);
+
+        // Draw label
+        position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+
+        // Don't make child fields be indented
+        var indent = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 0;
+
+        // Propiedades hermanas
+        SerializedProperty aspectProp = property.FindPropertyRelative("aspect");
+        SerializedProperty layerProp = property.FindPropertyRelative("layerNo");
+
+
+        // Rectángulos donde se pintan
+        var aspectRect = new Rect(position.x, position.y, 100, 16);
+        var layerRect = new Rect(position.x + 105, position.y, 30, 16);
+
+        
+        //Display
+        EditorGUI.PropertyField(aspectRect, aspectProp, GUIContent.none);
+        if (aspectProp.enumValueIndex > 0)
+            EditorGUI.PropertyField(layerRect, layerProp, GUIContent.none);
+
+        // Set indent back to what it was
+        EditorGUI.indentLevel = indent;
+
+        EditorGUI.EndProperty();
     }
 }
 #endregion

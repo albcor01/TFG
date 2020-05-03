@@ -1,6 +1,8 @@
+
 Synths {
-		//SINTE DE DIENTES DE SIERRA, GENERICO PARA MUCHOS USOS
+
 	init{
+
 		~synths = {
 			//SINTE DE DIENTES DE SIERRA, GENERICO PARA MUCHOS USOS
 			SynthDef(\bpfsaw, {
@@ -24,8 +26,7 @@ Synths {
 				Out.ar(out, sig);
 			}).add;
 
-			// SAMPLES NO TENGO NI IDEA DE QUE SINTE ES ESTE HULIO
-			// ---------------------------------------------------
+			//SAMPLER
 			SynthDef(\bpfbuf, {
 				arg atk=0, sus=0, rel=3, c1=1, c2=(-1),
 				buf=0, rate=1, spos=0, freq=440, rq=1, bpfmix=0,

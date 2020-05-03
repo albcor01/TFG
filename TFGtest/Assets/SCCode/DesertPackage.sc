@@ -3,7 +3,9 @@ DesertPackage : Package {
 
 	    //Variables de la clase
 
-		init{ arg parameters;
+		init {
+
+		arg parameters;
 
 		percs = Dictionary.new;
 		chords = Dictionary.new;
@@ -21,10 +23,10 @@ DesertPackage : Package {
 					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 					\buf, Pseq(
 						[
-							Prand(~buff[\africanPercsLow], 1),
-							Prand(~buff[\africanPercsHigh], 7),
-							Prand(~buff[\africanPercsLow], 1),
-							Prand(~buff[\africanPercsHigh], 7),
+							Prand(~buff[\percs_african_low], 1),
+							Prand(~buff[\percs_african_high], 7),
+							Prand(~buff[\percs_african_low], 1),
+							Prand(~buff[\percs_african_high], 7),
 						], inf
 					),
 					\amp, Pseq([1.4, Pexprand(0.4, 0.8, 7)], inf),
@@ -43,10 +45,10 @@ DesertPackage : Package {
 					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 					\buf, Pseq(
 						[
-							Prand(~buff[\africanPercsLow], 1),
-							Prand(~buff[\africanPercsHigh], 7),
-							Prand(~buff[\africanPercsLow], 1),
-							Prand(~buff[\africanPercsHigh], 7),
+							Prand(~buff[\percs_african_low], 1),
+							Prand(~buff[\percs_african_high], 7),
+							Prand(~buff[\percs_african_low], 1),
+							Prand(~buff[\percs_african_high], 7),
 						], inf
 					),
 					\amp, Pseq([1.4, Pexprand(0.4, 0.8, 7)], inf),
@@ -78,9 +80,9 @@ DesertPackage : Package {
 				\dur, Pwhite(0.2,0.7),
 				\atk, Pexprand(2,4),
 				\rel, Pexprand(3,5),
-				\buf, ~buff[\shakers][13].bufnum,
+				\buf, ~buff[\percs_shakers][13].bufnum,
 				\rate, Pwhite(-7.0,-4.0).midiratio,
-				\spos, Pwhite(0, ~buff[\shakers][13].numFrames/2),
+				\spos, Pwhite(0, ~buff[\percs_shakers][13].numFrames/2),
 				\amp, Pexprand(1.0,3.0),
 				\freq, {rrand(85.0,105.0).midicps}!3,
 				\rq, 0.005,
@@ -141,6 +143,7 @@ DesertPackage : Package {
 
 		});
 
+
 		melodies.add(\FirstMelody -> {
 			Pdef(
 				\melodies,
@@ -150,7 +153,7 @@ DesertPackage : Package {
 					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 					\buf, Pseq(
 						[
-							Pxrand(~buff[\doubleHarmonicScale], 1),
+							Pxrand(~buff[\scale_double_harmonic], 1),
 						], inf
 					),
 					\rel, Pwhite(10.0),
@@ -170,7 +173,7 @@ DesertPackage : Package {
 					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 					\buf, Pseq(
 						[
-							Pxrand(~buff[\doubleHarmonicScale], 1),
+							Pxrand(~buff[\scale_double_harmonic], 1),
 						], inf
 					),
 					\rel, Pwhite(10.0),
@@ -233,18 +236,18 @@ DesertPackage : Package {
 					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 					\buf, Pseq(
 						[
-							~buff[\doubleHarmonicScale_Shorts][1],
-							~buff[\doubleHarmonicScale_Shorts][2],
-							~buff[\doubleHarmonicScale_Shorts][3],
-							~buff[\doubleHarmonicScale_Shorts][4],
-							~buff[\doubleHarmonicScale_Shorts][5],
-							~buff[\doubleHarmonicScale_Shorts][6],
-							~buff[\doubleHarmonicScale_Shorts][7],
-							~buff[\doubleHarmonicScale_Shorts][8],
-							~buff[\doubleHarmonicScale_Shorts][9],
-							~buff[\doubleHarmonicScale_Shorts][10],
-							~buff[\doubleHarmonicScale_Shorts][11],
-							~buff[\doubleHarmonicScale_Shorts][12],
+							~buff[\scale_double_harmonic_shorts][1],
+							~buff[\scale_double_harmonic_shorts][2],
+							~buff[\scale_double_harmonic_shorts][3],
+							~buff[\scale_double_harmonic_shorts][4],
+							~buff[\scale_double_harmonic_shorts][5],
+							~buff[\scale_double_harmonic_shorts][6],
+							~buff[\scale_double_harmonic_shorts][7],
+							~buff[\scale_double_harmonic_shorts][8],
+							~buff[\scale_double_harmonic_shorts][9],
+							~buff[\scale_double_harmonic_shorts][10],
+							~buff[\scale_double_harmonic_shorts][11],
+							~buff[\scale_double_harmonic_shorts][12],
 						], 1
 					),
 					\amp, Pseq([3.8, 5.0], inf),
@@ -262,22 +265,21 @@ DesertPackage : Package {
 			Pdef(\melodies3).stop;
 		});
 
+
 		oneShots.add(\FirstOS -> {
-			Pdef(
-				\desertOS,
-				Pbind(
-					\instrument, \bpfbuf,
-					\buf, Pseq(
-						[
-							Prand(~buff[\desertOS], 1),
-						], 1
-					),
-					\amp, 15.0,
-					\rel, 20.0,
-					\group, ~mainGrp,
-					\out, ~bus[\reverb],
+			//Prand(~buff[\sfx_dh_slides], 1)
+			1.do{
+				Synth(
+					\bpfbuf,
+					[
+						\buf, ~buff[\sfx_dh_slides][1].bufnum,
+						\amp, exprand(2.2,4.5),
+						\pan, rrand(-0.9,0.9),
+						\out, ~bus[\reverb],
+					],
+					~mainGrp
 				);
-			).play(quant:1.875);
+			};
 		});
 
 		oneShots.add(\SecondOS -> {
@@ -290,7 +292,7 @@ DesertPackage : Package {
 						\rel, exprand(1.0,5.0),
 						\c1, exprand(1,8),
 						\c2, exprand(-8,-1),
-						\buf, ~buff[\shakers][13].bufnum,
+						\buf, ~buff[\percs_shakers][13].bufnum,
 						\rate, exprand(0.3,1.2),
 						\freq, (Scale.major.degrees.choose+64 + [-12,0,12,24].choose).midicps,
 						\rq, exprand(0.002,0.02),

@@ -1,12 +1,14 @@
 
-Package { var <percs, <chords, <melodies, <oneShots, <params;
+Package {
+
+	var <percs, <chords, <melodies, <oneShots, <params;
 
 	init{}
 
 	playAll{}
 	stopAll{}
 
-	//Recibe el id del estilo de al capa de percusion que sonara. Si esta no esta sonando la activara y la marcara como sonando.
+	//Recibe el id de la capa de percusion que sonara. Si esta no esta sonando la activara y la marcara como sonando.
 	//En caso contrario no pasara nada.
 	playRhythm{ arg capa;
 
@@ -23,7 +25,7 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
-	//Recibe el id del estilo de al capa de percusion que se detendra. Si esta sonando la detendra y la marcara como no sonando.
+	//Recibe el id de la capa de percusion que se detendra. Si esta sonando la detendra y la marcara como no sonando.
 	//En caso contrario no pasara nada.
 	stopRhythm{ arg capa;
 
@@ -40,6 +42,8 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
+	//Recibe el id de la capa harmonica que sonara. Si esta no esta sonando la activara y la marcara como sonando.
+	//En caso contrario no pasara nada.
 	playHarmony{ arg capa;
 
 		switch(capa,
@@ -52,6 +56,8 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
+	//Recibe el id de la capa harmonica que se detendra. Si esta sonando la detendra y la marcara como no sonando.
+	//En caso contrario no pasara nada.
 	stopHarmony{ arg capa;
 
 		switch(capa,
@@ -64,6 +70,8 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
+	//Recibe el id de la capa melodica que sonara. Si esta no esta sonando la activara y la marcara como sonando.
+	//En caso contrario no pasara nada.
 	playMelody{ arg capa;
 
 		switch(capa,
@@ -79,6 +87,8 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
+	//Recibe el id de la capa melodica que se detendra. Si esta sonando la detendra y la marcara como no sonando.
+	//En caso contrario no pasara nada.
 	stopMelody{ arg capa;
 
 		switch(capa,
@@ -94,6 +104,7 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
+	//Recibe el id del one shot que se lanzara, sin tener en cuenta nada mas.
 	playOS{ arg capa;
 
 		switch(capa,
@@ -115,6 +126,7 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		)
 	}
 
+	//Multiplica el tempo de todas las capas que estan sonando.
 	multiplyTempo{ arg mult;
 
 		params.setTempo(mult);
@@ -131,6 +143,7 @@ Package { var <percs, <chords, <melodies, <oneShots, <params;
 		melodies[\ReThirdMelody].value;
 	}
 
+	//Octava el sonido melodico de todas las capas que estan sonando
 	octaveMelody{ arg oct;
 
 	}

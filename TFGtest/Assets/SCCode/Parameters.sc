@@ -1,5 +1,6 @@
 
 MusicMakerParameters {
+
 	var
 	<basetempo = 1, <actualTempo,
 	<octave,

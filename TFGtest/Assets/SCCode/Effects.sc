@@ -1,6 +1,8 @@
 
 Effects {
+
 	init{
+
 		~effects = {
 			SynthDef(\reverb, {
 				arg in, predelay=0.1, revtime=1.8,

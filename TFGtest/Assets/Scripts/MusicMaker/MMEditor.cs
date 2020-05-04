@@ -167,7 +167,7 @@ public class MMWindow : EditorWindow
 
                 //Vemos si se ha personalizado el paquete o no
                 userMsg = "Has elegido el paquete " + package.ToString();
-                if (layersStr != defaultLayers)
+                if (layersStr != defaultLayers && customPackage)
                     userMsg += " (Personalizado)";
                 else
                     customPackage = false;

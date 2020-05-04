@@ -6,7 +6,18 @@ Package {
 	init{}
 
 	playAll{}
-	stopAll{}
+
+	//Pausa todos los elementos (menos los OS)
+	stopAll
+	{
+		this.params.
+		//Ritmos
+		for(0, 2, {arg i; this.stopRhythm(i.asInteger())});
+		//Melodías
+		for(0, 1, {arg i; this.stopMelody(i.asInteger())});
+		//Armonías
+		for(0, 2, {arg i; this.stopHarmony(i.asInteger())});
+	}
 
 	//Recibe el id de la capa de percusion que sonara. Si esta no esta sonando la activara y la marcara como sonando.
 	//En caso contrario no pasara nada.

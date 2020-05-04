@@ -3,13 +3,16 @@
 
 (
 a = MusicMaker.new;
-OSCdef.new(\Start,{ arg msg;
+OSCdef.new(\Start,{
+	arg msg;
 	a.init(msg[1]);
 },'/Start', nil, 57120);
 )
 
+//////
+
 a = MusicMaker.new;
-a.init(\Terror);
+a.init(\Fantasy);
 a.start;
 a.start2;
 a.start3;

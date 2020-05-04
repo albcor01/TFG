@@ -16,7 +16,7 @@ using UnityEngine.SceneManagement;
 namespace MM
 {
     //Los distintos paquetes que el usuario va a poder utilizar para la creación de musica
-    public enum Package { None, Ambient, Desert, Horror, Asian, Aquatic, War, Electronic };
+    public enum Package { None, Ambient, Desert, Horror, Fantasy };
 
     //Efecto del input sobre el output
     public enum MusicEffect { None, Activate, Deactivate, Increase, Decrease };

@@ -54,13 +54,13 @@ MusicMaker {
 
 			server.server.sync;
 			messages = Messages.new;
-			messages.init(actualPackage);
+			messages.init(packages[actualPackage]);
 			server.server.sync;
 
 			server.server.sync;
 			//this.start;
 			server.server.sync;
-			"done".postln;
+			"MusicMaker inicializado".postln;
 		});
 	}
 

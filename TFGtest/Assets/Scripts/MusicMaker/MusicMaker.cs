@@ -97,7 +97,16 @@ public class MusicMaker : MonoBehaviour
 
             //Le mandamos el tipo de paquete al cliente de SuperCollider
             OSCHandler.Instance.SendMessageToClient(ClientId, "/Start", package.ToString());
+
+            //Damos tiempo pa que se inicialice antes de reproducir la música
+            Invoke("PlayMusic", 10.0f);
         }
+    }
+
+    //Empieza a reproducir la música
+    private void PlayMusic()
+    {
+        OSCHandler.Instance.SendMessageToClient(ClientId, "/Play", package.ToString());
     }
 
     //Para cuando se hace algún cambio en el inspector
@@ -187,8 +196,13 @@ public class MusicMaker : MonoBehaviour
         //TODO: gestionar los arrays
 
         //2. DISTINGUIR EL OUTPUT Y MANDAR EL MENSAJE
-        string msg = "/" + t.output.aspect.ToString().ToLower() + t.output.layerNo;
-        OSCHandler.Instance.SendMessageToClient(ClientId, msg, numValue);
+        string msg = t.output.aspect.ToString() + " " + (t.output.layerNo - 1);
+
+        //Activar/desactivar una capa
+        if(numValue == 1)
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/PlayLayer", msg);
+        else
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/StopLayer", msg);
     }
 
     //Establece el paquete

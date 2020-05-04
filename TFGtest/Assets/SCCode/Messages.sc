@@ -24,7 +24,7 @@ Messages {
 
 		},'/Stop', nil, 57120);
 
-				//Activar una capa en concreto
+		//Activar una capa en concreto
 		OSCdef.new(\PlayLayer,
 			{
 				arg msg;
@@ -49,7 +49,7 @@ Messages {
 
 		},'/PlayLayer', nil, 57120);
 
-						//Desactivar una capa en concreto
+		//Desactivar una capa en concreto
 		OSCdef.new(\StopLayer,
 			{
 				arg msg;

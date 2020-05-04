@@ -77,14 +77,13 @@ public class MusicMaker : MonoBehaviour
                 for (int j = 0; j < MM.Constants.MAX_LAYERS; j++)
                     activeLayers[i, j] = layersData[c++] == '1' ? true : false;
 
-            //Debug
-            Debug.Log(package);
-            Debug.Log(layersData);
+
+            //Para asegurarnos de que hay paquete elegido
+            Debug.Assert(package != MM.Package.None); 
 
             //Iniciamos SuperCollider:
             //a) Crea el cliente de SuperCollider en la dirección de loopback
             //b) Crea el servidor para recibir mensajes de SuperCollider
-            Debug.Assert(package != MM.Package.None); //Para asegurarnos
             OSCHandler.Instance.Init();
 
             //Eliminar tuplas no válidas 
@@ -96,7 +95,7 @@ public class MusicMaker : MonoBehaviour
                 varValues.Add(t.input.GetValue());
 
             //Le mandamos el tipo de paquete al cliente de SuperCollider
-            OSCHandler.Instance.SendMessageToClient(ClientId, "/Start", package.ToString());
+            OSCHandler.Instance.SendMessageToClient(ClientId, "/Init", package.ToString());
 
             //Damos tiempo pa que se inicialice antes de reproducir la música
             Invoke("PlayMusic", 10.0f);
@@ -107,6 +106,14 @@ public class MusicMaker : MonoBehaviour
     private void PlayMusic()
     {
         OSCHandler.Instance.SendMessageToClient(ClientId, "/Play", package.ToString());
+        //TODO: hacer que empiecen las capas que sea sonando
+
+        //NOTA: los FX no pueden empezar activos
+        string[] aspects = { "Rhythm", "Harmony", "Melody" };
+        for (int i = 0; i < MM.Constants.NUM_ASPECTS - 1; i++)
+            for (int j = 0; j<MM.Constants.MAX_LAYERS;j++)
+                if(activeLayers[i,j])
+                    OSCHandler.Instance.SendMessageToClient(ClientId, "/PlayLayer", aspects[i] + " " + j);
     }
 
     //Para cuando se hace algún cambio en el inspector
@@ -199,6 +206,7 @@ public class MusicMaker : MonoBehaviour
         string msg = t.output.aspect.ToString() + " " + (t.output.layerNo - 1);
 
         //Activar/desactivar una capa
+        //TODO: actualizar las capas de Unity (no es obligatorio de momento)
         if(numValue == 1)
             OSCHandler.Instance.SendMessageToClient(ClientId, "/PlayLayer", msg);
         else
@@ -215,7 +223,9 @@ public class MusicMaker : MonoBehaviour
     //Cuando acaba el juego, mandamos el mensaje de "/Stop"
     void OnApplicationQuit()
     {
+        //Primero paramos todo en SC y luego nos desconectamos
         OSCHandler.Instance.SendMessageToClient(ClientId, "/Stop", package.ToString());
+        OSCHandler.Instance.Free();
     }
 
     #endregion

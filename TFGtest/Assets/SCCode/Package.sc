@@ -10,7 +10,6 @@ Package {
 	//Pausa todos los elementos (menos los OS)
 	stopAll
 	{
-		this.params.
 		//Ritmos
 		for(0, 2, {arg i; this.stopRhythm(i.asInteger())});
 		//Melodías

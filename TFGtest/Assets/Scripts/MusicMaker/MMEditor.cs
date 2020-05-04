@@ -130,16 +130,16 @@ public class MMWindow : EditorWindow
             }
 
             //Capa de efectos
-            EditorGUI.indentLevel = indent;
-            openFolds[3] = EditorGUILayout.Foldout(openFolds[3], "FX");
-            if (openFolds[3])
-            {
-                EditorGUI.indentLevel++;
-                layers[3, 0] = EditorGUILayout.Toggle("Fx 1", layers[3, 0]);
-                layers[3, 1] = EditorGUILayout.Toggle("Fx 2", layers[3, 1]);
-                layers[3, 2] = EditorGUILayout.Toggle("Fx 3", layers[3, 2]);
-                layers[3, 3] = EditorGUILayout.Toggle("Fx 4", layers[3, 3]);
-            }
+            //EditorGUI.indentLevel = indent;
+            //openFolds[3] = EditorGUILayout.Foldout(openFolds[3], "FX");
+            //if (openFolds[3])
+            //{
+            //    EditorGUI.indentLevel++;
+            //    layers[3, 0] = EditorGUILayout.Toggle("Fx 1", layers[3, 0]);
+            //    layers[3, 1] = EditorGUILayout.Toggle("Fx 2", layers[3, 1]);
+            //    layers[3, 2] = EditorGUILayout.Toggle("Fx 3", layers[3, 2]);
+            //    layers[3, 3] = EditorGUILayout.Toggle("Fx 4", layers[3, 3]);
+            //}
 
             //Tempo deseado
             EditorGUI.indentLevel = indent;

@@ -623,8 +623,8 @@ MonoBehaviour:
       index: 0
     effect: 2
     output:
-      aspect: 3
-      layerNo: 2
+      aspect: 2
+      layerNo: 1
   - input:
       objeto: {fileID: 1119864852}
       componente: {fileID: 1119864859}

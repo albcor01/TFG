@@ -129,7 +129,7 @@ public class OSCHandler : MonoBehaviour
     /// Ensure that the instance is destroyed when the game is stopped in the Unity editor
     /// Close all the OSC clients and servers
     /// </summary>
-    void OnApplicationQuit()
+    public void Free()
     {
         foreach (KeyValuePair<string, ClientLog> pair in _clients)
         {

@@ -3,10 +3,10 @@
 
 (
 a = MusicMaker.new;
-OSCdef.new(\Start,{
+OSCdef.new(\Init,{
 	arg msg;
 	a.init(msg[1]);
-},'/Start', nil, 57120);
+},'/Init', nil, 57120);
 )
 
 //////

@@ -161,5 +161,11 @@ para que el usuario elija cuáles empiezan activas.
 - Ahora el plugin permite usar elementos que estén en un array para la parte adaptativa, indicando el índice.
 Se ha refactorizado el código de "Utilities", moviéndolo casi todo a las propias clases
 MusicInput y MusicTuple.
-- Reunión con Jaime:: 
+- Reunión con Jaime:
+
+DE POR MEDIO HAY MUCHO TRABAJO REALIZADO SIN BITACORIZAR
+
+### 16/05/20
+-He hecho la escena de botones para testing, hay que hacer las llamadas a SC
+
 

@@ -193,7 +193,7 @@ namespace UnityOSC
 				}
 			}
 			catch{
-				throw new Exception(String.Format("Can't create server at port {0}", _localPort));
+				//throw new Exception(String.Format("Can't create server at port {0}", _localPort));
   			}
 		}
 		

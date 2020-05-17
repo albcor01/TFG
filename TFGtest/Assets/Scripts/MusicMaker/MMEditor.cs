@@ -266,7 +266,7 @@ public class MusicInputDrawer : PropertyDrawer
         // Para los floats
         MM.MusicInput input = new MM.MusicInput((Component)compProp.objectReferenceValue, varProp.stringValue);
         object variable = input.GetValue();
-        if (variable != null)
+        if (variable != null || input.IsAnArray())
         {
             if (input.IsAnArray())
                 EditorGUI.PropertyField(indexRect, indexProp, GUIContent.none);
@@ -275,6 +275,7 @@ public class MusicInputDrawer : PropertyDrawer
                 EditorGUI.PropertyField(minRect, minProp, GUIContent.none);
                 EditorGUI.PropertyField(maxRect, maxProp, GUIContent.none);
             }
+            //else -> es boolean
         }
 
         // Set indent back to what it was

@@ -148,6 +148,10 @@ public class MusicMaker : MonoBehaviour
                 //Cogemos el valor actual de la variable externa
                 object actualVal = t.input.GetValue();
                 string type = t.input.GetType().Name;
+                if (t.input.IsAnArray()) //Arrays
+                    actualVal = ((bool[])actualVal)[t.input.index];
+
+                //TODO: aqui
 
                 //Solo mandamos un mensaje a SuperCollider si la variable en cuestión ha cambiado desde el frame anterior
                 if (!actualVal.Equals(varValues[i]))
@@ -181,6 +185,11 @@ public class MusicMaker : MonoBehaviour
         //1. SACAR LA INFORMACIÓN SOBRE EL INPUT Y AJUSTARLO AL FORMATO QUE RECIBE SUPERCOLLIDER
         //Si es un número, hay que normalizar:
         object variable = t.input.GetValue();
+
+        if (t.input.IsAnArray()) //Arrays
+            variable = ((bool[])variable)[t.input.index];
+
+        //NOTA: no se usa
         if (variable.GetType().Name != "Boolean")
         {
             float range = t.input.max - t.input.min;
@@ -191,6 +200,7 @@ public class MusicMaker : MonoBehaviour
             if (t.effect == MM.MusicEffect.Decrease)
                 numValue = 1 - numValue;
         }
+
         //Si es un booleano:
         else
         {

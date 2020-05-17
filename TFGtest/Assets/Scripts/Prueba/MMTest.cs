@@ -52,6 +52,14 @@ public class MMTest : MonoBehaviour
         //Parámetro booleano
         if (Input.GetKeyDown(KeyCode.B))
             boolParam = !boolParam;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            boolArrayParam[0] = !boolArrayParam[0];
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            boolArrayParam[1] = !boolArrayParam[1];
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            boolArrayParam[2] = !boolArrayParam[2];
+
     }
 
     #endregion

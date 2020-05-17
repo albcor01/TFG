@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -145,8 +146,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193123250}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 0
+  m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 3
@@ -218,11 +220,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1396659300}
     m_Modifications:
-    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
-        type: 3}
-      propertyPath: m_Name
-      value: Arbol (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 2732557206539828533, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -278,6 +275,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
+        type: 3}
+      propertyPath: m_Name
+      value: Arbol (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 7894140733398782548, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_RootOrder
@@ -308,11 +310,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1396659300}
     m_Modifications:
-    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
-        type: 3}
-      propertyPath: m_Name
-      value: Arbol (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 2732557206539828533, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -368,6 +365,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
+        type: 3}
+      propertyPath: m_Name
+      value: Arbol (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 7894140733398782548, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_RootOrder
@@ -398,11 +400,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1396659300}
     m_Modifications:
-    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
-        type: 3}
-      propertyPath: m_Name
-      value: Arbol (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 2732557206539828533, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -457,6 +454,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
+        type: 3}
+      propertyPath: m_Name
+      value: Arbol (5)
       objectReference: {fileID: 0}
     - target: {fileID: 7894140733398782548, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
@@ -521,8 +523,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 922264042}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 0
+  m_Shape: 0
   m_Color: {r: 1, g: 0.9878444, b: 0.5330188, a: 1}
   m_Intensity: 12.8
   m_Range: 22.78
@@ -613,14 +616,14 @@ MonoBehaviour:
     effect: 2
     output:
       aspect: 1
-      layerNo: 1
+      layerNo: 2
   - input:
       objeto: {fileID: 1119864852}
       componente: {fileID: 1119864859}
       variable: moving
       min: 0
       max: 0
-      index: 0
+      index: 1
     effect: 2
     output:
       aspect: 2
@@ -631,7 +634,7 @@ MonoBehaviour:
       variable: lightOn
       min: 0
       max: 0
-      index: 0
+      index: 2
     effect: 2
     output:
       aspect: 4
@@ -657,11 +660,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1396659300}
     m_Modifications:
-    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
-        type: 3}
-      propertyPath: m_Name
-      value: Arbol (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 2732557206539828533, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -716,6 +714,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
+        type: 3}
+      propertyPath: m_Name
+      value: Arbol (1)
       objectReference: {fileID: 0}
     - target: {fileID: 7894140733398782548, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
@@ -799,6 +802,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1004,8 +1008,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911985491}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 0.72156864, g: 0.837306, b: 1, a: 1}
   m_Intensity: 0.2
   m_Range: 10
@@ -1116,6 +1121,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1169,11 +1175,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1396659300}
     m_Modifications:
-    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
-        type: 3}
-      propertyPath: m_Name
-      value: Arbol (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 2732557206539828533, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1228,6 +1229,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4433438020684606107, guid: 2e30b08ada13cf249a45d640495017e3,
+        type: 3}
+      propertyPath: m_Name
+      value: Arbol (2)
       objectReference: {fileID: 0}
     - target: {fileID: 7894140733398782548, guid: 2e30b08ada13cf249a45d640495017e3,
         type: 3}

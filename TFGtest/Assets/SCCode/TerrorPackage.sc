@@ -258,7 +258,7 @@ TerrorPackage : Package {
 						\cfmax, 400,
 						\rqmin, 0.02,
 						\rqmax, 0.08,
-						\amp, exprand(0.5,0.9),
+						\amp, exprand(4.5,6.9),
 						\pan, rrand(-0.5,0.5),
 						\out, ~bus[\reverb],
 					],
@@ -268,11 +268,33 @@ TerrorPackage : Package {
 		});
 
 		oneShots.add(\SecondOS -> {
-
+			1.do{
+				Synth(
+					\bpfbuf,
+					[
+						\buf, ~buff[\sfx_terror_strings][0].bufnum,
+						\amp, exprand(5.5,8.5),
+						\pan, rrand(-0.9,0.9),
+						\out, ~bus[\reverb],
+					],
+					~mainGrp
+				);
+			};
 		});
 
 		oneShots.add(\ThirdOS -> {
-
+			1.do{
+				Synth(
+					\bpfbuf,
+					[
+						\buf, ~buff[\sfx_terror_strings][1].bufnum,
+						\amp, exprand(3.5,6.5),
+						\pan, rrand(-0.9,0.9),
+						\out, ~bus[\reverb],
+					],
+					~mainGrp
+				);
+			};
 		});
 
 		oneShots.add(\FourthOS -> {

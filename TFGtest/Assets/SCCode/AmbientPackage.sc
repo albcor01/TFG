@@ -16,25 +16,26 @@ AmbientPackage : Package {
 
 		percs.add(\BasePercs -> {
 			~marimba = Pbind(
-			\instrument, \bpfsaw,
-			\dur, Prand([1,0.5],inf),
-			\freq, Prand([1/2,2/3,1,4/3,2,5/2,3,4,6,8],inf),
-			\detune, Pwhite(0,0.1),
-			\rqmin, 0.005,
-			\rqmax, 0.008,
-			\cfmin, Prand((Scale.major.degrees+64).midicps,inf) * Prand([0.5,1,2,4],inf),
-			\cfmax, Pkey(\cfmin) * Pwhite(1.008,1.025),
-			\atk, 3,
-			\sus, 1,
-			\rel, 5,
-			\amp, 1,
-			\group, ~mainGrp,
-			\out, ~bus[\reverb],
-		).play;
+				\instrument, \bpfsaw,
+				\dur, Prand([1,0.5],inf),
+				\freq, Prand([1/2,2/3,1,4/3,2,5/2,3,4,6,8],inf),
+				\detune, Pwhite(0,0.1),
+				\rqmin, 0.005,
+				\rqmax, 0.008,
+				\cfmin, Prand((Scale.major.degrees+64).midicps,inf) * Prand([0.5,1,2,4],inf),
+				\cfmax, Pkey(\cfmin) * Pwhite(1.008,1.025),
+				\atk, 3,
+				\sus, 1,
+				\rel, 5,
+				\amp, 1,
+				\group, ~mainGrp,
+				\out, ~bus[\reverb],
+			).play;
 		});
 
 		percs.add(\ReBasePercs -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		percs.add(\StopBasePercs -> {
@@ -47,7 +48,7 @@ AmbientPackage : Package {
 				\dur, Pexprand(0.2,2),
 				\atk, Pexprand(0.5,2),
 				\rel, Pexprand(2,6),
-				\buf, ~buff[\percs_deskBells][0],
+				\buf, ~buff[\percs_deskbells][0],
 				\rate, Pwhite(-7.5,-5.5).midiratio,
 				\spos, Pwhite(5000,80000),
 				\amp, Pexprand(2,5),
@@ -58,7 +59,8 @@ AmbientPackage : Package {
 		});
 
 		percs.add(\ReExtraPercs -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		percs.add(\StopExtraPercs -> {
@@ -85,7 +87,8 @@ AmbientPackage : Package {
 		});
 
 		percs.add(\ReEffectsPercs -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		percs.add(\StopEffectsPercs -> {
@@ -117,7 +120,8 @@ AmbientPackage : Package {
 		});
 
 		chords.add(\ReBaseHarmony -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		chords.add(\StopBaseHarmony -> {
@@ -125,52 +129,77 @@ AmbientPackage : Package {
 		});
 
 		chords.add(\ExtraHarmony -> {
-			//acorde mantenido
+			~chords2 = Pbind(
+				\instrument, \bpfsaw,
+				\dur, Pwhite(7.5,1.0),
+				\midinote, Pxrand([
+					[42,54,75,76],
+				], inf),
+				\cfmin, 300,
+				\cfmax, 1000,
+				\rqmin, Pexprand(0.01,0.15),
+				\atk, Pwhite(2.0,2.5),
+				\rel, Pwhite(6.5,10.0),
+				\ldb, 6,
+				\amp, 0.35,
+				\group, ~mainGrp,
+				\out, ~bus[\reverb],
+			).play;
 		});
 
 		chords.add(\ReExtraHarmony -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		chords.add(\StopExtraHarmony -> {
-
+			~chords2.stop;
 		});
 
 
 		melodies.add(\FirstMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LINEAS MELODICAS
+			// PUESTO QUE VAN EN CONTRA DE LA DEFINICION DE MUSICA AMBIENTAL
 		});
 
 		melodies.add(\ReFirstMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		melodies.add(\StopFirstMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LINEAS MELODICAS
+			// PUESTO QUE VAN EN CONTRA DE LA DEFINICION DE MUSICA AMBIENTAL
 		});
 
 		melodies.add(\SecondMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LINEAS MELODICAS
+			// PUESTO QUE VAN EN CONTRA DE LA DEFINICION DE MUSICA AMBIENTAL
 		});
 
 		melodies.add(\ReSecondMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		melodies.add(\StopSecondMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LINEAS MELODICAS
+			// PUESTO QUE VAN EN CONTRA DE LA DEFINICION DE MUSICA AMBIENTAL
 		});
 
 		melodies.add(\ThirdMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LINEAS MELODICAS
+			// PUESTO QUE VAN EN CONTRA DE LA DEFINICION DE MUSICA AMBIENTAL
 		});
 
 		melodies.add(\ReThirdMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LOS CAMBIOS DE TEMPO
+			// PUESTO QUE SE BASA EN PATRONES PSEUDO-ALEATORIOS
 		});
 
 		melodies.add(\StopThirdMelody -> {
-
+			// ESTE PAQUETE NO CONTEMPLA LINEAS MELODICAS
+			// PUESTO QUE VAN EN CONTRA DE LA DEFINICION DE MUSICA AMBIENTAL
 		});
 
 

@@ -41,7 +41,7 @@ DesertPackage : Package {
 				\rhythm,
 				Pbind(
 					\instrument, \bpfbuf,
-					\dur, Pseq([1/16], inf),
+					\dur, Pseq([1/8], inf),
 					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 					\buf, Pseq(
 						[
@@ -63,15 +63,51 @@ DesertPackage : Package {
 		});
 
 		percs.add(\ExtraPercs -> {
-
+			Pdef(
+				\rhythm2,
+				Pbind(
+					\instrument, \bpfbuf,
+					\dur, Pseq([1/8], inf),
+					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\buf, Pseq(
+						[
+							~buff[\percs_african_mid][0],
+							~buff[\percs_african_mid][0],
+							~buff[\percs_african_mid][0],
+							Prand(~buff[\percs_african_mid], 5),
+						], inf
+					),
+					\amp, 3.0,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:1.875);
 		});
 
 		percs.add(\ReExtraPercs -> {
-
+			Pdef(
+				\rhythm2,
+				Pbind(
+					\instrument, \bpfbuf,
+					\dur, Pseq([1/8], inf),
+					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\buf, Pseq(
+						[
+							~buff[\percs_african_mid][0],
+							~buff[\percs_african_mid][0],
+							~buff[\percs_african_mid][0],
+							Prand(~buff[\percs_african_mid], 5),
+						], inf
+					),
+					\amp, 3.0,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(1.875);
 		});
 
 		percs.add(\StopExtraPercs -> {
-
+			Pdef(\rhythm2).stop;
 		});
 
 		percs.add(\EffectsPercs -> {
@@ -93,7 +129,8 @@ DesertPackage : Package {
 		});
 
 		percs.add(\ReEffectsPercs -> {
-
+			// ESTE PATRON NO SE VE AFECTADO POR EL TEMPO
+			// PUESTO QUE ES UN SUSTAIN MANTENIDO
 		});
 
 		percs.add(\StopEffectsPercs -> {
@@ -107,7 +144,7 @@ DesertPackage : Package {
 					\instrument, \bpfsaw,
 					\dur, 5.0,
 					\midinote, Pxrand([
-						[60, 64, 67]
+						[48, 52, 55]
 					], inf),
 					\detune, Pexprand(0.05,0.1),
 					\cfmin, 100,
@@ -124,7 +161,26 @@ DesertPackage : Package {
 		});
 
 		chords.add(\ReBaseHarmony -> {
-
+			Pdef(
+				\chord,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, 5.0,
+					\midinote, Pxrand([
+						[48, 52, 55]
+					], inf),
+					\detune, Pexprand(0.05,0.1),
+					\cfmin, 100,
+					\cfmax, 1500,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(2.0,2.5),
+					\rel, Pwhite(6.5,10.0),
+					\ldb, 6,
+					\amp, 0.8,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(1.875);
 		});
 
 		chords.add(\StopBaseHarmony -> {
@@ -132,15 +188,55 @@ DesertPackage : Package {
 		});
 
 		chords.add(\ExtraHarmony -> {
-
+			Pdef(
+				\chord2,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, 3.0,
+					\midinote, Pxrand([
+						[60, 64, 67],
+						[61, 64, 68, 71]
+					], inf),
+					\detune, Pexprand(0.015,0.020),
+					\cfmin, 300,
+					\cfmax, 1000,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(2.0,2.5),
+					\rel, Pwhite(4.5,7.0),
+					\ldb, 6,
+					\amp, 0.8,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:1.875);
 		});
 
 		chords.add(\ReExtraHarmony -> {
-
+			Pdef(
+				\chord2,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, 3.0,
+					\midinote, Pxrand([
+						[60, 64, 67],
+						[61, 64, 68, 71]
+					], inf),
+					\detune, Pexprand(0.015,0.020),
+					\cfmin, 300,
+					\cfmax, 1000,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(2.0,2.5),
+					\rel, Pwhite(4.5,7.0),
+					\ldb, 6,
+					\amp, 0.8,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(1.875);
 		});
 
 		chords.add(\StopExtraHarmony -> {
-
+			Pdef(\chord2).stop;
 		});
 
 
@@ -220,7 +316,34 @@ DesertPackage : Package {
 		});
 
 		melodies.add(\ReSecondMelody -> {
-
+			Pdef(
+				\melodies2,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, Pwhite(0.5,5.0),
+					\midinote, Pxrand
+					(
+						[
+							Pseq([[72],[73],[76],[77],[79],[80],[82]], 1),
+							Pseq([[73],[72],[73],[77],[79],[80],[82]], 1),
+							Pseq([[82],[80],[79],[77],[79],[80],[82]], 1),
+							Pseq([[72]], 7),
+							Pseq([[72]], 4),
+						],
+						inf
+					),
+					\detune, Pexprand(0.05,0.2),
+					\cfmin, 100,
+					\cfmax, 1500,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(2.0,2.5),
+					\rel, Pwhite(6.5,10.0),
+					\ldb, 6,
+					\amp, 0.7,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(1.875);
 		});
 
 		melodies.add(\StopSecondMelody -> {
@@ -258,7 +381,33 @@ DesertPackage : Package {
 		});
 
 		melodies.add(\ReThirdMelody -> {
-
+			Pdef(
+				\melodies3,
+				Pbind(
+					\instrument, \bpfbuf,
+					\dur, Pxrand( [Pseq([1/8], inf), Pseq([1/12], inf)],inf),
+					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\buf, Pseq(
+						[
+							~buff[\scale_double_harmonic_shorts][1],
+							~buff[\scale_double_harmonic_shorts][2],
+							~buff[\scale_double_harmonic_shorts][3],
+							~buff[\scale_double_harmonic_shorts][4],
+							~buff[\scale_double_harmonic_shorts][5],
+							~buff[\scale_double_harmonic_shorts][6],
+							~buff[\scale_double_harmonic_shorts][7],
+							~buff[\scale_double_harmonic_shorts][8],
+							~buff[\scale_double_harmonic_shorts][9],
+							~buff[\scale_double_harmonic_shorts][10],
+							~buff[\scale_double_harmonic_shorts][11],
+							~buff[\scale_double_harmonic_shorts][12],
+						], 1
+					),
+					\amp, Pseq([3.8, 5.0], inf),
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(1.875);
 		});
 
 		melodies.add(\StopThirdMelody -> {
@@ -267,13 +416,12 @@ DesertPackage : Package {
 
 
 		oneShots.add(\FirstOS -> {
-			//Prand(~buff[\sfx_dh_slides], 1)
 			1.do{
 				Synth(
 					\bpfbuf,
 					[
 						\buf, ~buff[\sfx_dh_slides][1].bufnum,
-						\amp, exprand(2.2,4.5),
+						\amp, exprand(5.5,8.5),
 						\pan, rrand(-0.9,0.9),
 						\out, ~bus[\reverb],
 					],
@@ -308,7 +456,18 @@ DesertPackage : Package {
 		});
 
 		oneShots.add(\ThirdOS -> {
-
+			1.do{
+				Synth(
+					\bpfbuf,
+					[
+						\buf, ~buff[\sfx_dh_slides][0].bufnum,
+						\amp, exprand(5.5,8.5),
+						\pan, rrand(-0.9,0.9),
+						\out, ~bus[\reverb],
+					],
+					~mainGrp
+				);
+			};
 		});
 
 		oneShots.add(\FourthOS -> {

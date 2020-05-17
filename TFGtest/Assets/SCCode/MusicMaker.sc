@@ -64,48 +64,32 @@ MusicMaker {
 		});
 	}
 
-	start{
-		packages[actualPackage].playRhythm(0);
+	d_playRhythm{ arg layer;
+		packages[actualPackage].playRhythm(layer);
 	}
 
-	start2{
-		packages[actualPackage].playRhythm(1);
+	d_stopRhythm{ arg layer;
+		packages[actualPackage].stopRhythm(layer);
 	}
 
-	start3{
-		packages[actualPackage].playRhythm(2);
+	d_playHarmony{ arg layer;
+		packages[actualPackage].playHarmony(layer);
 	}
 
-	start4{
-		packages[actualPackage].playHarmony(0);
+	d_stopHarmony{ arg layer;
+		packages[actualPackage].stopHarmony(layer);
 	}
 
-	start5{
-		packages[actualPackage].playHarmony(1);
+	d_playMelody{ arg layer;
+		packages[actualPackage].playMelody(layer);
 	}
 
-	start6{
-		packages[actualPackage].playMelody(0);
+	d_stopMelody{ arg layer;
+		packages[actualPackage].stopMelody(layer);
 	}
 
-	start7{
-		packages[actualPackage].playMelody(1);
-	}
-
-	start8{
-		packages[actualPackage].playMelody(2);
-	}
-
-	start9{
-		packages[actualPackage].playOS(0);
-	}
-
-	start10{
-		packages[actualPackage].playOS(1);
-	}
-
-	stop{
-		packages[actualPackage].stopRhythm(0);
+	d_playOS{ arg layer;
+		packages[actualPackage].playOS(layer);
 	}
 
 	setPackage{ arg pck;

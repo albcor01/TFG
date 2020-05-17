@@ -1,5 +1,5 @@
 
-// DEBERIAMOS LLAMAR AL METODO OSC "INIT" NO?
+// METODO QUE INICIARÁ EL MUSIC MAKER DESDE UNITY
 
 (
 a = MusicMaker.new;
@@ -9,18 +9,18 @@ OSCdef.new(\Init,{
 },'/Init', nil, 57120);
 )
 
-//////
+// DEBUG DE LOS PAQUETES DESDE SUPERCOLLIDER
 
 a = MusicMaker.new;
 a.init(\Fantasy);
-a.start;
-a.start2;
-a.start3;
-a.start4;
-a.start5;
-a.start6;
-a.start7;
-a.start8;
-a.start9;
-a.start10;
-a.stop;
+
+a.d_playRhythm(2);
+a.d_stopRhythm(0);
+
+a.d_playHarmony(0);
+a.d_stopHarmony(0);
+
+a.d_playMelody(0);
+a.d_stopMelody(0);
+
+a.d_playOS(2);

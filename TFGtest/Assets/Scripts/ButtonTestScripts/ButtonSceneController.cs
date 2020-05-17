@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class ButtonSceneController : MonoBehaviour
 {
   
-    bool[] Activatedlayers = new bool[8];
+    public bool[] Activatedlayers { get; set; } = new bool[8];
     public GameObject[] textsLayers = new GameObject[8];
 
-    bool serverState = false;
+    public bool[] OneShots { get; set; } = new bool[3];
+    public GameObject[] OneShotsGO = new GameObject[3];
+
+    bool serverState { get; set; } = false;
     public GameObject serverStateText;
 
-    string[] packageText = { "Desert", "Ambient", "Horror", "Fantasy" };
+    string[] packageText { get; set; } = { "Desert", "Ambient", "Horror", "Fantasy" };
     public GameObject packageSelected;
 
     private void Start()
@@ -37,5 +40,13 @@ public class ButtonSceneController : MonoBehaviour
     public void ServerButtonPressed() {
         serverState = !serverState;
         serverStateText.transform.GetChild(0).GetComponent<Text>().text = serverState ? "On" : "Off";
+    }
+
+    public void OneShotButtonPressed(int o)
+    {
+        if (o < OneShots.Length && o >= 0)
+        {
+            OneShots[o] = !OneShots[o];
+        }
     }
 }

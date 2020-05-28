@@ -1,7 +1,8 @@
 
 TerrorPackage : Package {
 
-	    //Variables de la clase
+	// Variables de la clase
+	var <tempo = 3.0; // 40bpm -> 40/60bps -> 60/40 -> 60/40*2 = 3.0
 
 		init {
 
@@ -14,13 +15,16 @@ TerrorPackage : Package {
 
 		params = parameters;
 
+		params.basetempo = tempo;
+		params.actualTempo = tempo;
+
 		percs.add(\BasePercs -> {
 			Pdef(
 				\rhythm,
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/2], inf),
-					\stretch, 3, // 80bpm -> 80/60bps -> 60/80 -> 60/80*4spc = 3
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Prand(~buff[\percs_kicks_high], 1),
@@ -31,7 +35,7 @@ TerrorPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:3);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReBasePercs -> {
@@ -40,7 +44,7 @@ TerrorPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/2], inf),
-					\stretch, 3, // 80bpm -> 80/60bps -> 60/80 -> 60/80*4spc = 3
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Prand(~buff[\percs_kicks_high], 1),
@@ -51,7 +55,7 @@ TerrorPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(3);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopBasePercs -> {
@@ -64,7 +68,7 @@ TerrorPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/4], inf),
-					\stretch, 3, // 80bpm -> 80/60bps -> 60/80 -> 60/80*4spc = 3
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_bigbells][0],
@@ -77,7 +81,7 @@ TerrorPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:3);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReExtraPercs -> {
@@ -86,7 +90,7 @@ TerrorPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/4], inf),
-					\stretch, 3, // 80bpm -> 80/60bps -> 60/80 -> 60/80*4spc = 3
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_bigbells][0],
@@ -99,7 +103,7 @@ TerrorPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(3);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopExtraPercs -> {
@@ -112,7 +116,7 @@ TerrorPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/4], inf),
-					\stretch, 3, // 80bpm -> 80/60bps -> 60/80 -> 60/80*4spc = 3
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_bigbells][2],
@@ -125,7 +129,7 @@ TerrorPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:3);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReEffectsPercs -> {
@@ -134,7 +138,7 @@ TerrorPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/4], inf),
-					\stretch, 3, // 80bpm -> 80/60bps -> 60/80 -> 60/80*4spc = 3
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_bigbells][2],
@@ -147,7 +151,7 @@ TerrorPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(3);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopEffectsPercs -> {
@@ -174,7 +178,8 @@ TerrorPackage : Package {
 		});
 
 		chords.add(\ReBaseHarmony -> {
-
+			// LA ARMONIA DE ESTE PAQUETE NO SIGUE PATRONES RITMICOS NI SE AJUSTA A UN TEMPO
+			// ES PSEUDOALEATORIO CADA CAMBIO
 		});
 
 		chords.add(\StopBaseHarmony -> {
@@ -190,7 +195,7 @@ TerrorPackage : Package {
 				\att, 0.01,
 				\rel, Pwhite(5, 6.0, inf),
 				\ldb, 1,
-				\amp, 2,
+				\amp, 1,
 				\group, ~mainGrp,
 				\out, ~bus[\reverb],
 				\cutoff, 100,
@@ -198,7 +203,8 @@ TerrorPackage : Package {
 		});
 
 		chords.add(\ReExtraHarmony -> {
-
+			// LA ARMONIA DE ESTE PAQUETE NO SIGUE PATRONES RITMICOS NI SE AJUSTA A UN TEMPO
+			// ES PSEUDOALEATORIO CADA CAMBIO
 		});
 
 		chords.add(\StopExtraHarmony -> {

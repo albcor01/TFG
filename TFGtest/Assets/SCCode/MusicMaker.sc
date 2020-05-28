@@ -92,7 +92,11 @@ MusicMaker {
 		packages[actualPackage].playOS(layer);
 	}
 
-	setPackage{ arg pck;
+	d_setPackage{ arg pck;
 		actualPackage = pck;
+	}
+
+	d_mulTempo { arg temp;
+		packages[actualPackage].multiplyTempo(temp);
 	}
 }

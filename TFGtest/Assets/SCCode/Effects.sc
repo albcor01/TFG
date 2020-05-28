@@ -29,6 +29,7 @@ Effects {
 			//0 = Jonico, 1 = Dorico, 2 = Frigio, 3 = Lidio, 4 = Mixolidio, 5 = Eolico, 6 = Locrio
 			//A partir de aquí generara un array con arrays de acordes construidos con notas en el
 			//modo elegido a partir de la nota elegida.
+
 			~chorsdGen = {
 				arg midi = 57, modo = 0;
 				var dist, chords, actualPos, midiNotes, actualMidi, r,a,h,b,j;

@@ -2,7 +2,7 @@
 MusicMakerParameters {
 
 	var
-	<basetempo = 1, <actualTempo,
+	<>basetempo, <>actualTempo,
 	<octave,
 	<num_percs_layers = 3, <percs_layers,
 	<num_harmonic_layers = 2, <harmonic_layers,
@@ -20,8 +20,8 @@ MusicMakerParameters {
 	}
 
 
-	setTempo{ arg mult;
-		actualTempo = basetempo * mult;
+	mulTempo{ arg mult;
+		actualTempo = basetempo * (1 / mult);
 	}
 
 	setOctave{ arg oct;

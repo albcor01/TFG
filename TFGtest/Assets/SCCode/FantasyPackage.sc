@@ -1,7 +1,8 @@
 
 FantasyPackage : Package {
 
-	    //Variables de la clase
+	// Variables de la clase
+	var <tempo = 1.2857143; // 140bpm -> 140/60bps -> 60/140spb -> 60/140*3spc = 1.2857143
 
 		init {
 
@@ -14,13 +15,16 @@ FantasyPackage : Package {
 
 		params = parameters;
 
+		params.basetempo = tempo;
+		params.actualTempo = tempo;
+
 		percs.add(\BasePercs -> {
 			Pdef(
 				\rhythm,
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/6], inf),
-					\stretch, 1.2857143, // 140bpm -> 140/60bps -> 60/140spb -> 60/140*3spc = 1.2857
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Prand(~buff[\percs_forest_low], 1),
@@ -35,7 +39,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.2857143);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReBasePercs -> {
@@ -44,7 +48,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/6], inf),
-					\stretch, 1.2857143, // 140bpm -> 140/60bps -> 60/140spb -> 60/140*3spc = 1.2857
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Prand(~buff[\percs_forest_low], 1),
@@ -59,7 +63,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.2857143);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopBasePercs -> {
@@ -72,7 +76,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/1], inf),
-					\stretch, 1.2857143,
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_forest_esp][0],
@@ -83,7 +87,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.2857143);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReExtraPercs -> {
@@ -92,7 +96,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/1], inf),
-					\stretch, 1.2857143,
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_forest_esp][0],
@@ -103,7 +107,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.2857143);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopExtraPercs -> {
@@ -116,7 +120,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/6], inf),
-					\stretch, 1.2857143,
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_jinglebells][1],
@@ -131,7 +135,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.2857143);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReEffectsPercs -> {
@@ -140,7 +144,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/6], inf),
-					\stretch, 1.2857143,
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_jinglebells][1],
@@ -155,7 +159,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.2857143);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopEffectsPercs -> {
@@ -183,7 +187,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.2857143);
+			).play(quant:params.actualTempo);
 		});
 
 		chords.add(\ReBaseHarmony -> {
@@ -206,7 +210,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.2857143);
+			).quant_(params.actualTempo);
 		});
 
 		chords.add(\StopBaseHarmony -> {
@@ -233,7 +237,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.2857143);
+			).play(quant:params.actualTempo);
 		});
 
 		chords.add(\ReExtraHarmony -> {
@@ -256,7 +260,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.2857143);
+			).quant_(params.actualTempo);
 		});
 
 		chords.add(\StopExtraHarmony -> {
@@ -270,7 +274,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/1], inf),
-					\stretch, 1.2857143,
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Pxrand(~buff[\scale_lydian], 1),
@@ -281,7 +285,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.2857143);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReFirstMelody -> {
@@ -290,7 +294,7 @@ FantasyPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/2], inf),
-					\stretch, 1.2857143,
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Pxrand(~buff[\scale_lydian], 1),
@@ -301,7 +305,7 @@ FantasyPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.2857143);
+			).quant_(params.actualTempo);
 		});
 
 		melodies.add(\StopFirstMelody -> {

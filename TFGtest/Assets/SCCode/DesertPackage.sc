@@ -1,7 +1,8 @@
 
 DesertPackage : Package {
 
-	    //Variables de la clase
+	// Variables de la clase
+	var <tempo = 1.875; // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
 
 		init {
 
@@ -14,13 +15,16 @@ DesertPackage : Package {
 
 		params = parameters;
 
+		params.basetempo = tempo;
+		params.actualTempo = tempo;
+
 		percs.add(\BasePercs -> {
 			Pdef(
 				\rhythm,
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/8], inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Prand(~buff[\percs_african_low], 1),
@@ -33,7 +37,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReBasePercs -> {
@@ -42,7 +46,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/8], inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Prand(~buff[\percs_african_low], 1),
@@ -55,7 +59,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopBasePercs -> {
@@ -68,7 +72,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/8], inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_african_mid][0],
@@ -77,11 +81,11 @@ DesertPackage : Package {
 							Prand(~buff[\percs_african_mid], 5),
 						], inf
 					),
-					\amp, 3.0,
+					\amp, 1.0,
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		percs.add(\ReExtraPercs -> {
@@ -90,7 +94,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/8], inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\percs_african_mid][0],
@@ -103,7 +107,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		percs.add(\StopExtraPercs -> {
@@ -157,7 +161,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		chords.add(\ReBaseHarmony -> {
@@ -180,7 +184,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		chords.add(\StopBaseHarmony -> {
@@ -208,7 +212,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		chords.add(\ReExtraHarmony -> {
@@ -232,7 +236,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		chords.add(\StopExtraHarmony -> {
@@ -246,7 +250,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/1], inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Pxrand(~buff[\scale_double_harmonic], 1),
@@ -257,7 +261,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReFirstMelody -> {
@@ -266,7 +270,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pseq([1/2], inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							Pxrand(~buff[\scale_double_harmonic], 1),
@@ -277,7 +281,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		melodies.add(\StopFirstMelody -> {
@@ -312,7 +316,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReSecondMelody -> {
@@ -343,7 +347,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		melodies.add(\StopSecondMelody -> {
@@ -356,7 +360,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pxrand( [Pseq([1/8], inf), Pseq([1/12], inf)],inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\scale_double_harmonic_shorts][1],
@@ -377,7 +381,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).play(quant:1.875);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReThirdMelody -> {
@@ -386,7 +390,7 @@ DesertPackage : Package {
 				Pbind(
 					\instrument, \bpfbuf,
 					\dur, Pxrand( [Pseq([1/8], inf), Pseq([1/12], inf)],inf),
-					\stretch, 1.875, // 128bpm -> 128/60bps -> 60/128spb -> 60/128*4spc = 1.875
+					\stretch, params.actualTempo,
 					\buf, Pseq(
 						[
 							~buff[\scale_double_harmonic_shorts][1],
@@ -407,7 +411,7 @@ DesertPackage : Package {
 					\group, ~mainGrp,
 					\out, ~bus[\reverb],
 				);
-			).quant_(1.875);
+			).quant_(params.actualTempo);
 		});
 
 		melodies.add(\StopThirdMelody -> {

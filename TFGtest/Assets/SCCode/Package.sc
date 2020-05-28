@@ -139,7 +139,7 @@ Package {
 	//Multiplica el tempo de todas las capas que estan sonando.
 	multiplyTempo{ arg mult;
 
-		params.setTempo(mult);
+		params.mulTempo(mult);
 
 		percs[\ReBasePercs].value;
 		percs[\ReExtraPercs].value;
@@ -151,11 +151,6 @@ Package {
 		melodies[\ReFirstMelody].value;
 		melodies[\ReSecondMelody].value;
 		melodies[\ReThirdMelody].value;
-	}
-
-	//Octava el sonido melodico de todas las capas que estan sonando
-	octaveMelody{ arg oct;
-
 	}
 }
 

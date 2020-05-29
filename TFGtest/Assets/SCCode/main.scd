@@ -14,7 +14,7 @@ OSCdef.new(\Init,{
 a = MusicMaker.new;
 a.init(\Terror);
 
-a.d_playRhythm(0);
+a.d_playRhythm(1);
 a.d_stopRhythm(0);
 
 a.d_playHarmony(1);
@@ -25,4 +25,4 @@ a.d_stopMelody(0);
 
 a.d_playOS(2);
 
-a.d_mulTempo(0.5);
+a.d_mulTempo(1.5);

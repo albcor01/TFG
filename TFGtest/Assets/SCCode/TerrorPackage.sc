@@ -13,7 +13,8 @@ TerrorPackage : Package {
 		melodies = Dictionary.new;
 		oneShots = Dictionary.new;
 
-		params = parameters;
+		params = MusicMakerParameters.new;
+		params.init(1, 0);
 
 		params.basetempo = tempo;
 		params.actualTempo = tempo;

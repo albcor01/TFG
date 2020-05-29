@@ -13,7 +13,8 @@ AmbientPackage : Package {
 		melodies = Dictionary.new;
 		oneShots = Dictionary.new;
 
-		params = parameters;
+		params = MusicMakerParameters.new;
+		params.init(1, 0);
 
 		percs.add(\BasePercs -> {
 			~marimba = Pbind(

@@ -14,9 +14,6 @@ MusicMaker {
 		effects = Effects.new;
 		effects.init;
 
-		params = MusicMakerParameters.new;
-		params.init(1, 0);
-
 		actualPackage = package;
 
 		server = PluginServer.new;
@@ -36,13 +33,13 @@ MusicMaker {
 
 			server.server.sync;
 			terror = TerrorPackage.new;
-			terror.init(params);
+			terror.init();
 			ambient = AmbientPackage.new;
-			ambient.init(params);
+			ambient.init();
 			desert = DesertPackage.new;
-			desert.init(params);
+			desert.init();
 			fantasy = FantasyPackage.new;
-			fantasy.init(params);
+			fantasy.init();
 			server.server.sync;
 
 			server.server.sync;

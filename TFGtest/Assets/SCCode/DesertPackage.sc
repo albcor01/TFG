@@ -6,14 +6,13 @@ DesertPackage : Package {
 
 		init {
 
-		arg parameters;
-
 		percs = Dictionary.new;
 		chords = Dictionary.new;
 		melodies = Dictionary.new;
 		oneShots = Dictionary.new;
 
-		params = parameters;
+		params = MusicMakerParameters.new;
+		params.init(1, 0);
 
 		params.basetempo = tempo;
 		params.actualTempo = tempo;

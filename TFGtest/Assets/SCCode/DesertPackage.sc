@@ -122,7 +122,7 @@ DesertPackage : Package {
 				\buf, ~buff[\percs_shakers][13].bufnum,
 				\rate, Pwhite(-7.0,-4.0).midiratio,
 				\spos, Pwhite(0, ~buff[\percs_shakers][13].numFrames/2),
-				\amp, Pexprand(1.0,3.0),
+				\amp, Pexprand(0.5,1.0),
 				\freq, {rrand(85.0,105.0).midicps}!3,
 				\rq, 0.005,
 				\bpfmix, 0.97,
@@ -424,7 +424,7 @@ DesertPackage : Package {
 					\bpfbuf,
 					[
 						\buf, ~buff[\sfx_dh_slides][1].bufnum,
-						\amp, exprand(5.5,8.5),
+						\amp, exprand(3.5,5.5),
 						\pan, rrand(-0.9,0.9),
 						\out, ~bus[\reverb],
 					],
@@ -434,6 +434,21 @@ DesertPackage : Package {
 		});
 
 		oneShots.add(\SecondOS -> {
+			1.do{
+				Synth(
+					\bpfbuf,
+					[
+						\buf, ~buff[\sfx_dh_slides][0].bufnum,
+						\amp, exprand(3.5,5.5),
+						\pan, rrand(-0.9,0.9),
+						\out, ~bus[\reverb],
+					],
+					~mainGrp
+				);
+			};
+		});
+
+		oneShots.add(\ThirdOS -> {
 			15.do{
 				Synth(
 					\bpfbuf,
@@ -456,29 +471,6 @@ DesertPackage : Package {
 					~mainGrp
 				);
 			};
-		});
-
-		oneShots.add(\ThirdOS -> {
-			1.do{
-				Synth(
-					\bpfbuf,
-					[
-						\buf, ~buff[\sfx_dh_slides][0].bufnum,
-						\amp, exprand(5.5,8.5),
-						\pan, rrand(-0.9,0.9),
-						\out, ~bus[\reverb],
-					],
-					~mainGrp
-				);
-			};
-		});
-
-		oneShots.add(\FourthOS -> {
-
-		});
-
-		oneShots.add(\FifthOS -> {
-
 		});
 	}
 }

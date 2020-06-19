@@ -12,17 +12,17 @@ OSCdef.new(\Init,{
 // DEBUG DE LOS PAQUETES DESDE SUPERCOLLIDER
 
 a = MusicMaker.new;
-a.init(\Terror);
+a.init(\Fantasy);
 
-a.d_playRhythm(1);
+a.d_playRhythm(2);
 a.d_stopRhythm(0);
 
 a.d_playHarmony(1);
 a.d_stopHarmony(1);
 
-a.d_playMelody(0);
-a.d_stopMelody(0);
+a.d_playMelody(2);
+a.d_stopMelody(2);
 
 a.d_playOS(2);
 
-a.d_mulTempo(1.5);
+a.d_mulTempo(1.0);

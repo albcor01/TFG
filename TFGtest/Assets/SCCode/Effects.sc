@@ -22,50 +22,50 @@ Effects {
 				Out.ar(out, sig);
 			}).add;
 
-			//Recibe una nota en midi y un modo del 0 al 7
-			//la nota midi se recomienda que este entre un LA 220 (midinote:57)
-			//y un LA 880 (midinote:77) los modos que acepta la función van del
-			//0 al 6 siendo estos los siguientes
-			//0 = Jonico, 1 = Dorico, 2 = Frigio, 3 = Lidio, 4 = Mixolidio, 5 = Eolico, 6 = Locrio
-			//A partir de aquí generara un array con arrays de acordes construidos con notas en el
-			//modo elegido a partir de la nota elegida.
+		//Recibe una nota en midi y un modo del 0 al 7
+		//la nota midi se recomienda que este entre un LA 220 (midinote:57)
+		//y un LA 880 (midinote:77) los modos que acepta la función van del
+		//0 al 6 siendo estos los siguientes
+		//0 = Jonico, 1 = Dorico, 2 = Frigio, 3 = Lidio, 4 = Mixolidio, 5 = Eolico, 6 = Locrio
+		//A partir de aquí generara un array con arrays de acordes construidos con notas en el
+		//modo elegido a partir de la nota elegida.
 
-			~chorsdGen = {
-				arg midi = 57, modo = 0;
-				var dist, chords, actualPos, midiNotes, actualMidi, r,a,h,b,j;
+		~chorsdGen = {
+			arg midi = 57, modo = 0;
+			var dist, chords, actualPos, midiNotes, actualMidi, r,a,h,b,j;
 
-				dist = Array.with(2,2,1,2,2,2,1); //El array base de distancias de los modos griegos
-				actualPos = modo;
-				actualMidi = midi;
+			dist = Array.with(2,2,1,2,2,2,1); //El array base de distancias de los modos griegos
+			actualPos = modo;
+			actualMidi = midi;
 
-				//En esta parte metemos todas las notas de la escala en el array
-				midiNotes = Array.fill(9,{
-					actualMidi = actualMidi+dist[actualPos%7];
-					actualPos = actualPos + 1;
-					actualMidi;
-				});
-				midiNotes  = midiNotes.insert(0, midi);
+			//En esta parte metemos todas las notas de la escala en el array
+			midiNotes = Array.fill(9,{
+				actualMidi = actualMidi+dist[actualPos%7];
+				actualPos = actualPos + 1;
+				actualMidi;
+			});
+			midiNotes  = midiNotes.insert(0, midi);
 
-				//Empezamos a rellenar el array de acordes
-				chords = Array.fill(10,{
-					r = rrand(2, 5);
-					a = [];
-					h = 0;
-					for(h, r,
-						{
-							b = rrand(0,9);
-							while(
-								{
-									var centinela = false;
-									j = 0;
-									for(0, a.size -1,
-										{
-											if(a[j] == midiNotes[b], {centinela = true;});
-											j = j+1;
-									});
-									centinela;
-							},{b = rrand(0,9);});
-							a = a.insert(0, midiNotes[b]);
+			//Empezamos a rellenar el array de acordes
+			chords = Array.fill(10,{
+				r = rrand(2, 5);
+				a = [];
+				h = 0;
+				for(h, r,
+					{
+						b = rrand(0,9);
+						while(
+							{
+								var centinela = false;
+								j = 0;
+								for(0, a.size -1,
+									{
+										if(a[j] == midiNotes[b], {centinela = true;});
+										j = j+1;
+								});
+								centinela;
+						},{b = rrand(0,9);});
+						a = a.insert(0, midiNotes[b]);
 					});
 					a;
 				});
@@ -73,6 +73,7 @@ Effects {
 			};
 
 			~autoChords = ~chorsdGen.value(60, 5);
+
 		}
 	}
 }

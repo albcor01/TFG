@@ -175,7 +175,7 @@ TerrorPackage : Package {
 				\amp, 2,
 				\group, ~mainGrp,
 				\out, ~bus[\reverb],
-			).play;
+			).play(quant:params.actualTempo);
 		});
 
 		chords.add(\ReBaseHarmony -> {
@@ -193,14 +193,14 @@ TerrorPackage : Package {
 				\dur, Pwhite(4.5, 5.0, inf),
 				\midinote, Pxrand(~autoChords, inf),
 				\rqmin, Pexprand(0.05, 0.05, inf),
-				\att, 0.01,
+				\att, 3.5,
 				\rel, Pwhite(5, 6.0, inf),
 				\ldb, 1,
 				\amp, 1,
 				\group, ~mainGrp,
 				\out, ~bus[\reverb],
 				\cutoff, 100,
-			).play;
+			).play(quant:params.actualTempo);
 		});
 
 		chords.add(\ReExtraHarmony -> {
@@ -214,39 +214,107 @@ TerrorPackage : Package {
 
 
 		melodies.add(\FirstMelody -> {
-
+			Pdef(
+				\melodies,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, Pwhite(2.5,4.0),
+					\midinote, Pxrand
+					(
+						[
+							Pseq([[72],[74],[75],[77],[79],[80],[82]], 1),
+							Pseq([[75],[74],[72],[82],[80],[79],[82]], 1),
+							Pseq([[72],[75], [72]], 1),
+							Pseq([[82],[79], [82]], 1),
+						],
+						inf
+					),
+					\detune, Pexprand(0.25,0.5),
+					\cfmin, 100,
+					\cfmax, 1000,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(1.25,1.75),
+					\rel, Pwhite(7.5,10.5),
+					\ldb, 6,
+					\amp, 0.65,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReFirstMelody -> {
-
+			// LA MELODIA DE ESTE PAQUETE NO SIGUE PATRONES RITMICOS NI SE AJUSTA A UN TEMPO
+			// ES PSEUDOALEATORIO CADA CAMBIO
 		});
 
 		melodies.add(\StopFirstMelody -> {
-
+			Pdef(\melodies).stop;
 		});
 
 		melodies.add(\SecondMelody -> {
-
+			Pdef(
+				\melodies,
+				Pbind(
+					\instrument, \organDonor,
+					\dur, Pwhite(1.5,3.0),
+					\midinote, Pxrand
+					(
+						[
+							Pseq([[72],[74],[75],[77],[79],[80],[82]], 1),
+							Pseq([[75],[74],[72],[82],[80],[79],[82]], 1),
+							Pseq([[72],[75], [72]], 1),
+							Pseq([[82],[79], [82]], 1),
+						],
+						inf
+					),
+					\att, Pwhite(4.25,5.5),
+					\rel, Pwhite(5.5,7.5),
+					\amp, 4.5,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReSecondMelody -> {
-
+			// LA MELODIA DE ESTE PAQUETE NO SIGUE PATRONES RITMICOS NI SE AJUSTA A UN TEMPO
+			// ES PSEUDOALEATORIO CADA CAMBIO
 		});
 
 		melodies.add(\StopSecondMelody -> {
-
+			Pdef(\melodies2).stop;
 		});
 
 		melodies.add(\ThirdMelody -> {
-
+			Pdef(
+				\melodies,
+				Pbind(
+					\instrument, \organDonor,
+					\dur, Pwhite(5.0,8.0),
+					\midinote, Pxrand
+					(
+						[
+							[84],[86],[87],[89],[91],[92],[94],
+						],
+						inf
+					),
+					\att, Pwhite(1.25,2.5),
+					\rel, Pwhite(6.5,8.5),
+					\amp, 5.5,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReThirdMelody -> {
-
+			// LA MELODIA DE ESTE PAQUETE NO SIGUE PATRONES RITMICOS NI SE AJUSTA A UN TEMPO
+			// ES PSEUDOALEATORIO CADA CAMBIO
 		});
 
 		melodies.add(\StopThirdMelody -> {
-
+			Pdef(\melodies3).stop;
 		});
 
 
@@ -302,14 +370,6 @@ TerrorPackage : Package {
 					~mainGrp
 				);
 			};
-		});
-
-		oneShots.add(\FourthOS -> {
-
-		});
-
-		oneShots.add(\FifthOS -> {
-
 		});
 	}
 }

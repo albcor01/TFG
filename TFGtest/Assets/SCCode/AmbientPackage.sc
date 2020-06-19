@@ -242,7 +242,7 @@ AmbientPackage : Package {
 						\buf, ~buff[\percs_shakers][13].bufnum,
 						\rate, exprand(0.4,2.0),
 						\bpfmix, 0,
-						\amp, exprand(0.2,0.5),
+						\amp, exprand(0.1,0.2),
 						\pan, rrand(-0.9,0.9),
 						\spos, rrand(0,100000),
 						\out, ~bus[\reverb]
@@ -275,14 +275,6 @@ AmbientPackage : Package {
 					~mainGrp
 				);
 			};
-		});
-
-		oneShots.add(\FourthOS -> {
-
-		});
-
-		oneShots.add(\FifthOS -> {
-
 		});
 	}
 }

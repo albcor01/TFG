@@ -314,27 +314,135 @@ FantasyPackage : Package {
 		});
 
 		melodies.add(\SecondMelody -> {
-			// cliches
+			Pdef(
+				\melodies2,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, Pwhite(0.5,3.0),
+					\midinote, Pxrand
+					(
+						[
+							Pseq([[72],[74],[76],[78],[79],[81],[83]], 1),
+							Pseq([[72],[74],[78],[76],[74],[78],[72]], 1),
+							Pseq([[74],[72],[78],[76],[79],[81],[83]], 1),
+							Pseq([[74],[72],[78]], 1),
+							Pseq([[72],[78],[83]], 1),
+							Pseq([[78]], 7),
+						],
+						inf
+					),
+					\detune, Pexprand(0.025,0.1),
+					\cfmin, 150,
+					\cfmax, 1200,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(2.25,2.75),
+					\rel, Pwhite(7.5,11.25),
+					\ldb, 6,
+					\amp, 0.5,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReSecondMelody -> {
-
+			Pdef(
+				\melodies2,
+				Pbind(
+					\instrument, \bpfsaw,
+					\dur, Pwhite(0.5,3.0),
+					\midinote, Pxrand
+					(
+						[
+							Pseq([[72],[74],[76],[78],[79],[81],[83]], 1),
+							Pseq([[72],[74],[78],[76],[74],[78],[72]], 1),
+							Pseq([[74],[72],[78],[76],[79],[81],[83]], 1),
+							Pseq([[74],[72],[78]], 1),
+							Pseq([[72],[78],[83]], 1),
+							Pseq([[78]], 7),
+						],
+						inf
+					),
+					\detune, Pexprand(0.025,0.1),
+					\cfmin, 150,
+					\cfmax, 1200,
+					\rqmin, Pexprand(0.01,0.15),
+					\atk, Pwhite(2.25,2.75),
+					\rel, Pwhite(7.5,11.25),
+					\ldb, 6,
+					\amp, 0.5,
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(params.actualTempo);
 		});
 
 		melodies.add(\StopSecondMelody -> {
-
+			Pdef(\melodies2).stop;
 		});
 
 		melodies.add(\ThirdMelody -> {
-			// algo con los shorts
+			Pdef(
+				\melodies3,
+				Pbind(
+					\instrument, \bpfbuf,
+					\dur, Pxrand( [Pseq([1/6], inf), Pseq([1/12], inf)],inf),
+					\stretch, params.actualTempo,
+					\buf, Pseq(
+						[
+							~buff[\scale_lydian_shorts][1],
+							~buff[\scale_lydian_shorts][4],
+							~buff[\scale_lydian_shorts][3],
+							~buff[\scale_lydian_shorts][2],
+							~buff[\scale_lydian_shorts][5],
+							~buff[\scale_lydian_shorts][6],
+							~buff[\scale_lydian_shorts][7],
+							~buff[\scale_lydian_shorts][8],
+							~buff[\scale_lydian_shorts][11],
+							~buff[\scale_lydian_shorts][10],
+							~buff[\scale_lydian_shorts][11],
+							~buff[\scale_lydian_shorts][12],
+						], 1
+					),
+					\amp, Pseq([2.5, 4.0], inf),
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).play(quant:params.actualTempo);
 		});
 
 		melodies.add(\ReThirdMelody -> {
-
+			Pdef(
+				\melodies3,
+				Pbind(
+					\instrument, \bpfbuf,
+					\dur, Pxrand( [Pseq([1/6], inf), Pseq([1/12], inf)],inf),
+					\stretch, params.actualTempo,
+					\buf, Pseq(
+						[
+							~buff[\scale_lydian_shorts][1],
+							~buff[\scale_lydian_shorts][4],
+							~buff[\scale_lydian_shorts][3],
+							~buff[\scale_lydian_shorts][2],
+							~buff[\scale_lydian_shorts][5],
+							~buff[\scale_lydian_shorts][6],
+							~buff[\scale_lydian_shorts][7],
+							~buff[\scale_lydian_shorts][8],
+							~buff[\scale_lydian_shorts][11],
+							~buff[\scale_lydian_shorts][10],
+							~buff[\scale_lydian_shorts][11],
+							~buff[\scale_lydian_shorts][12],
+						], 1
+					),
+					\amp, Pseq([2.5, 4.0], inf),
+					\group, ~mainGrp,
+					\out, ~bus[\reverb],
+				);
+			).quant_(params.actualTempo);
 		});
 
 		melodies.add(\StopThirdMelody -> {
-
+			Pdef(\melodies3).stop;
 		});
 
 
@@ -381,14 +489,6 @@ FantasyPackage : Package {
 					~mainGrp
 				);
 			};
-		});
-
-		oneShots.add(\FourthOS -> {
-
-		});
-
-		oneShots.add(\FifthOS -> {
-
 		});
 	}
 }

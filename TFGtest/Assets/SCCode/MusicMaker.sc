@@ -43,7 +43,7 @@ MusicMaker {
 			server.server.sync;
 
 			server.server.sync;
-			packages.add(\Terror -> terror );
+			packages.add(\Horror -> terror );
 			packages.add(\Ambient -> ambient );
 			packages.add(\Desert -> desert );
 			packages.add(\Fantasy -> fantasy);
